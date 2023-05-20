@@ -29,6 +29,7 @@ CREATE TABLE users (
 	iterations INTEGER NOT NULL,
 	hashed_password VARCHAR(512) NOT NULL,
 	icon_id INTEGER NOT NULL,
+	authToken VARCHAR(128),
 	FOREIGN KEY (icon_id) REFERENCES icons (id)
 );
 
