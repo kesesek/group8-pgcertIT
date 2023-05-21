@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>   
+    <link rel="stylesheet" href="./css/site.css"> 
+</head>
+<body id="login_body">
+    
+    <div id="login_container">
+        <h1>Login</h1>
+        {{#if toastMessage}}
+        <p id="login_fail_message">{{toastMessage}}</p>
+        {{/if}}
+        <form action="./login" method="POST">
+            <label>
+                <input class="ipt" type="text" name="username_input" placeholder="Username">
+            </label>
+            <label>
+                <input class="ipt" type="password" name="password_input" placeholder="Password">
+            </label>
+            <button type="submit" id="login_btn">Login</button>
+        </form>
+    </div> 
+</body>
+</html>
