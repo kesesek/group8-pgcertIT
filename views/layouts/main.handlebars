@@ -8,7 +8,49 @@
     {{else}}
     <title>Default title.</title>
     {{/if}}
+    {{!-- other style --}}
+    <link rel="stylesheet" href="./css/site.css">
+    <script type="text/javascript" src="./js/client-side.js"></script>
 </head>
+
+{{!-- header --}}
+<div class="header">
+    <header>
+        <h1>iBlogger</h1>
+    </header>
+</div>
+{{!-- header end --}}
+
+{{!-- nav bar --}}
+{{!-- To do: links to be added --}}
+<div class="nav">
+    <ul>
+        <li class="leftnav"><a href="" class="text">Articles</a></li>
+        <li class="rightnav"><a href="" class="text">Log out</a></li>
+        <li class="rightnav"><a href="" class="text"><img src="">Username</a></li>
+        <li class="rightnav">
+            <a class="notifications">
+                <span><img src="./images/notification.png"></span>
+                <span class="badge">3</span>
+            </a>
+        </li>
+    </ul>
+</div>
+{{!-- nav bar end --}}
+
+{{!-- notification pop up window --}}
+<div class="notification-container hide" id="notification-container">
+    <div class="notification notification-info">
+        <p class="message">Lorem ipsum dolor sit amet.</p> 
+    </div>
+    <div class="notification notification-info">
+        <p class="message">Lorem ipsum dolor sit amet.</p> 
+    </div>
+    <div class="notification notification-info">
+        <p class="message">Lorem ipsum dolor sit amet.</p> 
+    </div>
+</div>
+{{!-- notification pop up window end --}}
 
 <body>
     {{{body}}}
