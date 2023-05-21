@@ -4,7 +4,7 @@ const router = express.Router();
 const notificationDao = require("../modules/notification-dao.js");
 
 router.get("/", async function(req, res) {
-
+  
     res.locals.title = "All Articles";
 
     // set up 
@@ -13,6 +13,7 @@ router.get("/", async function(req, res) {
 
 
     res.render("home");
+
 });
 
 module.exports = router;
