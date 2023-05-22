@@ -14,19 +14,19 @@ window.addEventListener("load",function(){
         }
     });
 
-    notificationBell.addEventListener("mouseover", function(){
-        if(!notificationShowed){
-            showNotification();
-            notificationShowed = true;
-        }
-    });
+    // notificationBell.addEventListener("mouseover", function(){
+    //     if(!notificationShowed){
+    //         showNotification();
+    //         notificationShowed = true;
+    //     }
+    // });
 
-    notificationBell.addEventListener("mouseout", function(){
-        if(notificationShowed){
-            hideNotification();
-            notificationShowed = false;
-        }
-    });
+    // notificationBell.addEventListener("mouseout", function(){
+    //     if(notificationShowed){
+    //         hideNotification();
+    //         notificationShowed = false;
+    //     }
+    // });
 
     function showNotification(){
         notificationContainer.classList.remove('hide');
@@ -35,4 +35,12 @@ window.addEventListener("load",function(){
     function hideNotification(){
         notificationContainer.classList.add('hide');
     };
+
+    // change notifications status when it is clicked
+    const notification = this.document.querySelectorAll(".notification-info");
+    notification.forEach(message => {
+        message.addEventListener("click", function(){
+            message.classList.add('read');
+        })
+    });
 })
