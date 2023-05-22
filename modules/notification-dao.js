@@ -1,12 +1,14 @@
 const SQL = require("sql-template-strings");
 const dbPromise = require("./database.js");
 
-async function retrieveNotificationByStatus() {
+async function retrieveNotificationByStatus(userAuthToken) {
     const db = await dbPromise;
 
     const notifications = await db.all(SQL`
-        select * from notifications
-        where isRead = 0`);
+        select * from notifications, users
+        where notifications.isRead = 0
+        and users.id = notifications.receiver_id
+        and users.authToken = ${userAuthToken}`);
     
     return notifications;
 }
