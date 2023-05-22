@@ -40,15 +40,22 @@
 
 {{!-- notification pop up window --}}
 <div class="notification-container hide" id="notification-container">
+    {{#if notificationMessages}}
+    {{#each notificationMessages}}
     <div class="notification notification-info">
-        <p class="message">Lorem ipsum dolor sit amet.</p> 
+        <div class="flex-container">
+            <div class="flex-vertical-container">
+                <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
+                <p class="message">{{this.username}}</p> 
+            </div>
+            <div class="flex-vertical-container">
+                <p class="message"><a>{{this.message}}</a></p>
+                <p class="message datastamp">{{this.datastamp}}</p>
+            </div>
+        </div>     
     </div>
-    <div class="notification notification-info">
-        <p class="message">Lorem ipsum dolor sit amet.</p> 
-    </div>
-    <div class="notification notification-info">
-        <p class="message">Lorem ipsum dolor sit amet.</p> 
-    </div>
+    {{/each}}
+    {{/if}}
 </div>
 {{!-- notification pop up window end --}}
 
