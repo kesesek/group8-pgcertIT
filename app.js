@@ -33,6 +33,9 @@ app.use(require("./middleware/toaster-middleware.js"));
 
 // Setup routes
 app.use(require("./routes/application-routes.js"));
+//add authentication routes by hly
+const appRouter = require("./routes/authenticate-routes.js");
+app.use(appRouter);
 
 // Start the server running.
 app.listen(port, function () {
