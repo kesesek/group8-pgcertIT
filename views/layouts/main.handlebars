@@ -11,6 +11,7 @@
     {{!-- other style --}}
     <link rel="stylesheet" href="./css/site.css">
     <script type="text/javascript" src="./js/client-side.js"></script>
+    <script type="text/javascript" src="./js/client-cookie-helper.js"></script>
 </head>
 
 {{!-- header --}}
@@ -25,13 +26,15 @@
 {{!-- To do: links to be added --}}
 <div class="nav">
     <ul>
-        <li class="leftnav"><a href="" class="text">Articles</a></li>
-        <li class="rightnav"><a href="" class="text">Log out</a></li>
+        <li class="leftnav"><a href="./" class="text">Articles</a></li>
+        <li class="rightnav loginStatus"><a href="./login" class="text">Log in</a></li>
         <li class="rightnav"><a href="" class="icon"><img src="./images/icons/panda.png" width="40px"></a></li>
         <li class="rightnav">
             <a class="notifications">
                 <span><img src="./images/notification.png"></span>
+                {{#if notificationCount}}
                 <span class="badge">{{notificationCount}}</span>
+                {{/if}}
             </a>
         </li>
     </ul>
@@ -40,7 +43,11 @@
 
 {{!-- notification pop up window --}}
 <div class="notification-container hide" id="notification-container">
-    {{#if notificationMessages}}
+    {{#if logout}}
+    <div class="notification notification-info">
+        <p>Please <a href="./login" class="text">Log in</a> to check notifications.</p>
+    </div>
+    {{else if notificationMessages}}
     {{#each notificationMessages}}
     <div class="notification notification-info">
         <div class="flex-container">
@@ -55,6 +62,10 @@
         </div>     
     </div>
     {{/each}}
+    {{else}}
+    <div class="notification notification-info">
+        <p>No new notifications.</p>
+    </div>
     {{/if}}
 </div>
 {{!-- notification pop up window end --}}

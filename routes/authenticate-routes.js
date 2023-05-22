@@ -7,9 +7,10 @@ const router = express.Router();
 const userDao = require("../modules/user-dao.js");
 
 router.get("/login", function(req, res) {
-    if(res.locals.user) {
+    if(req.cookies.authToken) {
         res.redirect("/");
     } else {
+        res.locals.layout = "loginSignup";
         res.render("login");
     }
 });
@@ -20,9 +21,8 @@ router.post("/login", async function(req, res) {
 
     const user = await userDao.retrieveUserWithCredentials(username, password);
 
-    console.log(user);
-
     if(user) {
+        res.locals.user = user;
         const authToken = uuid();
         user.authToken = authToken;
         await userDao.updateUser(user);
