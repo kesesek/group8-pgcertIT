@@ -46,6 +46,7 @@ async function updateUser(user) {
         where id = ${user.id}`);
 }
 
+//get all user names from the database
 async function getUsernames(){
     const db = await dbPromise;
 
@@ -56,6 +57,7 @@ async function getUsernames(){
     return userNames;
 }
 
+//create a user then insert into the database
 async function createUser(username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id){
     const db = await dbPromise;
 
@@ -65,6 +67,7 @@ async function createUser(username, fname, mname, lname, description, date_of_bi
     `);
 }
 
+//get the predifined id of the icon
 async function getPreIconId(filename){
     const db = await dbPromise;
 
@@ -76,6 +79,7 @@ async function getPreIconId(filename){
     return preIconId;
 }
 
+//save the uploaded Avatar filename into the database, then retrive the id of it
 async function saveUploadAndGetId(filename){
     const db = await dbPromise;
 
