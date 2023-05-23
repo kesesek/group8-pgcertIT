@@ -43,8 +43,8 @@ CREATE TABLE subscribles (
 
 CREATE TABLE articles (
 	id INTEGER NOT NULL PRIMARY KEY,
-	title VARCHAR(32) NOT NULL,
 	content VARCHAR(8000) NOT NULL,
+	title VARCHAR(32) NOT NULL,
 	date_time TIMESTAMP NOT NULL,
 	author_id INTEGER NOT NULL,
 	FOREIGN KEY (author_id) REFERENCES users (id)
@@ -78,9 +78,11 @@ CREATE TABLE notifications (
 	comment_id INTEGER,
 	article_id INTEGER,
 	user_id INTEGER NOT NULL,
+	receiver_id INTEGER NOT NULL,
 	FOREIGN KEY (comment_id) REFERENCES comments (id),
 	FOREIGN KEY (article_id) REFERENCES articles (id),
-	FOREIGN KEY (user_id) REFERENCES users (id)
+	FOREIGN KEY (user_id) REFERENCES users (id),
+	FOREIGN KEY (receiver_id) REFERENCES users (id)
 );
 
 INSERT INTO icons (id, filename) VALUES 
@@ -123,7 +125,7 @@ INSERT INTO subscribles (subscribed_id, blogger_id) VALUES
 	(10, 5),
 	(10, 7);
 	
-INSERT INTO articles (id, title, content, date_time, author_id) VALUES
+INSERT INTO articles (id, content, title, date_time, author_id) VALUES
 	(1, 'Pokem ipsum dolor sit amet Budew Togetic Seviper Swellow Regirock Marsh Badge. Leaf Green Electrike Swinub Escavalier Durant Kakuna Servine. Volcano Badge Lumineon Raikou Baltoy Vullaby Chatot Tornadus. Vermilion City searching far and wide Elite Four Oddish Cleffa Snover Swinub. Lavender Town Zebstrika Yamask Psyduck Dome Fossil Watchog Dragon Rage.', 'If MOVIE Is So Terrible, Why Do not Statistics Show It?', datetime('2019-10-15 15:48:10'), 1),
 	(2, 'Duis aute irure dolor in reprehenderit in voluptate Glalie Bayleef Tornadus Kingdra Fire Glitch City. Sed do eiusmod tempor incididunt Hitmonchan Clamperl Torkoal Rock Zubat Grass. Sapphire Electrode et dolore magna aliqua Leavanny Munchlax Cerulean City Glitch City. Mirror Move Corsola Litwick Persian Maractus Rhyperior Cacturne. Boulder Badge Caterpie Chimchar Minun Spinarak Uxie Slakoth.', '10 Tips That Will Make You Influential In MOVIE', datetime('2020-04-16 19:28:40'), 1),
 	(3, 'Dark Typhlosion sunt in culpa qui officia Vanillite Beldum Jynx ullamco laboris nisi. Ivysaur Gothitelle Dusclops Espeon Simisear Oshawott Lopunny. Ground Fighting Entei Zigzagoon Rhydon Salamence Venomoth. Dark Sentret Pokemon, it is you and me Slowking Ninetales Klinklang Koffing. Vermilion City Togetic Buneary lorem ipsum dolor sit amet Lileep Elekid Hitmonchan.', 'How To Teach MOVIE Better Than Anyone Else', datetime('2021-12-16 10:28:45'), 1),
@@ -176,15 +178,15 @@ INSERT INTO comments (id, content, date_time, parent_id, article_id, user_id) VA
 	(16, 'Pokem ipsum dolor sit amet Rotom Cherrim Boulder Badge Shellos Mismagius in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Celadon Department Store Rhyhorn consectetur adipisicing elit Whirlipede Marsh Badge Glalie Crustle. Rising Badge Drowzee Delcatty Turtwig Pansage Pokemon Clefairy. Bubble Darkrai Delibird Seedot James Ho-oh Manaphy. Charizard Rampardos gotta catch them all Slakoth Missingno Starly Victini.', datetime('now'), NULL, 10, 10);
 	
 INSERT  INTO notifications VALUES
-	(1, datetime('now'), false, 'XX creates a new article.', NULL, 1, 2),
-	(2, datetime('now'), false, 'XX makes to a comment.', 1, NULL, 1),
-	(3, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 3),
-	(4, datetime('now'), false, 'XX replies to a comment.', 10, NULL, 10),
-	(5, datetime('now'), false, 'XX creates a new article.', NULL, 6, 10),
-	(6, datetime('now'), false, 'XX creates a new article.', NULL, 8, 9),
-	(7, datetime('now'), false, 'XX makes to a comment.', 15, NULL, 2),
-	(8, datetime('now'), false, 'XX replies to a comment.', 9, NULL, 8),
-	(9, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 7),
-	(10, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 1);
+	(1, datetime('now'), false, 'XX creates a new article.', NULL, 1, 2, 10),
+	(2, datetime('now'), false, 'XX makes to a comment.', 1, NULL, 1, 2),
+	(3, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 3, 10),
+	(4, datetime('now'), false, 'XX replies to a comment.', 10, NULL, 10, 1),
+	(5, datetime('now'), false, 'XX creates a new article.', NULL, 6, 10, 1),
+	(6, datetime('now'), false, 'XX creates a new article.', NULL, 8, 9, 1),
+	(7, datetime('now'), false, 'XX makes to a comment.', 15, NULL, 2, 3),
+	(8, datetime('now'), false, 'XX replies to a comment.', 9, NULL, 8, 3),
+	(9, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 7, 5),
+	(10, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 1, 4);
 	
 	
