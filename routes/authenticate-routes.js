@@ -40,17 +40,22 @@ router.post("/login", async function (req, res) {
     }
 });
 
+//Using Ajax create a page containing all user names from the database
 router.get("/allusernames", async function (req, res) {
     const userNames = await userDao.getUsernames();
 
     res.send(userNames);
 });
 
+//from login page to the sign-up page
 router.get("/signup", function (req, res) {
 
     res.render("signup");
 });
 
+//get the necessary data from the sign-up page, then create a new user into the database
+//middle name and description could be null
+//if user do not upload a photo as his Avatar, then the predifined Avatar(panda.png) would be used
 router.post("/signup", upload.single("avatar"), async function (req, res) {
     const userName = req.body.username;
     const fName = req.body.fname;
