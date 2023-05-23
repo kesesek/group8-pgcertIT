@@ -1,3 +1,9 @@
+<div class="welcomeMessage">
+    {{#if toastMessage}}
+    <h1>Hi! {{username}}</h1>
+    <h2>{{toastMessage}}</h2>
+    {{/if}}
+</div>
 <div class="main-container">
     <div class="main-content">
         <div class="grid-articles">
@@ -9,7 +15,11 @@
                     <p>{{this.datestamp}}</p>
                     <p>{{this.content}}</p>
                     <div class="favorite">
+                        {{#if this.user_id}}
+                        <img src="./images/black favorite.png" width="40px">
+                        {{else}}
                         <img src="./images/outline favorite.png" width="40px">
+                        {{/if}}
                     </div>
                 </div>
                 <div class="loginHint hide">
@@ -18,8 +28,10 @@
             </div>
             {{/each}}
         </div>
-        <div class="">
-            <p>Show more</p>
+        <div class="moreButton">
+            <form action="./allArticles" method="get">
+                <button type="submit" id="showMoreArticles">Show More</button>
+            </form>
         </div>   
     </div>
 </div>

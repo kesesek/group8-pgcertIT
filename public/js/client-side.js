@@ -15,20 +15,6 @@ window.addEventListener("load",function(){
             }
         });
 
-        // notificationBell.addEventListener("mouseover", function(){
-        //     if(!notificationShowed){
-        //         showNotification();
-        //         notificationShowed = true;
-        //     }
-        // });
-
-        // notificationBell.addEventListener("mouseout", function(){
-        //     if(notificationShowed){
-        //         hideNotification();
-        //         notificationShowed = false;
-        //     }
-        // });
-
         function showNotification(){
             notificationContainer.classList.remove('hide');
         };
@@ -47,7 +33,6 @@ window.addEventListener("load",function(){
 
         // change the login/logout label depends on the cookies
         const loginLabel = this.document.querySelector(".loginStatus");
-        console.log(loginLabel);
         if (getCookie("authToken")) {
             loginLabel.innerHTML = `<a href="./" class="text logout">Log out</a>`;
             const logoutLabel = this.document.querySelector(".logout");
@@ -105,11 +90,18 @@ window.addEventListener("load",function(){
     // add/remove favorites in the all articles page
     if(this.document.querySelector(".favorite")){
         const favoritebuttons = this.document.querySelectorAll(".favorite");
-        console.log(favoritebuttons);
-        favoritebuttons.forEach(button => {
+        const loginHint = document.querySelectorAll('.loginHint');
+        for (let index = 0; index < favoritebuttons.length; index++) {
+            const button = favoritebuttons[index];
+            const singleHint = loginHint[index];
             button.addEventListener("click", function(){
-                button.innerHTML = `<img src="./images/black favorite.png" width="40px"></img>`;
+                if (!getCookie("authToken")){
+                    singleHint.classList.remove('hide');
+                    singleHint.addEventListener("click", function(){
+                        singleHint.classList.add('hide');
+                    })
+                }
             })
-        });
+        }
     }
 });
