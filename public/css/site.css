@@ -273,3 +273,224 @@ a:visited {
 }
 
 /* all article page, articles layout end */
+
+
+/* login page style */
+#login_body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9ebeb;
+}
+
+#login_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  height: 450px;
+  border-radius: 20px;
+  background-color: #db9292;
+  box-shadow: 15px 15px 10px #a48294;
+  overflow: hidden;
+  position: relative;
+}
+
+#login_container form {
+  width: 350px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+#login_container form .ipt {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #f9ebeb;
+  background: none;
+  color: #f9ebeb;
+  font-size: 15px;
+}
+
+#login_container form .ipt::placeholder {
+  color: #f9ebeb;
+  font-size: 15px;
+}
+
+#login_container form #login_btn {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: 2px inset;
+  background-color: #f9ebeb;
+  border-radius: 20px;
+  color: #f9ebeb;
+  background: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#login_container h1 {
+  color:#f9ebeb;
+  font-size: 50px;
+  letter-spacing: 5px;
+  font-weight: 100;
+  text-shadow: 5px 5px 5px rgb(158, 108, 108);
+  z-index: 1;
+}
+
+#login_fail_message {
+  color:#f9ebeb;
+  text-align: center;
+  font-style:italic;
+  font-size: 20px;
+}
+/* login page ends */
+
+/* login&sign-up layout body style */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header_nav {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  background-color: rgb(158, 108, 108);
+  z-index: 2;
+}
+/*login&sign-up layout body ends */
+
+/* sidebar style ⬇️ */
+#sidebar {
+  float: left;
+  width: 200px;
+  height: 100%;
+  overflow: hidden;
+  background-color: #db9292;
+  z-index: 1;
+  position: fixed;
+}
+
+#sidebar li a:hover:not(.active) {
+  background-color: rgb(158, 108, 108);
+}
+
+#sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#sidebar ul li {
+  list-style: none;
+}
+
+#sidebar .text {
+  display: block;
+  color: #f9ebeb;
+  text-align: center;
+  padding: 15px 16px;
+  text-decoration: none;
+}
+
+#layout_body {
+  margin-top: 50px;
+  margin-left: 300px;
+  float: right;
+}
+/* sidebar style ends */
+
+/* editAccount page style⬇️ */
+#edit_account_container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  background-color: #f9ebeb;
+}
+
+.editipt {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid rgb(158, 108, 108);
+  background: none;
+  color: rgb(158, 108, 108);
+  font-size: 15px;
+}
+
+.editipt ::placeholder {
+  color: rgb(158, 108, 108);
+  font-size: 15px;
+}
+
+.btn {
+  width: 80px;
+  height: 40px;
+  outline: none;
+  border: 2px inset;
+  background-color: rgb(158, 108, 108);
+  border-radius: 20px;
+  color: #f9ebeb;
+  background: none;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#avatarModal {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left:50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height: 60%;
+  overflow: auto;
+  background-color: #f9ebeb;
+}
+
+#avatars {
+  background-color: #f9ebeb;
+  padding: 20px;
+  border: 1px solid rgb(158, 108, 108);
+}
+
+.modalBtn {
+  width: 80px;
+  height: 40px;
+  outline: none;
+  border: 2px inset;
+  background-color: rgb(158, 108, 108);
+  border-radius: 20px;
+  color: #f9ebeb;
+  background: none;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#edtForm image {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}

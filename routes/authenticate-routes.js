@@ -88,4 +88,101 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
     res.redirect("/login");
 });
 
+//for editAcount page⬇️:
+router.get("/editAccount", async function(res, req) {
+    const authToken = req.cookie.authToken;
+    const user = await userDao.getUserInfo(authToken);
+    const userAvatar = await userDao.getUserAvatar(user.id);
+    res.locals.user = user;
+    res.locals.userAvatarName = userAvatar;
+    res.render("editAccount", {layout: 'sidebar&nav'});
+});
+
+router.post("/verifyOldPassword", async function(res, req) {
+    const oldPassword = req.body.oldPassword;
+    
+    const authToken = req.cookie.authToken;
+    const user = await userDao.getUserInfo(authToken);
+    const oldHashed = user.hashed_password;
+    console.log(oldHashed);
+    const salt = user.salt;
+    console.log(salt);
+
+    const iterations = user.iterations;
+    console.log(iterations);
+
+    const hashedInputOldPassword = await userDao.hashPassword(oldPassword, salt, iterations);
+
+    if(hashedInputOldPassword === oldHashed ) {
+        res.setToastMessage("Correct.");
+    } else {
+        res.setToastMessage("Password does not mach.");
+    }
+
+});
+
+router.get("/getAvatars", async function(res, req){
+    const images = await userDao.getAvatars();
+    res.json({images:images});
+    res.render("editAccount", {images:images});
+});
+
+router.post("/saveAll", async function(res, req) {
+    const authToken = req.cookie.authToken;
+
+    const avartarID = parseInt(req.body.avartarID);
+    const avartarFileName = req.body.avartarFileName;
+    const newName = req.body.newName;
+    const newPassword = req.body.newPassword;
+    const newDb = req.body.newDb;
+    const newFname = req.body.newFname;
+    const newMname = req.body.newMname;
+    const newLname = req.body.newLname;
+    const newDes = req.body.newDes;
+
+    if(await userDao.isExist(avartarFileName)) {
+        //true 已存在的文件 直接更新到user
+        await userDao.updateUserAvatar(authToken, avartarID);
+    } else {
+        //false 新文件 创建ID 更新到user
+        const newAvatarID = await userDao.saveUploadAndGetId(avartarFileName);
+        await userDao.updateUserAvatar(authToken, newAvatarID);
+    }
+
+    if(newName !== null) {
+        await userDao.updateUsername(authToken, newName);
+    }
+
+    if(newPassword !== null) {
+        await userDao.updatePassword(authToken, newPassword);
+    }
+    
+    if(newDb !== null) {
+        await userDao.updateDateBrith(authToken, newDb);
+    }
+
+    if(newFname !== null) {
+        await userDao.updateFname(authToken, newFname);
+    }
+
+    if(newMname !== null) {
+        await userDao.updateMname(authToken, newMname);
+    }
+
+    if(newLname !== null) {
+        await userDao.updateLname(authToken, newLname);
+    }
+
+    if(newDes !== null) {
+        await userDao.updateDescription(authToken, newDes);
+    }
+
+//下面这两句有必要吗
+    const user = await userDao.getUserInfo(authToken);
+    res.locals.user = user;
+
+    res.redirect("/editAccount");
+})
+//editAccount page ends
+
 module.exports = router;

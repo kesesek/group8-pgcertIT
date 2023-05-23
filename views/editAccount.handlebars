@@ -1,0 +1,60 @@
+<div id="edit_account_container">
+    {{#if user}}
+    <form id="edtForm">
+        <div id="avatarModal">
+            <div id="avatars">
+                <input type="file" id="uploadImg" class="editipt" placeholder="Upload profile picture" accept=".png,.jpg,.jpeg,.bmp">
+                <img id="previewImg" src="#" alt="preview">
+                {{#each images}}
+                <input type="radio" class="defaultAvatar" id="avartarRadio" name="avatar" value="{{this.filename}}" {{#if (isEqual user.icon_id this.id)}}checked{{/if}}>
+                <label>
+                    <img class="modalImg" src="/images/icons/{{this.filename}}" data-value="{{this.filename}}" alt="Avatar">
+                </label>
+                {{/each}}
+                <button class="modalBtn" type="submit" id="saveAvatar">Save</button>
+                <button class="modalBtn" type="button" id="closeModal">Close</button>
+            </div>
+        </div>
+
+        <label>Click to edit avatar</label>
+        <a href="#" onclick="openModal()" id="openModalLink"><image id="nowAvatar" src="/images/icons/{{userAvatarName}}" data-value="{{user.icon_id}}" alt="{{userAvatarName}}"></image></a>
+
+        <label>Username: </label>
+        <input placeholder="{{user.username}}" type="text" name="newname" id="newnameid" class="editipt" maxlength="32">
+        <label id="newNameTest" for="username"></label><br><br>
+
+
+        <label>Old password: </label>
+        <input placeholder="enter your old password for verification" type="text" name="oldpassword" class="editipt">
+        <button type="submit" class="btn" id="verifyBtn">Verify</button>
+        {{#if toastMessage1}}
+        <p id="verifyResult">{{toastMessage1}}</p>
+        {{/if}}
+
+        <label>New password: </label>
+        <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8">
+
+        <label>Confirm new password: </label>
+        <input type="password" disabled name="confirmnew" class="editipt" id="confirmnewid">
+        <label id="passwordMatch" for="comPassword"></label><br><br>
+
+        <lable>Date of birth: </lable>
+        <input type="date" class="editipt" id="newBd" min="1900-01-01" max="2023-06-01" name="newbirth" placeholder="{{user.date_of_birth}}">
+
+        <label for="fname">First name: </label>
+        <input id="fnameid" name="fname" type="text" placeholder="{{user.fname}}" maxlength="32"><br><br>
+
+        <label for="mname">Middle name: </label>
+        <input id="mnameid" name="mname" type="text" placeholder="{{user.mname}}" maxlength="32"><br><br>
+
+        <label for="lname">Last name: </label>
+        <input id="lnameid" name="lname" type="text" placehoder="{{user.lname}}" maxlength="32"><br><br>
+
+        <label for="des">Description: </label>
+        <input id="desid" name="des" type="text" placeholder="{{user.description}}" maxlength="500"><br><br>
+
+        <button class="btn" type="submit" id="saveBtn">Save all changes</button>
+        <button class="btn" type="submit" id="delectBtn">Delect this account</button>
+    </form>
+    {{/if}}
+</div>

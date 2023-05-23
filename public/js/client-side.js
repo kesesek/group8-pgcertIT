@@ -106,3 +106,158 @@ window.addEventListener("load",function(){
         });
     }
 })
+
+//for editAccount page⬇️--hly
+//1.verify the new username:
+const testNewName = document.querySelector("#newNameTest");
+    const newName = document.querySelector("#newnameid");
+
+    newName.addEventListener("input", async function () {
+        testNewName.innerHTML = "";
+        let newNameValue = newName.value;
+        const userNamesArray = await getAllUserNames();
+        for (let i = 0; i < userNamesArray.length; i++) {
+            if (newNameValue == userNamesArray[i].username) {
+                testLabel.innerHTML = `User name already exists!`;
+                break;
+            }
+        }
+    });
+
+//2.verify the new password:
+const isMatch = document.querySelector("#passwordMatch");
+    const newPassword = document.querySelector("#newpasswordid");
+    const confirmNew = document.querySelector("#confirmnewid");
+
+    confirmNew.addEventListener("input", function () {
+        isMatch.innerHTML = "";
+        let passWordValue1 = newPassword.value;
+        let passWordValue2 = confirmNew.value;
+
+        if(passWordValue1 != passWordValue2){
+            isMatch.innerHTML = `Different password input!`;
+        }
+    });
+
+//3.avatar related codes:
+const Handlebars = require('handlebars');
+Handlebars.registerHelper('isEqual', function(a,b){
+    return a === b;
+});
+
+document.getElementById('openModalLink').addEventListener('click', openModal);
+
+function openModal() {
+    const modal = document.getElementById('avatarModal');
+    
+    $.ajax({
+        url:"/getAvatars",
+        method: "get",
+        success: function() {
+            modal.style.display = 'block';
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function closeModal() {
+    const modal = document.getElementById('avatarModal');
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('avatarModal');
+    if(event.target != modal) {
+        closeModal();
+    }
+}
+
+function savaAvatar(){
+    const selectedAvatarFilename = document.querySelector('input[name="avatar"]:checked').value;
+    const avatarImage = document.querySelector('#nowAvatar');
+        
+    if(selectedAvatarFilename == null) {
+        const uploadImage = document.getElementById('uploadImg');
+        uploadImage.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileName = file.name;
+                console.log(fileName);
+                avatarImage.src = `/images/icons/${fileName}`;
+            } else {
+                alert('There is no changes to save!');
+            }
+          });
+    } else {
+        const selectedAvatarUrl = `/images/icons/${selectedAvatarFilename}`;
+        avatarImage.src = selectedAvatarUrl;
+    }
+    closeModal();
+}
+
+const saveAvatarBtn = document.getElementById('saveAvatar');
+saveAvatarBtn.addEventListener('click', function(){
+    savaAvatar();
+})
+
+const closeModalBtn = document.getElementById('closeModal');
+closeModalBtn.addEventListener('click', function(){
+    closeModal();
+})
+
+//4.verify old password:
+$(document).ready(function(){
+    $("#verifyBtn").click(function () { 
+        let oldpassword = $("input[name='oldpassword']").val();
+        
+        $.ajax({
+            url: "/verifyOldPassword",
+            method:"POST",
+            data: {oldPassword: oldpassword},
+            success: function (response) {
+                if(response.success) {
+                    $("input[name='newpassword']").prop("disabled", false);
+                    $("input[name='confirmnew']").prop("disabled", false);
+                }
+            }
+        });
+    });
+});
+
+//5.save changes:
+const saveBtn = document.getElementById('saveBtn');
+saveBtn.addEventListener('click', function(){
+    let avartarID = document.getElementById('nowAvatar').dataset.value;
+    let avartarFileName = document.getElementById('nowAvatar').alt;
+    let newName = document.getElementById('newnameid').value;
+    let newPassword = document.getElementById('newpasswordid').value;
+    let newDb = document.getElementById('newBd').value;
+    let newFname = document.getElementById('fnameid').value;
+    let newMname = document.getElementById('mnameid').value;
+    let newLname = document.getElementById('lnameid').value;
+    let newDes = document.getElementById('desid').value;
+    $.ajax({
+        url: "/saveAll",
+        method:"POST",
+        data: {
+            avartarID: avartarID,
+            avartarFileName: avartarFileName,
+            newName: newName,
+            newPassword: newPassword,
+            newDb: newDb,
+            newFname: newFname,
+            newMname: newMname,
+            newLname: newLname,
+            newDes: newDes
+        },
+        success: function() {
+            alert("Saved!");
+        },
+        error: function() {
+            alert("Save failed, please try again.");
+        }
+    });
+});
+
