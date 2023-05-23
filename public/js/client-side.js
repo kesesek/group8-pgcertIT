@@ -44,6 +44,49 @@ window.addEventListener("load",function(){
         }
     }
 
+    //get all user names from the page we created, return the Json
+    async function getAllUserNames() {
+        let userNamesResponse = await fetch("http://localhost:3000/allusernames");
+        let userNamesJson = await userNamesResponse.json();
+
+        return userNamesJson;
+    }
+
+    //display the information about the duplicate usernames
+    const testLabel = document.querySelector("#test");
+    const userName = document.querySelector("#username");
+
+    //function that check if there are duplicate usernames
+    userName.addEventListener("input", async function () {
+        testLabel.innerHTML = "";
+        let userNameValue = userName.value;
+        const userNamesArray = await getAllUserNames();
+        for (let i = 0; i < userNamesArray.length; i++) {
+            if (userNameValue == userNamesArray[i].username) {
+                testLabel.innerHTML = `User name already exists!`;
+                break;
+            }
+        }
+    });
+
+    //display the information about the different re-enter password
+    const passLabel = document.querySelector("#pass");
+    const passWordInput1 = document.querySelector("#password");
+    const passWordInput2 = document.querySelector("#comPassword");
+
+    //function that check if the re-enter password is different from the first password
+    passWordInput2.addEventListener("input", function () {
+        passLabel.innerHTML = "";
+        let passWordValue1 = passWordInput1.value;
+        let passWordValue2 = passWordInput2.value;
+
+        if(passWordValue1 != passWordValue2){
+            passLabel.innerHTML = `Different password input!`;
+        }
+    });
+
+        
+
     // add/remove favorites in the all articles page
     if(this.document.querySelector(".favorite")){
         const favoritebuttons = this.document.querySelectorAll(".favorite");
@@ -61,5 +104,4 @@ window.addEventListener("load",function(){
             })
         }
     }
-    
-})
+});

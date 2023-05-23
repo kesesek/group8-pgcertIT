@@ -1,0 +1,68 @@
+<div>
+    {{!-- Using form get the data from sign-up page --}}
+    <form action="./signup" method="POST" enctype="multipart/form-data">
+
+        <label for="avatar">Avatar: </label>
+        <input id="avatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        <p>Or you can choose a predefined avatar: </p>
+        <div>
+            <input type="radio" id="icon1" name="presetAvatar" value="panda.png" checked>
+            <label for="icon1"><img src="/images/icons/panda.png" alt="Panda" width="60"></label>
+
+            <input type="radio" id="icon2" name="presetAvatar" value="cat.png">
+            <label for="icon2"><img src="/images/icons/cat.png" alt="Cat" width="60"></label>
+            
+            <input type="radio" id="icon3" name="presetAvatar" value="dog.png">
+            <label for="icon3"><img src="/images/icons/dog.png" alt="Dog" width="60"></label>
+
+            <input type="radio" id="icon4" name="presetAvatar" value="fox.png">
+            <label for="icon4"><img src="/images/icons/fox.png" alt="Fox" width="60"></label>
+
+            <input type="radio" id="icon5" name="presetAvatar" value="hamster.png">
+            <label for="icon5"><img src="/images/icons/hamster.png" alt="Hamster" width="60"></label>
+
+            <input type="radio" id="icon6" name="presetAvatar" value="koala.png">
+            <label for="icon6"><img src="/images/icons/koala.png" alt="Koala" width="60"></label>
+
+            <input type="radio" id="icon7" name="presetAvatar" value="meiduan.png">
+            <label for="icon7"><img src="/images/icons/meiduan.png" alt="American Short-tailed Cat" width="60"></label>
+
+            <input type="radio" id="icon8" name="presetAvatar" value="orange_cat.png">
+            <label for="icon8"><img src="/images/icons/orange_cat.png" alt="Orange Cat" width="60"></label>
+
+            <input type="radio" id="icon9" name="presetAvatar" value="bear.png">
+            <label for="icon9"><img src="/images/icons/bear.png" alt="Bear" width="60"></label>
+
+            <input type="radio" id="icon10" name="presetAvatar" value="wolf.png">
+            <label for="icon10"><img src="/images/icons/wolf.png" alt="Wolf" width="60"></label>
+        </div>
+        <br><br>
+
+
+        <label for="username">*Username: </label>
+        <input id="username" name="username" type="text" required><label id="test" for="username"></label><br><br>
+
+        <label for="password">*Password: </label>
+        <input id="password" name="password" type="password" required><br><br>
+
+        <label for="comPassword">*Comfirm password: </label>
+        <input id="comPassword" name="comPassword" type="password" required><label id="pass" for="comPassword"></label><br><br>
+
+        <label for="dateOfBirth">*Date of birth: </label>
+        <input id="dateOfBirth" name="dateOfBirth" type="date" required><br><br>
+
+        <label for="fname">*First name: </label>
+        <input id="fname" name="fname" type="text" required><br><br>
+
+        <label for="mname">Middle name: </label>
+        <input id="mname" name="mname" type="text"><br><br>
+
+        <label for="lname">*Last name: </label>
+        <input id="lname" name="lname" type="text" required><br><br>
+
+        <label for="des">Description: </label>
+        <textarea id="des" name="des" type="text">Write something about you...</textarea><br><br>
+
+        <button type="submit">Sign up!</button>
+    </form>
+</div>
