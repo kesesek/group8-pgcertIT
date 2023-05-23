@@ -47,7 +47,52 @@ async function updateUser(user) {
         where id = ${user.id}`);
 }
 
+async function getUsernames(){
+    const db = await dbPromise;
+
+    const userNames = await db.all(SQL`
+        SELECT username FROM users
+    `);
+
+    return userNames;
+}
+
+async function createUser(username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id){
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        INSERT INTO users (username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id) VALUES
+        (${username}, ${fname}, ${mname}, ${lname}, ${description}, ${date_of_birth}, ${salt}, ${iterations}, ${hashed_password}, ${icon_id});
+    `);
+}
+
+async function getPreIconId(filename){
+    const db = await dbPromise;
+
+    const preIconId = await db.get(SQL`
+        SELECT id FROM icons
+        WHERE filename = ${filename};
+    `);
+
+    return preIconId;
+}
+
+async function saveUploadAndGetId(filename){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+        INSERT INTO icons (filename) VALUES (${filename});
+    `);
+
+    return result.lastID;
+}
+
 module.exports = {
     updateUser,
-    retrieveUserWithCredentials
+    retrieveUserWithCredentials,
+    getUsernames,
+    createUser,
+    hashPassword,
+    getPreIconId,
+    saveUploadAndGetId
 }
