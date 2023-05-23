@@ -23,7 +23,7 @@ CREATE TABLE users (
 	fname VARCHAR(32) NOT NULL,
 	mname VARCHAR(32),
 	lname VARCHAR(32) NOT NULL,
-	description VARCHAR(500) NOT NULL,
+	description VARCHAR(500),
 	date_of_birth TEXT NOT NULL,
 	salt VARCHAR(64) NOT NULL,
 	iterations INTEGER NOT NULL,
