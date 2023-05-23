@@ -12,10 +12,11 @@ const fs = require("fs");
 
 const userDao = require("../modules/user-dao.js");
 
-router.get("/login", function (req, res) {
-    if (res.locals.user) {
+router.get("/login", function(req, res) {
+    if(req.cookies.authToken) {
         res.redirect("/");
     } else {
+        res.locals.layout = "loginSignup";
         res.render("login");
     }
 });
@@ -25,10 +26,8 @@ router.post("/login", async function (req, res) {
     const password = req.body.password_input;
 
     const user = await userDao.retrieveUserWithCredentials(username, password);
-
-    console.log(user);
-
-    if (user) {
+    if(user) {
+        res.locals.user = user;
         const authToken = uuid();
         user.authToken = authToken;
         await userDao.updateUser(user);

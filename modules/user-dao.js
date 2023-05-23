@@ -39,7 +39,6 @@ function hashPassword(password, salt, iteration) {
 //update the user's info⬇️
 async function updateUser(user) {
     const db = await dbPromise;
-    console.log(user);
     await db.run(SQL`
         update users
         set username = ${user.username}, hashed_password = ${user.hashed_password},

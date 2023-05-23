@@ -1,2 +1,25 @@
-<h1>A dragon:</h1>
-<img src="./images/Dragonite.png">
+<div class="main-container">
+    <div class="main-content">
+        <div class="grid-articles">
+            {{#each article}}
+            <div class="grid-content">
+                <div class="card">
+                    <p>{{this.title}}</p>
+                    <p>{{this.author}}</p>
+                    <p>{{this.datestamp}}</p>
+                    <p>{{this.content}}</p>
+                    <div class="favorite">
+                        <img src="./images/outline favorite.png" width="40px">
+                    </div>
+                </div>
+                <div class="loginHint hide">
+                    <p>Please <a href="./login" class="text">Log in</a> to add Favorites!</p>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="">
+            <p>Show more</p>
+        </div>   
+    </div>
+</div>
