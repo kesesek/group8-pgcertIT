@@ -1,0 +1,42 @@
+<div class="sort-container">
+    <form action="./sortArticles" method="get">
+        <label for="sortForm">Sort article lists by article title, author or date if you want: </label>
+        <select name="sort" id="sortForm">
+            <option value="title">Title</option>
+            <option value="author">Author</option>
+            <option value="datestamp">date</option>
+        </select>
+        <button type="submit">Sort!</button>
+    </form>
+</div>
+
+<div class="main-container">
+    <div class="main-content">
+        <div class="grid-articles">
+            {{#each article}}
+            <div class="grid-content">
+                <div class="card">
+                    <p>{{this.title}}</p>
+                    <p>{{this.author}}</p>
+                    <p>{{this.datestamp}}</p>
+                    <p>{{this.content}}</p>
+                    <div class="favorite">
+                        {{#if this.user_id}}
+                        <form action="./removeLikedArticles" method="get">
+                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img src="./images/black favorite.png" width="40px"></button>
+                        </form>
+                        {{else}}
+                        <form action="./addLikedArticles" method="get">
+                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img src="./images/outline favorite.png" width="40px"></button>
+                        </form>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="loginHint hide">
+                    <p>Please <a href="./login" class="text">Log in</a> to add Favorites!</p>
+                </div>
+            </div>
+            {{/each}}
+        </div>   
+    </div>
+</div>

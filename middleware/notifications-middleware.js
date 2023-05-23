@@ -1,4 +1,5 @@
 const notificationDao = require("../modules/notification-dao.js");
+const userDao = require("../modules/user-dao.js");
 
 async function showNotifications(req, res, next) {
 
@@ -7,6 +8,8 @@ async function showNotifications(req, res, next) {
     if(req.cookies.authToken){
         res.locals.logout = false;
         const notifications = await notificationDao.retrieveNotificationByStatus(req.cookies.authToken);
+        const icon = await userDao.retrieveUserIconPathWithAuthToken(req.cookies.authToken);
+        res.locals.iconpath = icon.filepath;
         if (notifications.length > 0) {
             res.locals.notificationCount = notifications.length;
 
@@ -28,6 +31,7 @@ async function showNotifications(req, res, next) {
             }
         }
     } else{
+        res.locals.iconpath = null;
         res.locals.logout = true;
     }
     
