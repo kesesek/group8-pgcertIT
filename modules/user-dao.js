@@ -46,6 +46,26 @@ async function updateUser(user) {
         where id = ${user.id}`);
 }
 
+async function retrieveUserWithAuthToken(authToken) {
+    const db = await dbPromise;
+    const user = await db.get(SQL`
+    select * from users
+    where authToken = ${authToken} 
+    `);
+
+    return user;
+}
+
+async function retrieveUserIconPathWithAuthToken(authToken) {
+    const db = await dbPromise;
+    const user = await db.get(SQL`
+    select icons.filename as filepath from icons, users
+    where users.authToken = ${authToken} 
+    and users.icon_id = icons.id`);
+
+    return user;
+}
+
 //get all user names from the database
 async function getUsernames(){
     const db = await dbPromise;
@@ -212,6 +232,8 @@ async function delectAccount(authToken) {
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
+    retrieveUserWithAuthToken,
+    retrieveUserIconPathWithAuthToken,
     getUsernames,
     createUser,
     hashPassword,
