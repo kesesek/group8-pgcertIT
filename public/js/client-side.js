@@ -15,20 +15,6 @@ window.addEventListener("load",function(){
             }
         });
 
-        // notificationBell.addEventListener("mouseover", function(){
-        //     if(!notificationShowed){
-        //         showNotification();
-        //         notificationShowed = true;
-        //     }
-        // });
-
-        // notificationBell.addEventListener("mouseout", function(){
-        //     if(notificationShowed){
-        //         hideNotification();
-        //         notificationShowed = false;
-        //     }
-        // });
-
         function showNotification(){
             notificationContainer.classList.remove('hide');
         };
@@ -47,7 +33,6 @@ window.addEventListener("load",function(){
 
         // change the login/logout label depends on the cookies
         const loginLabel = this.document.querySelector(".loginStatus");
-        console.log(loginLabel);
         if (getCookie("authToken")) {
             loginLabel.innerHTML = `<a href="./" class="text logout">Log out</a>`;
             const logoutLabel = this.document.querySelector(".logout");
@@ -59,57 +44,64 @@ window.addEventListener("load",function(){
         }
     }
 
-    //get all user names from the page we created, return the Json
-    async function getAllUserNames() {
-        let userNamesResponse = await fetch("http://localhost:3000/allusernames");
-        let userNamesJson = await userNamesResponse.json();
+    if (document.querySelector("#username")) {
+            //get all user names from the page we created, return the Json
+        async function getAllUserNames() {
+            let userNamesResponse = await fetch("http://localhost:3000/allusernames");
+            let userNamesJson = await userNamesResponse.json();
 
-        return userNamesJson;
-    }
+            return userNamesJson;
+        }
 
-    //display the information about the duplicate usernames
-    const testLabel = document.querySelector("#test");
-    const userName = document.querySelector("#username");
+        //display the information about the duplicate usernames
+        const testLabel = document.querySelector("#test");
+        const userName = document.querySelector("#username");
 
-    //function that check if there are duplicate usernames
-    userName.addEventListener("input", async function () {
-        testLabel.innerHTML = "";
-        let userNameValue = userName.value;
-        const userNamesArray = await getAllUserNames();
-        for (let i = 0; i < userNamesArray.length; i++) {
-            if (userNameValue == userNamesArray[i].username) {
-                testLabel.innerHTML = `User name already exists!`;
-                break;
+        //function that check if there are duplicate usernames
+        userName.addEventListener("input", async function () {
+            testLabel.innerHTML = "";
+            let userNameValue = userName.value;
+            const userNamesArray = await getAllUserNames();
+            for (let i = 0; i < userNamesArray.length; i++) {
+                if (userNameValue == userNamesArray[i].username) {
+                    testLabel.innerHTML = `User name already exists!`;
+                    break;
+                }
             }
-        }
-    });
+        });
 
-    //display the information about the different re-enter password
-    const passLabel = document.querySelector("#pass");
-    const passWordInput1 = document.querySelector("#password");
-    const passWordInput2 = document.querySelector("#comPassword");
+        //display the information about the different re-enter password
+        const passLabel = document.querySelector("#pass");
+        const passWordInput1 = document.querySelector("#password");
+        const passWordInput2 = document.querySelector("#comPassword");
 
-    //function that check if the re-enter password is different from the first password
-    passWordInput2.addEventListener("input", function () {
-        passLabel.innerHTML = "";
-        let passWordValue1 = passWordInput1.value;
-        let passWordValue2 = passWordInput2.value;
+        //function that check if the re-enter password is different from the first password
+        passWordInput2.addEventListener("input", function () {
+            passLabel.innerHTML = "";
+            let passWordValue1 = passWordInput1.value;
+            let passWordValue2 = passWordInput2.value;
 
-        if(passWordValue1 != passWordValue2){
-            passLabel.innerHTML = `Different password input!`;
-        }
-    });
-
-        
+            if(passWordValue1 != passWordValue2){
+                passLabel.innerHTML = `Different password input!`;
+            }
+        });
+    }
 
     // add/remove favorites in the all articles page
     if(this.document.querySelector(".favorite")){
         const favoritebuttons = this.document.querySelectorAll(".favorite");
-        console.log(favoritebuttons);
-        favoritebuttons.forEach(button => {
+        const loginHint = document.querySelectorAll('.loginHint');
+        for (let index = 0; index < favoritebuttons.length; index++) {
+            const button = favoritebuttons[index];
+            const singleHint = loginHint[index];
             button.addEventListener("click", function(){
-                button.innerHTML = `<img src="./images/black favorite.png" width="40px"></img>`;
+                if (!getCookie("authToken")){
+                    singleHint.classList.remove('hide');
+                    singleHint.addEventListener("click", function(){
+                        singleHint.classList.add('hide');
+                    })
+                }
             })
-        });
+        }
     }
 });
