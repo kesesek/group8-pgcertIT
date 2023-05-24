@@ -96,17 +96,14 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 //for editAcount page⬇️:
 router.get("/editAccount", async function(req, res) {
     const authToken = req.cookies.authToken;
-    if(authToken !== null || undefined) {
-        console.log(authToken);
-    } else {
-        console.log('null or undefined');
-    }
+    // if(authToken !== null || undefined) {
+    //     console.log(authToken);
+    // } else {
+    //     console.log('null or undefined');
+    // }
     
-    console.log(authToken);
     const user = await userDao.getUserInfo(authToken);
-    console.log(user);
     const userid = user.id;
-    console.log(userid);
     const userAvatar = await userDao.getUserAvatar(userid);
     res.locals.user = user;
     res.locals.userAvatarName = userAvatar;
@@ -126,21 +123,19 @@ router.post("/verifyOldPassword", async function(req, res) {
     const iterations = user.iterations;
     console.log(iterations);
 
-    const hashedInputOldPassword = await userDao.hashPassword(oldPassword, salt, iterations);
+    const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
 
     if(hashedInputOldPassword === oldHashed ) {
-        res.setToastMessage("Correct.");
+        console.log('true');
+        res.json(true);
     } else {
-        res.setToastMessage("Password does not mach.");
+        console.log('false');
+
+        res.json(false);
     }
 
 });
 
-router.get("/getAvatars", async function(req, res){
-    const images = await userDao.getAvatars();
-    res.json({images:images});
-    res.render("editAccount", {images:images});
-});
 
 router.post("/saveAll", async function(req, res) {
     const authToken = req.cookies.authToken;
@@ -204,7 +199,7 @@ router.post("/delectAccount", async function(req, res){
     await userDao.delectAccount(authToken);
 
     res.clearCookie('authToken');
-    res.json({ success: true });
+    res.send({ success: true });
 })
 //editAccount page ends
 

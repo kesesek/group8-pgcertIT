@@ -63,7 +63,7 @@ async function retrieveUserIconPathWithAuthToken(authToken) {
     where users.authToken = ${authToken} 
     and users.icon_id = icons.id`);
 
-    return user;
+    return user;   
 }
 
 //get all user names from the database

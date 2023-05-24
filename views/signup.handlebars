@@ -3,7 +3,7 @@
     <form action="./signup" method="POST" enctype="multipart/form-data">
         <br>
         <label for="avatar">Avatar: </label>
-        <input id="signUpAvatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        <input id="avatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
         <p>Or you can choose a predefined avatar: </p>
         <div>
             <input type="radio" id="icon1" name="presetAvatar" value="panda.png" checked>
@@ -42,7 +42,7 @@
 
 
         <label for="username">* Username: </label>
-        <input class="signText" id="username" name="username" type="text" required><label id="test" for="username" maxlength="32"></label><br><br>
+        <input class="signText" id="username" name="username" type="text"  maxlength="32" required><label id="test" for="username"></label><br><br>
 
         <label for="password">* Password: </label>
         <input class="signText" id="password" name="password" type="password" minlength="8" maxlength="20" required><br><br>

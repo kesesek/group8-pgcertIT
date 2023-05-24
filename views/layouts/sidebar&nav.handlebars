@@ -10,9 +10,14 @@
     {{/if}}
     {{!-- other style --}}
     <link rel="stylesheet" href="./css/site.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="./js/client-side.js"></script>
+    <script type="text/javascript" src="./js/client-cookie-helper.js"></script>
+
 </head>
-<div clsaa="header_nav">
+<body class="bodywithsidebar">
+
+<div class="header_nav">
 {{!-- header --}}
 <div class="header">
     <header>
@@ -67,8 +72,9 @@
 </div>
 
 
-<body>
-    {{{body}}}
+    <div class="maincontent">
+     {{{body}}}
+    </div>
 </body>
 
 </html>

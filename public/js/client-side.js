@@ -56,11 +56,14 @@ window.addEventListener("load",function(){
         //display the information about the duplicate usernames
         const testLabel = document.querySelector("#test");
         const userName = document.querySelector("#username");
+        console.log(userName);
 
         //function that check if there are duplicate usernames
         userName.addEventListener("input", async function () {
             testLabel.innerHTML = "";
             let userNameValue = userName.value;
+            console.log(userNameValue);
+
             const userNamesArray = await getAllUserNames();
             for (let i = 0; i < userNamesArray.length; i++) {
                 if (userNameValue == userNamesArray[i].username) {
@@ -104,31 +107,54 @@ window.addEventListener("load",function(){
             })
         }
     }
-})
+
+
 
 //for editAccount page⬇️--hly
 //1.verify the new username:
-const testNewName = document.querySelector("#newNameTest");
-    const newName = document.querySelector("#newnameid");
+console.log(document.querySelector("#newnameid"));
+console.log('hey');
+if (document.querySelector("#newnameid")) {
+    //get all user names from the page we created, return the Json
+    async function getAllUserNames() {
+        let userNamesResponse = await fetch("http://localhost:3000/allusernames");
+        let userNamesJson = await userNamesResponse.json();
 
-    newName.addEventListener("input", async function () {
-        testNewName.innerHTML = "";
-        let newNameValue = newName.value;
+        return userNamesJson;
+    }
+
+    //display the information about the duplicate usernames
+    const testLabel = document.querySelector("#newNameTest");
+    const userName = document.querySelector("#newnameid");
+    console.log(userName);
+
+
+    //function that check if there are duplicate usernames
+    userName.addEventListener("input", async function () {
+        testLabel.innerHTML = "";
+        let userNameValue = userName.value;
+        console.log(userNameValue);
+
         const userNamesArray = await getAllUserNames();
         for (let i = 0; i < userNamesArray.length; i++) {
-            if (newNameValue == userNamesArray[i].username) {
+            if (userNameValue == userNamesArray[i].username) {
                 testLabel.innerHTML = `User name already exists!`;
                 break;
             }
         }
     });
+} else {
+    console.log('no value');
+}
+
 
 //2.verify the new password:
-const isMatch = document.querySelector("#passwordMatch");
+if(document.querySelector("#confirmnewid")) {
+    const isMatch = document.querySelector("#passwordMatch");
     const newPassword = document.querySelector("#newpasswordid");
     const confirmNew = document.querySelector("#confirmnewid");
 
-    confirmNew.addEventListener("input", function () {
+    confirmNew.addEventListener("input", async function () {
         isMatch.innerHTML = "";
         let passWordValue1 = newPassword.value;
         let passWordValue2 = confirmNew.value;
@@ -137,93 +163,45 @@ const isMatch = document.querySelector("#passwordMatch");
             isMatch.innerHTML = `Different password input!`;
         }
     });
-
-//3.avatar related codes:
-const Handlebars = require('handlebars');
-Handlebars.registerHelper('isEqual', function(a,b){
-    return a === b;
-});
-
-document.getElementById('openModalLink').addEventListener('click', openModal);
-
-function openModal() {
-    const modal = document.getElementById('avatarModal');
-    
-    $.ajax({
-        url:"/getAvatars",
-        method: "get",
-        success: function() {
-            modal.style.display = 'block';
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    });
 }
-
-function closeModal() {
-    const modal = document.getElementsByClassName('modal');
-    modal.style.display = 'none';
-}
-
-window.onclick = function(event) {
-    const modal = document.getElementById('avatarModal');
-    if(event.target != modal) {
-        closeModal();
-    }
-}
-
-function savaAvatar(){
-    const selectedAvatarFilename = document.querySelector('input[name="avatar"]:checked').value;
-    const avatarImage = document.querySelector('#nowAvatar');
-        
-    if(selectedAvatarFilename == null) {
-        const uploadImage = document.getElementById('uploadImg');
-        uploadImage.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const fileName = file.name;
-                console.log(fileName);
-                avatarImage.src = `/images/icons/${fileName}`;
-            } else {
-                alert('There is no changes to save!');
-            }
-          });
-    } else {
-        const selectedAvatarUrl = `/images/icons/${selectedAvatarFilename}`;
-        avatarImage.src = selectedAvatarUrl;
-    }
-    closeModal();
-}
-
-const saveAvatarBtn = document.getElementById('saveAvatar');
-saveAvatarBtn.addEventListener('click', function(){
-    savaAvatar();
-})
-
-const closeModalBtn = document.getElementById('closeModal');
-closeModalBtn.addEventListener('click', function(){
-    closeModal();
-})
 
 //4.verify old password:
-$(document).ready(function(){
-    $("#verifyBtn").click(function () { 
-        let oldpassword = $("input[name='oldpassword']").val();
-        
-        $.ajax({
-            url: "/verifyOldPassword",
+if(documrnt.querySelector("#oldpasswordid")) {
+    console.log('im in');
+    async function getVerificationResult(){
+        let result = await fetch("http://localhost:3000/verifyOldPassword",{
             method:"POST",
-            data: {oldPassword: oldpassword},
-            success: function (response) {
-                if(response.success) {
-                    $("input[name='newpassword']").prop("disabled", false);
-                    $("input[name='confirmnew']").prop("disabled", false);
-                }
-            }
+            body: JSON.stringify({oldPassword:document.querySelector("#oldpasswordid").value}),
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
-    });
-});
+            let flag = await result.json();
+            return flag;
+    }
+
+    const testLabel = document.querySelector("#oldPasswordTest");
+        const oldone = document.querySelector("#oldpasswordid");
+        console.log(oldone);
+
+        oldone.addEventListener("input", async function () {
+            testLabel.innerHTML = "";
+            let oldpassword = oldone.value;
+            console.log(oldpassword);
+
+            const flag = await getVerificationResult();
+                if (!flag) {
+                    testLabel.innerHTML = `Verification failed!`;
+                } else {
+                    const newPasswordInput = document.querySelector("#newpasswordid");
+                    newPasswordInput.disabled = false;
+
+                    const confirmNewPssword = document.querySelector("#confirmnewid");
+                    confirmNewPssword.disabled = false;
+
+                }  
+        });
+}
 
 //5.save changes:
 const saveBtn = document.getElementById('saveBtn');
@@ -254,48 +232,50 @@ saveBtn.addEventListener('click', function(){
         success: function() {
             if(response.success) {
                 alert("Saved!");
-                window.location.href = "/editAccount";
+                setTimeout(function(){
+                    window.location.href = "/editAccount";
+                });
             } else {
                 alert("Failed to save. Please try again.");
-                window.location.href = "/editAccount";
+                setTimeout(function(){
+                    window.location.href = "/editAccount";
+                });
             }
             
         },
         error: function() {
             alert("Error. Failed to save. Please try again.");
-            window.location.href = "/editAccount";
+            setTimeout(function(){
+                window.location.href = "/editAccount";
+            });
         }
     });
 });
 
 //6.delect account
-document.getElementById('delectBtn').addEventListener('click', openDelectModal);
-
-function openDelectModal(){
-    const modal = document.getElementById('thinkTwice');
-    modal.style.display = 'block';
-}
-
-const confirmDelect = document.getElementById('confirmDelect');
-confirmDelect.addEventListener('click', function(){
+document.getElementById('delectBtn').addEventListener('click', function(){
     $.ajax({
         url: "/delectAccount",
         method: "post",
         success:function(response) {
             if(response.success) {
                 alert("Delected! Hope to see you again!");
-                window.location.href = "/";
+                setTimeout(function(){
+                    window.location.href = "/";
+                });
             } else {
                 alert("Failed to delete. Please try again.");
-                window.location.href = "/editAccount";
+                setTimeout(function(){
+                    window.location.href = "/";
+                });
             }
         },
         error: function() {
             alert("Error. Failed to delete. Please try again.");
-            window.location.href = "/editAccount";
+            setTimeout(function(){
+                window.location.href = "/";
+            });
         }
     });
 });
-
-document.getElementById('dontDelect').addEventListener('click', closeModal);
-
+})
