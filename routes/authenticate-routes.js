@@ -12,8 +12,8 @@ const fs = require("fs");
 
 const userDao = require("../modules/user-dao.js");
 
-router.get("/login", function(req, res) {
-    if(req.cookies.authToken) {
+router.get("/login", function (req, res) {
+    if (req.cookies.authToken) {
         res.redirect("/");
     } else {
         res.locals.layout = "loginSignup";
@@ -26,7 +26,7 @@ router.post("/login", async function (req, res) {
     const password = req.body.password_input;
 
     const user = await userDao.retrieveUserWithCredentials(username, password);
-    if(user) {
+    if (user) {
         res.locals.user = user;
         const authToken = uuid();
         user.authToken = authToken;
@@ -60,12 +60,12 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
     const userName = req.body.username;
     const fName = req.body.fname;
     let mName = req.body.mname;
-    if(mName == ""){
+    if (mName == "") {
         mName = null;
     }
     const lName = req.body.lname;
     let description = req.body.des;
-    if(description == "Write something about you..."){
+    if (description == "Write something about you...") {
         description = null;
     }
     const birth = req.body.dateOfBirth;
@@ -91,6 +91,42 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
     await userDao.createUser(userName, fName, mName, lName, description, birth, salt, iterations, hashed_password, icon_id);
 
     res.redirect("/login");
+});
+
+//when click the "Add Articles" button from the side bar
+//the page would go to the "addarticle" page
+router.get("/addarticle", function (req, res) {
+
+    res.render("addarticle");
+});
+
+//in the "addarticle" page, user can write a whole new article and save it to the database, the redirect to the "My Articles" page
+router.post("/submitArticle", upload.single("imageFile"), async function (req, res) {
+    let title = req.body.title;
+    if(title == "" || title == "<p>Title here...</p>"){
+        title = "[Untitled]";
+    }
+    let content = req.body.content;
+    if(content == "" || content == "<p>Content here...</p>"){
+        content = "[Empty]";
+    }
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const user_id = user_idObj.id;
+    const fileInfo = req.file;
+    let image_id;
+    if(fileInfo != undefined){
+        const oldFileName = fileInfo.path;
+        const newFileName = `./public/images/uploadedFiles/${fileInfo.originalname}`;
+        fs.renameSync(oldFileName, newFileName);
+        image_id = await userDao.saveImageAndGetId(fileInfo.originalname);
+    }
+    if(image_id == undefined){
+        image_id = null;
+    }
+
+    await userDao.addArticle(content, title, user_id, image_id);
+
+    res.redirect("/myarticle");
 });
 
 module.exports = router;

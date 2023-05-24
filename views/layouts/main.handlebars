@@ -12,6 +12,30 @@
     <link rel="stylesheet" href="./css/site.css">
     <script type="text/javascript" src="./js/client-side.js"></script>
     <script type="text/javascript" src="./js/client-cookie-helper.js"></script>
+    {{!-- add WYSIWYG package --}}
+    <script src="https://cdn.tiny.cloud/1/iou5a9nf8iwyr0m36wgd0ohiwnnewr65yn0dw2x1e5bdh70m/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '.title',
+            height: 110,
+            menubar: false,
+            toolbar: 'bold italic underline',
+            {{!-- toolbar: false, --}}
+            {{!-- formats: {
+                h3: { block: 'h3' }
+            },
+            init_instance_callback: function (editor) {
+                editor.setContent('<h3>Title here...</h3>');
+            } --}}
+        });
+        tinymce.init({
+            selector: '.content',
+            menubar: false,
+            plugins: 'lists advlist',
+            toolbar: 'styleselect | bold italic underline | numlist bullist',
+        });
+    </script>
 </head>
 
 {{!-- header --}}
@@ -53,13 +77,13 @@
         <div class="flex-container">
             <div class="flex-vertical-container">
                 <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
-                <p class="message">{{this.username}}</p> 
+                <p class="message">{{this.username}}</p>
             </div>
             <div class="flex-vertical-container">
                 <p class="message"><a>{{this.message}}</a></p>
                 <p class="message datastamp">{{this.datastamp}}</p>
             </div>
-        </div>     
+        </div>
     </div>
     {{/each}}
     {{else}}
