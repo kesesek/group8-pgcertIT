@@ -140,8 +140,10 @@ router.post("/verifyOldPassword", async function(req, res) {
 router.post("/saveAll", async function(req, res) {
     const authToken = req.cookies.authToken;
 
-    const avartarID = parseInt(req.body.avartarID);
-    const avartarFileName = req.body.avartarFileName;
+    const fileInfo = req.file;
+    const preAvatar = req.body.presetAvatar;
+    const avatarID = parseInt(req.body.avartarID);
+    const avatarFile = req.body.avartarFile;
     const newName = req.body.newName;
     const newPassword = req.body.newPassword;
     const newDb = req.body.newDb;
@@ -149,13 +151,17 @@ router.post("/saveAll", async function(req, res) {
     const newMname = req.body.newMname;
     const newLname = req.body.newLname;
     const newDes = req.body.newDes;
+    console.log(avatarID);
 
-    if(await userDao.isExist(avartarFileName)) {
-        //true 已存在的文件 直接更新到user
-        await userDao.updateUserAvatar(authToken, avartarID);
+    if(avatarFile == undefined) {
+        const avatarID = await userDao.getPreIconId(preAvatar);
+        await userDao.updateUserAvatar(authToken, avatarID);
     } else {
         //false 新文件 创建ID 更新到user
-        const newAvatarID = await userDao.saveUploadAndGetId(avartarFileName);
+        const oldFileName = avatarFile.path;
+        const newFileName = `./public/images/uploadedFiles/${avatarFile.originalname}`;
+        fs.renameSync(oldFileName, newFileName);
+        const newAvatarID = await userDao.saveUploadAndGetId(avatarFile.originalname);
         await userDao.updateUserAvatar(authToken, newAvatarID);
     }
 
@@ -187,8 +193,9 @@ router.post("/saveAll", async function(req, res) {
         await userDao.updateDescription(authToken, newDes);
     }
 
-//下面这两句有必要吗
+
     const user = await userDao.getUserInfo(authToken);
+    console.log(user);
     res.locals.user = user;
 
     res.json({ success: true });

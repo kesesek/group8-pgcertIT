@@ -136,20 +136,7 @@ async function getUserAvatar(userId) {
     
     return iconPath;
 }
-//4.pic exists or not
-async function isExist(filename) {
-    const db = await dbPromise;
-    const query = 'select count(*) as count from icons where filename = ?';
-    const params = [filename];
-    const result = await db.get(query, params);
 
-    const count = result.count;
-    if(count > 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
 //5.update info
 async function updateUserAvatar(authToken, avartarID) {
     const db = await dbPromise;
@@ -223,9 +210,35 @@ async function updateDateBrith(authToken, date) {
 //6.delect an account
 async function delectAccount(authToken) {
     const db = await dbPromise;
+    const user = await db.run(SQL`
+    select * from users
+    where authToken = ${authToken} `);
+
     await db.run(SQL`
-        delect from users
-        where authToken = ${authToken}`);
+        DELETE FROM subscribles
+        WHERE subscribed_id = ${user.id}
+        AND blogger_id = ${user.id}`);
+
+    await db.run(SQL`
+        DELETE FROM articles
+        WHERE author_id = ${user.id}`);
+
+    await db.run(SQL`
+        DELETE FROM likes
+        WHERE user_id = ${user.id}`);
+
+    await db.run(SQL`
+        DELETE FROM comments
+        WHERE user_id = ${user.id}`);
+
+    await db.run(SQL`
+        DELETE FROM notifications
+        WHERE user_id = ${user.id}
+        AND receiver_id = ${user.id}`);
+
+    await db.run(SQL`
+        DELETE FROM users
+        WHERE authToken = ${authToken}`);
 }
 //editAccount page ends
 
@@ -242,7 +255,6 @@ module.exports = {
     getUserInfo,
     getAvatars,
     getUserAvatar,
-    isExist,
     updateUserAvatar,
     updateUsername,
     updatePassword,
