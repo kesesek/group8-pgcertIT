@@ -50,7 +50,7 @@ router.get("/allusernames", async function (req, res) {
 //from login page to the sign-up page
 router.get("/signup", function (req, res) {
 
-    res.render("signup");
+    res.render("signup", {layout: 'loginSignup'});
 });
 
 //get the necessary data from the sign-up page, then create a new user into the database
@@ -94,19 +94,29 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 });
 
 //for editAcount page⬇️:
-router.get("/editAccount", async function(res, req) {
-    const authToken = req.cookie.authToken;
+router.get("/editAccount", async function(req, res) {
+    const authToken = req.cookies.authToken;
+    if(authToken !== null || undefined) {
+        console.log(authToken);
+    } else {
+        console.log('null or undefined');
+    }
+    
+    console.log(authToken);
     const user = await userDao.getUserInfo(authToken);
-    const userAvatar = await userDao.getUserAvatar(user.id);
+    console.log(user);
+    const userid = user.id;
+    console.log(userid);
+    const userAvatar = await userDao.getUserAvatar(userid);
     res.locals.user = user;
     res.locals.userAvatarName = userAvatar;
     res.render("editAccount", {layout: 'sidebar&nav'});
 });
 
-router.post("/verifyOldPassword", async function(res, req) {
+router.post("/verifyOldPassword", async function(req, res) {
     const oldPassword = req.body.oldPassword;
     
-    const authToken = req.cookie.authToken;
+    const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const oldHashed = user.hashed_password;
     console.log(oldHashed);
@@ -126,14 +136,14 @@ router.post("/verifyOldPassword", async function(res, req) {
 
 });
 
-router.get("/getAvatars", async function(res, req){
+router.get("/getAvatars", async function(req, res){
     const images = await userDao.getAvatars();
     res.json({images:images});
     res.render("editAccount", {images:images});
 });
 
-router.post("/saveAll", async function(res, req) {
-    const authToken = req.cookie.authToken;
+router.post("/saveAll", async function(req, res) {
+    const authToken = req.cookies.authToken;
 
     const avartarID = parseInt(req.body.avartarID);
     const avartarFileName = req.body.avartarFileName;
@@ -186,7 +196,15 @@ router.post("/saveAll", async function(res, req) {
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
 
-    res.redirect("/editAccount");
+    res.json({ success: true });
+})
+
+router.post("/delectAccount", async function(req, res){
+    const authToken = req.cookies.authToken;
+    await userDao.delectAccount(authToken);
+
+    res.clearCookie('authToken');
+    res.json({ success: true });
 })
 //editAccount page ends
 

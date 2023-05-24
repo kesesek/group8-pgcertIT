@@ -170,7 +170,7 @@ function openModal() {
 }
 
 function closeModal() {
-    const modal = document.getElementById('avatarModal');
+    const modal = document.getElementsByClassName('modal');
     modal.style.display = 'none';
 }
 
@@ -260,11 +260,50 @@ saveBtn.addEventListener('click', function(){
             newDes: newDes
         },
         success: function() {
-            alert("Saved!");
+            if(response.success) {
+                alert("Saved!");
+                window.location.href = "/editAccount";
+            } else {
+                alert("Failed to save. Please try again.");
+                window.location.href = "/editAccount";
+            }
+            
         },
         error: function() {
-            alert("Save failed, please try again.");
+            alert("Error. Failed to save. Please try again.");
+            window.location.href = "/editAccount";
         }
     });
 });
+
+//6.delect account
+document.getElementById('delectBtn').addEventListener('click', openDelectModal);
+
+function openDelectModal(){
+    const modal = document.getElementById('thinkTwice');
+    modal.style.display = 'block';
+}
+
+const confirmDelect = document.getElementById('confirmDelect');
+confirmDelect.addEventListener('click', function(){
+    $.ajax({
+        url: "/delectAccount",
+        method: "post",
+        success:function(response) {
+            if(response.success) {
+                alert("Delected! Hope to see you again!");
+                window.location.href = "/";
+            } else {
+                alert("Failed to delete. Please try again.");
+                window.location.href = "/editAccount";
+            }
+        },
+        error: function() {
+            alert("Error. Failed to delete. Please try again.");
+            window.location.href = "/editAccount";
+        }
+    });
+});
+
+document.getElementById('dontDelect').addEventListener('click', closeModal);
 

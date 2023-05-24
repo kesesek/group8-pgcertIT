@@ -1,8 +1,8 @@
 <div id="edit_account_container">
     {{#if user}}
     <form id="edtForm">
-        <div id="avatarModal">
-            <div id="avatars">
+        <div class="modal" id="avatarModal">
+            <div id="avatars" class="modalContent">
                 <input type="file" id="uploadImg" class="editipt" placeholder="Upload profile picture" accept=".png,.jpg,.jpeg,.bmp">
                 <img id="previewImg" src="#" alt="preview">
                 {{#each images}}
@@ -28,7 +28,7 @@
         <input placeholder="enter your old password for verification" type="text" name="oldpassword" class="editipt">
         <button type="submit" class="btn" id="verifyBtn">Verify</button>
         {{#if toastMessage1}}
-        <p id="verifyResult">{{toastMessage1}}</p>
+        <p id="verifyResult" class="pMessage">{{toastMessage1}}</p>
         {{/if}}
 
         <label>New password: </label>
@@ -55,6 +55,14 @@
 
         <button class="btn" type="submit" id="saveBtn">Save all changes</button>
         <button class="btn" type="submit" id="delectBtn">Delect this account</button>
+
+        <div id="thinkTwice" class="modal">
+            <div id="confirmMessage" class="modalContent">
+                <p id="areYouSure">Are you sure you want to delecte this account?😭</p>
+                <button type="submit" id="confirmDelect" class="btn">YES</button>
+                <button type="button" id="dontDelect" class="btn">NOT NOW</button>
+            </div>
+        </div>
     </form>
     {{/if}}
 </div>

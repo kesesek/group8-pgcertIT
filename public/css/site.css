@@ -370,8 +370,13 @@ body {
   display: flex;
   align-items: center;
   background-color: rgb(158, 108, 108);
-  z-index: 2;
+  text-align: center;
 }
+
+.header_nav div{
+  flex-basis: 15%;
+}
+
 /*login&sign-up layout body ends */
 
 /* sidebar style ⬇️ */
@@ -422,6 +427,7 @@ body {
   display: flex;
   align-items: center;
   background-color: #f9ebeb;
+  color:rgb(158, 108, 108);
 }
 
 .editipt {
@@ -442,7 +448,7 @@ body {
 
 .btn {
   width: 80px;
-  height: 40px;
+  height: 30px;
   outline: none;
   border: 2px inset;
   background-color: rgb(158, 108, 108);
@@ -455,7 +461,7 @@ body {
   margin-right: 10px;
 }
 
-#avatarModal {
+.modal {
   display: none;
   position: fixed;
   z-index: 2;
@@ -468,7 +474,7 @@ body {
   background-color: #f9ebeb;
 }
 
-#avatars {
+.modalContent {
   background-color: #f9ebeb;
   padding: 20px;
   border: 1px solid rgb(158, 108, 108);
@@ -478,7 +484,7 @@ body {
   width: 80px;
   height: 40px;
   outline: none;
-  border: 2px inset;
+  border: 2px;
   background-color: rgb(158, 108, 108);
   border-radius: 20px;
   color: #f9ebeb;
@@ -489,8 +495,79 @@ body {
   margin-right: 10px;
 }
 
-#edtForm image {
+#edtForm img {
   border-radius: 50%;
   width: 30px;
   height: 30px;
+  margin: 10px;
 }
+/* editAccount ends */
+
+/* signup ⬇️*/
+#signuppage {
+  margin: 0;
+  padding: 0 ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9ebeb;
+  color:rgb(158, 108, 108);
+  font-size: 20px;
+}
+
+#signuppage img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+#signuppage .signText {
+  width: 250px;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid rgb(158, 108, 108);
+  background: none;
+  color: rgb(158, 108, 108);
+}
+
+#signpage textarea {
+  width: 300px;
+  height: 60px;
+  border-color: rgb(158, 108, 108);
+  overflow: scroll;
+  border: 1px solid rgb(158, 108, 108);
+  background-color: #f9ebeb;
+  color:rgb(158, 108, 108);
+  font-size: 15px;
+  resize: none;
+}
+
+#textareaBox {
+  display: flex;
+}
+
+#signupBtn {
+  width: 300px;
+  height: 30px;
+  outline: none;
+  border: 2px;
+  background-color: rgb(158, 108, 108);
+  border-radius: 20px;
+  color: #f9ebeb;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+
+
+
+
+
+
+

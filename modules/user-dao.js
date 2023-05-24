@@ -94,7 +94,7 @@ async function saveUploadAndGetId(filename){
 //1.get user's info
 async function getUserInfo(authToken) {
     const db = await dbPromise;
-    const user = await db.run(SQL`
+    const user = await db.get(SQL`
     select * from users
     where authToken = ${authToken}`);
     return user;
@@ -130,7 +130,7 @@ async function isExist(filename) {
         return false;
     }
 }
-//4.update info
+//5.update info
 async function updateUserAvatar(authToken, avartarID) {
     const db = await dbPromise;
     await db.run(SQL`
@@ -199,6 +199,14 @@ async function updateDateBrith(authToken, date) {
         set date_of_birth = ${date}
         where authToken = ${authToken}`);
 }
+
+//6.delect an account
+async function delectAccount(authToken) {
+    const db = await dbPromise;
+    await db.run(SQL`
+        delect from users
+        where authToken = ${authToken}`);
+}
 //editAccount page ends
 
 module.exports = {
@@ -220,5 +228,6 @@ module.exports = {
     updateFname,
     updateMname,
     updateLname,
-    updateDateBrith
+    updateDateBrith,
+    delectAccount
 }
