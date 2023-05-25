@@ -99,6 +99,16 @@ window.addEventListener("load", async function(){
         });
     }
 
+    // add articleId cookies when the read more button was clicked in the all articles page
+    if (this.document.querySelector(".readMore")) {
+        const readMoreButtons = this.document.querySelectorAll(".readMore");
+        readMoreButtons.forEach(readMore => {
+            readMore.addEventListener("click", function(){
+                setCookie("articleId", readMore.value, 1)
+            })
+        });
+    }
+
     // add/remove favorites in the all articles page
     if(this.document.querySelector(".favorite")){
         const favoritebuttons = this.document.querySelectorAll(".favorite");
@@ -193,19 +203,29 @@ window.addEventListener("load", async function(){
 
     // delete/reply comments
     if (this.document.querySelector(".deleteButton")) {
-        const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
-        deleteButtonArray.forEach(deleteButton => {
-            deleteButton.addEventListener("click", async function () {
-                const comment = await getCommentJson();
-                const article = await getArticleJson();
-                const user = await getUserJson();
-                if (!getCookie("authToken")){
-                    alert('Please Log in to delete!');
-                } else if (user.id != article.authorId && user.id != comment.user_id) {
-                    alert('Sorry! You do not have access to delete this comment.');
-                }
+        if (this.document.querySelector("#login_fail_message")) {
+            const deleteFail = this.document.querySelector("#login_fail_message");
+            deleteFail.addEventListener("click", function(){
+                deleteFail.innerHTML = '';
             })
-        });
+        }
+        // const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
+        // deleteButtonArray.forEach(deleteButton => {
+        //     deleteButton.addEventListener("click", async function () {
+        //         const comment = await getCommentJson();
+        //         const article = await getArticleJson();
+        //         const user = await getUserJson();
+        //         console.log(comment.user_id);
+        //         console.log(article.authorId);
+        //         console.log(user.id);
+        //         console.log(getCookie("authToken"));
+        //         if (!getCookie("authToken")){
+        //             alert('Please Log in to delete!');
+        //         } else if (user.id != article.authorId && user.id != comment.user_id) {
+        //             alert('Sorry! You do not have access to delete this comment.');
+        //         }
+        //     })
+        // });
 
         const replyButtonArray = this.document.querySelectorAll(".replyButton");
         replyButtonArray.forEach(replyButton => {
@@ -214,6 +234,13 @@ window.addEventListener("load", async function(){
                     alert('Please Log in to reply!');
                 }
             })
+        });
+
+        const commentButton = this.document.querySelector("#commentButton");
+        commentButton.addEventListener("click", function () {
+            if (!getCookie("authToken")){
+                alert('Please Log in to comment!');
+            }
         });
 
         // To check whether the user has the access to delete the comment

@@ -106,7 +106,7 @@ router.get("/article", showNotifications, async function(req, res) {
   
     res.locals.title = "Full Article";
 
-    res.locals.article = await articleDao.retrieveArticleById(req.query.fullArticle);
+    res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
     
     let userId = 0;
     if (req.cookies.authToken) {
@@ -119,7 +119,7 @@ router.get("/article", showNotifications, async function(req, res) {
             }
         });
     }
-    res.cookie("articleId", req.query.fullArticle);
+    // res.cookie("articleId", req.query.fullArticle);
     // res.locals.comments = await commentDao.retrieveCommentsByArticleId(req.query.fullArticle);
 
     res.render("fullArticle");
@@ -142,7 +142,8 @@ router.get("/replyComment", showNotifications, async function(req, res) {
                 res.locals.subscribe = true;
             }
         });
-        // add comment to the comments table
+        // reply comment to the comments table
+
     }
 
     res.render("fullArticle");
@@ -170,7 +171,12 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
         res.cookie("commentId", comment.id);
         if (userId == comment.user_id || userId == res.locals.article.authorId) {
             await commentDao.deleteCommentById(comment.id);
+        } else{
+            res.locals.deleteNoAccess = "Sorry! You do not have access to delete this comment.";
         }
+    } else {
+        console.log("log out status");
+        res.locals.deleteNoAccess = "Please Log in to delete!";
     }
 
     res.render("fullArticle");
@@ -240,6 +246,30 @@ router.get("/subscribe", showNotifications, async function(req, res) {
     }
 
     res.render("fullArticle");
+
+});
+
+router.get("/commentArticle", showNotifications, async function(req, res) {
+  
+    res.locals.title = "Full Article";
+
+    res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
+    
+    let userId = 0;
+    if (req.cookies.authToken) {
+        const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
+        userId = user.id;
+        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        subscribers.forEach(subscriber => {
+            if (subscriber.subscribed_id == userId) {
+                res.locals.subscribe = true;
+            }
+        });
+        // add comment to the comments table
+        await commentDao.addCommentToArticle(req.query.comment, res.locals.article.articleId, userId);
+    }
+
+    res.redirect("/article");
 
 });
 

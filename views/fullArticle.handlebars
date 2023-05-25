@@ -1,4 +1,7 @@
 <div class="article-container">
+    {{#if deleteNoAccess}}
+    <p id="login_fail_message">{{deleteNoAccess}}</p>
+    {{/if}}
     <h1>{{{article.title}}}</h1>
     <h3>{{article.timestamp}}</h3>
     <p><a href="" class="icon"><img src="./images/icons/{{article.path}}" width="40px"></a>
@@ -73,9 +76,9 @@
         <p class="user-comment"><a href="" class="icon"><img
                     src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></p>
         <div id="commentEditor" style="width: 82.5%;">
-            <form action="" method="">
-                <textarea class="comment" name="comment" required>Any comments?</textarea><br>
-                <button type="submit" id="commentButton">Submit</button>
+            <form action="./commentArticle" method="get">
+                <textarea name="comment" required>Any comments?</textarea><br>
+                <button type="submit" id="commentButton" name="articleId" value="{{article.articleId}}">Submit</button>
             </form>
         </div>
     </div>
