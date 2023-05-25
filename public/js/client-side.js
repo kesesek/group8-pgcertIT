@@ -111,6 +111,7 @@ window.addEventListener("load", async function(){
             })
         }
     }
+    
 
     // subscribe/unsubscribe in the full articles page
     if(this.document.querySelector(".subscribeStatus")){

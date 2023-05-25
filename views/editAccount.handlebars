@@ -1,9 +1,8 @@
 <script>
 window.addEventListener('load', function(){
-console.log(document.querySelector("#newnameid"));
-console.log('hey');
-if (document.querySelector("#newnameid")) {
-    //get all user names from the page we created, return the Json
+    console.log('hey');
+    //1.verify same names
+    if (document.querySelector("#newnameid")) {
     async function getAllUserNames() {
         let userNamesResponse = await fetch("http://localhost:3000/allusernames");
         let userNamesJson = await userNamesResponse.json();
@@ -11,13 +10,11 @@ if (document.querySelector("#newnameid")) {
         return userNamesJson;
     }
 
-    //display the information about the duplicate usernames
     const testLabel = document.querySelector("#newNameTest");
     const userName = document.querySelector("#newnameid");
     console.log(userName);
 
 
-    //function that check if there are duplicate usernames
     userName.addEventListener("input", async function () {
         testLabel.innerHTML = "";
         let userNameValue = userName.value;
@@ -31,8 +28,6 @@ if (document.querySelector("#newnameid")) {
             }
         }
     });
-} else {
-    console.log('no value');
 }
 
 
@@ -53,7 +48,7 @@ if(document.querySelector("#confirmnewid")) {
     });
 }
 
-//4.verify old password:
+//3.verify old password:
 if(document.querySelector("#oldpasswordid")) {
     console.log('im in');
     async function getVerificationResult(){
@@ -91,90 +86,133 @@ if(document.querySelector("#oldpasswordid")) {
         });
 }
 
-//5.save changes:
+//4.save changes:
 const saveBtn = document.getElementById('saveBtn');
 saveBtn.addEventListener('click', function(){
     console.log("clicked");
-    let avatarID = document.getElementByName('presetAvatar').value;
+    
+    const allAvatar = document.getElementsByName('presetAvatar');
+    let checkedAvatar = null;
+    allAvatar.forEach((radio) => {
+        if (radio.checked) {
+            checkedAvatar = radio.value;
+            console.log(checkedAvatar);
+        }
+    });
+
     let avatarFileName = document.getElementById('editAvatar').files[0];
     let formData = new FormData();
-    formData.append('file', file);
+    formData.append('avatarFileName', avatarFileName);
 
     let newName = document.getElementById('newnameid').value;
+    console.log(newName + ' here');//correct
     let newPassword = document.getElementById('newpasswordid').value;
     let newDb = document.getElementById('newBd').value;
     let newFname = document.getElementById('fnameid').value;
     let newMname = document.getElementById('mnameid').value;
     let newLname = document.getElementById('lnameid').value;
     let newDes = document.getElementById('desid').value;
-    console.log('newName');
+    
+    formData.append('checkedAvatar', checkedAvatar);
+    formData.append('newName', newName);
+    formData.append('newPassword', newPassword);
+    formData.append('newDb', newDb);
+    formData.append('newFname', newFname);
+    formData.append('newMname', newMname);
+    formData.append('newLname', newLname);
+    formData.append('newDes', newDes);
+
+    console.log('get changes');
     $.ajax({
         url: "/saveAll",
         method:"POST",
-        data: {
-            avatarID: avatarID,
-            avatarFile: formData,
-            newName: newName,
-            newPassword: newPassword,
-            newDb: newDb,
-            newFname: newFname,
-            newMname: newMname,
-            newLname: newLname,
-            newDes: newDes
-        },
+        data: formData,
         processData: false,
-        contentType:false,
+        contentType: false,
         success: function() {
-            if(response.success) {
-                alert("Saved!");
+                alert("Saved!");//dont know why this dosent work
                 setTimeout(function(){
-                    window.location.href = "/editAccount";
-                },1000);
-            }
+                    window.location.reload;
+                },10000);
         },
         error: function() {
             alert("Error. Failed to save. Please try again.");
             setTimeout(function(){
-                window.location.href = "/editAccount";
-            },1000);
+                window.location.reload;
+            },10000);
         }
     });
-    console.log('ajax end');
 });
 
-//6.delect account
-document.getElementById('delectBtn').addEventListener('click', function(){
+//5.delect account
+//and modal
+const modal = document.getElementById('thinkTwice');
+const mask = document.getElementById('mask');
+const confirmdelect = document.getElementById('confirmdelect');
+const dontdelect = document.getElementById('dontdelect');
+
+document.getElementById('delectBtn').onclick = function(){
+    modal.style.display = "block";
+    mask.style.display = "block";
+};
+
+dontdelect.onclick = function(){
+    modal.style.display = "none";
+    mask.style.display = "none";
+}
+
+confirmdelect.addEventListener('click' ,function(){
     $.ajax({
         url: "/delectAccount",
         method: "post",
-        success:function(response) {
-            if(response.success) {
-                alert("Delected! Hope to see you again!");
-                setTimeout(function(){
-                    window.location.href = "/";
-                },1000);
-            } 
+        dataType: 'json',
+        success:function() {
+            //alert("Delected! Hope to see you again!");       
+            window.location.href = "/";
+            
+   
         },
         error: function() {
-            alert("Error. Failed to delete. Please try again.");
-            setTimeout(function(){
+        alert("Error. Failed to delete. Please try again.");
+        setTimeout(function() {
                 window.location.href = "/";
-            },1000);
+            }, 10000);
+        }
+    })
+
+        
+});
+
+    //6.if there is a file, make all radios disabled:
+    const file = document.getElementById('editAvatar');
+    file.addEventListener('change', function(){
+        console.log('changed');
+        const allRadio = document.getElementsByName('presetAvatar');
+
+        if(file.files.length > 0){
+            console.log(file.files.length);
+            for(let i = 0; i < allRadio.length; i ++){
+                allRadio[i].disabled = true;
+            }
+        } else {
+            for(let i = 0; i < allRadio.length; i ++){
+                allRadio[i].disabled = false;
+            }
         }
     });
-});
 })
-//todo: saveBtn's not working; checked the pic that user uses; delectBtn is not tested; delectThinkTwice modal
 </script>
+
 <div id="edit_account_container">
+    <div id="mask"></div>
     {{#if user}}
-    <form id="edtForm" enctype="multipart/form-data">
+    <form id="edtForm">
         <br>
         <label for="editAvatar">Avatar: </label>
         <input id="editAvatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
         <p>Or you can choose a predefined avatar: </p>
         <div>
-            <input type="radio" id="iconOne" name="presetAvatar" value="panda.png" checked>
+            <input type="radio" id="iconOne" name="presetAvatar" value="panda.png">
             <label for="iconOne"><img src="/images/icons/panda.png" alt="Panda" width="60"></label>
 
             <input type="radio" id="iconTwo" name="presetAvatar" value="cat.png">
@@ -240,9 +278,19 @@ document.getElementById('delectBtn').addEventListener('click', function(){
             <textarea id="desid" name="des" type="text" maxlength="500" placeholder="{{user.description}}"></textarea><br><br>
         </div>
 
+        <div id="thinkTwice">
+            <div id="modalcontent" >
+                <p>Are you sure you want to delect this account?😭</p>
+                <p>🥺Please think twice🥺</p>
+            </div>
+            <button id="confirmdelect" type="submit">yes</button>
+            <button id="dontdelect" type="button">NOT NOW</button>
+        </div>
+        
         <button class="btn" type="submit" id="saveBtn">Save all changes</button>
-        <button class="btn" type="submit" id="delectBtn">Delect this account</button><br><br>
+        <button class="btn" type="button" id="delectBtn">Delect this account</button><br><br>
 
+        
         
     </form>
     {{/if}}

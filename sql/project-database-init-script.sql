@@ -38,8 +38,8 @@ CREATE TABLE subscribles (
 	subscribed_id INTEGER NOT NULL,
 	blogger_id INTEGER NOT NULL,
 	PRIMARY KEY (subscribed_id, blogger_id),
-	FOREIGN KEY (subscribed_id) REFERENCES users (id),
-	FOREIGN KEY (blogger_id) REFERENCES users (id)
+	FOREIGN KEY (subscribed_id) REFERENCES users (id) ON DELETE CASCADE,
+	FOREIGN KEY (blogger_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE images (
@@ -54,7 +54,7 @@ CREATE TABLE articles (
 	date_time TIMESTAMP NOT NULL,
 	author_id INTEGER NOT NULL,
 	image_id INTEGER,
-	FOREIGN KEY (author_id) REFERENCES users (id),
+	FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE,
 	FOREIGN KEY (image_id) REFERENCES images (id)
 );
 
@@ -62,8 +62,8 @@ CREATE TABLE likes (
 	user_id INTEGER NOT NULL,
 	article_id INTEGER NOT NULL,
 	PRIMARY KEY (user_id, article_id),
-	FOREIGN KEY (user_id) REFERENCES users (id),
-	FOREIGN KEY (article_id) REFERENCES articles (id)
+	FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+	FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
@@ -73,9 +73,9 @@ CREATE TABLE comments (
 	parent_id INTEGER,
 	article_id INTEGER,
 	user_id INTEGER NOT NULL,
-	FOREIGN KEY (parent_id) REFERENCES comments (id),
-	FOREIGN KEY (article_id) REFERENCES articles (id),
-	FOREIGN KEY (user_id) REFERENCES users (id)
+	FOREIGN KEY (parent_id) REFERENCES comments (id) ON DELETE CASCADE,
+	FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE,
+	FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE notifications (
@@ -87,10 +87,10 @@ CREATE TABLE notifications (
 	article_id INTEGER,
 	user_id INTEGER NOT NULL,
 	receiver_id INTEGER NOT NULL,
-	FOREIGN KEY (comment_id) REFERENCES comments (id),
-	FOREIGN KEY (article_id) REFERENCES articles (id),
-	FOREIGN KEY (user_id) REFERENCES users (id),
-	FOREIGN KEY (receiver_id) REFERENCES users (id)
+	FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE,
+	FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE,
+	FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+	FOREIGN KEY (receiver_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 INSERT INTO icons (id, filename) VALUES 

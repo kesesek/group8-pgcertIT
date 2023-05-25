@@ -187,13 +187,10 @@ async function updateUsername(authToken, name) {
         where authToken = ${authToken}`);
 }
 
-async function updatePassword(authToken, password) {
+async function updatePassword(authToken, salt, iteration, password) {
     const db = await dbPromise;
-    const user = await db.run(SQL`
-    select * from users
-    where authToken = ${authToken} `);
-
-    const hashedPassword = hashPassword(password, user.salt, paseInt(user.iterations));
+    
+    const hashedPassword = hashPassword(password, salt, iteration);
     await db.run(SQL`
         update users
         set hashed_password = ${hashedPassword}
@@ -243,35 +240,11 @@ async function updateDateBrith(authToken, date) {
 //6.delect an account
 async function delectAccount(authToken) {
     const db = await dbPromise;
-    const user = await db.run(SQL`
-    select * from users
-    where authToken = ${authToken} `);
-
-    await db.run(SQL`
-        DELETE FROM subscribles
-        WHERE subscribed_id = ${user.id}
-        AND blogger_id = ${user.id}`);
-
-    await db.run(SQL`
-        DELETE FROM articles
-        WHERE author_id = ${user.id}`);
-
-    await db.run(SQL`
-        DELETE FROM likes
-        WHERE user_id = ${user.id}`);
-
-    await db.run(SQL`
-        DELETE FROM comments
-        WHERE user_id = ${user.id}`);
-
-    await db.run(SQL`
-        DELETE FROM notifications
-        WHERE user_id = ${user.id}
-        AND receiver_id = ${user.id}`);
 
     await db.run(SQL`
         DELETE FROM users
         WHERE authToken = ${authToken}`);
+
 }
 //editAccount page ends
 
