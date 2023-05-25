@@ -17,7 +17,6 @@ function deleteCookie(cname) {
 function getCookie(cname) {
     const name = `${cname}=`;
     const decodedCookie = decodeURIComponent(document.cookie);
-    console.log(decodedCookie);
     const cookieArray = decodedCookie.split(";");
     for (let i = 0; i < cookieArray.length; i++) {
         let cookie = cookieArray[i].trim();
@@ -26,4 +25,22 @@ function getCookie(cname) {
         }
     }
     return false;
+}
+
+/**
+ * This function return the cookie value.
+ * 
+ * @param {*} cname the name of the cookie to check
+ */
+function getCookieValue(cname) {
+    const name = `${cname}=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(";");
+    for (let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i].trim();
+        if (cookie.indexOf(name) === 0) {
+            return cookie.substring(name.length);
+        }
+    }
+    return undefined;
 }

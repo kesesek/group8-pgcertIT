@@ -12,24 +12,56 @@
     <link rel="stylesheet" href="./css/site.css">
     <script type="text/javascript" src="./js/client-side.js"></script>
     <script type="text/javascript" src="./js/client-cookie-helper.js"></script>
+    {{!-- add WYSIWYG package --}}
+    <script src="https://cdn.tiny.cloud/1/iou5a9nf8iwyr0m36wgd0ohiwnnewr65yn0dw2x1e5bdh70m/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '.title',
+            height: 110,
+            menubar: false,
+            toolbar: 'bold italic underline',
+            {{!-- toolbar: false, --}}
+            {{!-- formats: {
+            h3: { block: 'h3' }
+        },
+            init_instance_callback: function (editor) {
+                editor.setContent('<h3>Title here...</h3>');
+            } --}}
+        });
+        tinymce.init({
+            selector: '.content',
+            menubar: false,
+            plugins: 'lists advlist',
+            toolbar: 'styleselect | bold italic underline | numlist bullist',
+        });
+        tinymce.init({
+            selector: '.comment',
+            menubar: false,
+            plugins: 'lists advlist',
+            toolbar: 'styleselect | bold italic underline | numlist bullist',
+        });
+    </script>
 </head>
 <div class="header_nav">
-{{!-- header --}}
-<div class="header">
-    <header>
-        <h1>iBlogger</h1>
-    </header>
-</div>
-{{!-- header end --}}
+    {{!-- header --}}
+    <div class="header">
+        <header>
+            <h1>iBlogger</h1>
+        </header>
+    </div>
+    {{!-- header end --}}
 
 {{!-- nav bar --}}
 {{!-- To do: links to be added --}}
 <div class="nav">
     <ul>
         <li class="leftnav"><a href="./" class="text {{#if active_HomePage}}active{{/if}}">Home Page</a></li>
-        <li class="leftnav"><a href="./allArticles" class="text {{#if active_AllArticlesPage}}active{{/if}}">All Articles</a></li>
+        <li class="leftnav"><a href="./allArticles" class="text {{#if active_AllArticlesPage}}active{{/if}}">All
+                Articles</a></li>
         <li class="rightnav loginStatus"><a href="./login" class="text">Log in</a></li>
-        <li class="rightnav"><a href="" class="icon"><img src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></li>
+        <li class="rightnav navIcon"><a href="./editAccount" class="icon"><img
+                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></li>
         <li class="rightnav">
             <a class="notifications">
                 <span><img src="./images/notification.png"></span>
@@ -41,6 +73,7 @@
     </ul>
 </div>
 {{!-- nav bar end --}}
+
 </div>
 {{!-- notification pop up window --}}
 <div class="notification-container hide" id="notification-container">
@@ -54,13 +87,13 @@
         <div class="flex-container">
             <div class="flex-vertical-container">
                 <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
-                <p class="message">{{this.username}}</p> 
+                <p class="message">{{this.username}}</p>
             </div>
             <div class="flex-vertical-container">
                 <p class="message"><a>{{this.message}}</a></p>
                 <p class="message datastamp">{{this.datastamp}}</p>
             </div>
-        </div>     
+        </div>
     </div>
     {{/each}}
     {{else}}

@@ -251,7 +251,7 @@ a:visited {
 
 .card {
   background-color: #db9292;
-  margin: 20px;
+  margin: 30px 20px;
   border-radius: 10px;
   color: #f9ebeb;
   text-align: center;
@@ -411,14 +411,21 @@ a:visited {
 #sidebar {
   float: left;
   width: 200px;
-  height: 120vh;
+  height: 100vh;
   overflow: hidden;
   background-color: #db9292;
   z-index: -1;
+  /* position: -webkit-sticky;
+  position: sticky;
+  top: 0; */
+}
+
+#sidebar a.active {
+  background-color: rgb(225, 185, 185);
 }
 
 #sidebar li a:hover:not(.active) {
-  background-color: rgb(158, 108, 108);
+  background-color: rgb(225, 185, 185);
 }
 
 #sidebar ul {
@@ -641,6 +648,61 @@ a:visited {
 
 
 
+/* addarticles css start */
+#inpFile {
+  display: none; 
+}
+
+.bTn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+#mylabel {
+  display: inline-block;
+  padding: 10px 10px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+#mylabel:hover {
+  background-color: #db9292;
+}
+
+
+#mybutton {
+  display: inline-block;
+  padding: 12px 20px;
+  margin-right: 10px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#mybutton:hover {
+  background-color: #db9292;
+}
+/* addarticles css end */
+
+/* favorite articles css modified */
+.grid-favArticles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 30px;
+}
+/* favorite articles css modified */
+
+
 
 /* Home Page */
 .welcomeMessage{
@@ -658,4 +720,102 @@ a:visited {
   background-color: #db9292;
   border: none;
 }
+
+.readMore{
+  background-color: #db9292;
+  border: rgb(158, 108, 108) 1px solid;
+  color: white;
+}
+
+.homePage{
+  margin: 10px;
+}
 /* Home Page end */
+
+/* Full Article Page */
+.article-container{
+  background-color: #db9292;
+  color: white;
+  margin: 50px 150px;
+  text-align: center;
+}
+
+.article-container h1{
+  padding: 20px;
+}
+
+.article-container h3{
+  padding: 10px;
+}
+
+.article-content{
+  background-color:rgb(158, 108, 108);
+  padding: 30px;
+}
+
+.comments-container{
+  background-color: #db9292;
+  color: white;
+  margin: 50px 150px;
+  text-align:left;
+}
+
+.comments-container .others-comments{
+  padding: 16px 30px;
+}
+
+.hide-or-show{
+  background-color:rgb(158, 108, 108);
+  width: fit-content;
+}
+
+.others-comments a{
+  color: white;
+}
+
+.comment-content{
+  background-color:rgb(158, 108, 108);
+  color: white;
+  text-align:left;
+  display: flex;
+}
+
+.comment-content .user-comment{
+  padding: 10px 30px;
+  margin: 0;
+}
+
+.comments-block{
+  padding: 10px;
+  margin: 10px;
+  border: rgb(158, 108, 108) 3px solid;
+}
+
+.comment-header{
+  display: flex;
+  justify-content:left;
+}
+
+.comment-header img{
+  display: block;
+  padding: 20px;
+}
+
+.comment-header p{
+  padding: 10px;
+}
+
+.comment-text {
+  background-color: rgb(158, 108, 108);
+  padding: 10px;
+}
+
+.button-combo{
+  display: flex;
+  justify-content:right;
+}
+
+.button-combo button{
+  margin: 10px;
+}
+/* Full Article Page end */

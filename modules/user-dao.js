@@ -11,14 +11,14 @@ async function retrieveUserWithCredentials(username, password) {
     where username = ${username} 
     `);
 
-    if(!user) {
+    if (!user) {
         return null;
     }
 
     const salt = user.salt;
     const iteration = parseInt(user.iterations);
     const hashedPassword = hashPassword(password, salt, iteration);
-    if(hashedPassword == user.hashed_password) {
+    if (hashedPassword == user.hashed_password) {
         return user;
     } else {
         return null;
@@ -31,7 +31,7 @@ function hashPassword(password, salt, iteration) {
 
     const hashedPassword = crypto.pbkdf2Sync(
         password, salt, iteration, length, digest);
-        
+
     return hashedPassword.toString('hex');
 }
 //login⬆️
@@ -67,7 +67,7 @@ async function retrieveUserIconPathWithAuthToken(authToken) {
 }
 
 //get all user names from the database
-async function getUsernames(){
+async function getUsernames() {
     const db = await dbPromise;
 
     const userNames = await db.all(SQL`
@@ -78,7 +78,7 @@ async function getUsernames(){
 }
 
 //create a user then insert into the database
-async function createUser(username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id){
+async function createUser(username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id) {
     const db = await dbPromise;
 
     await db.run(SQL`
@@ -88,7 +88,7 @@ async function createUser(username, fname, mname, lname, description, date_of_bi
 }
 
 //get the predifined id of the icon
-async function getPreIconId(filename){
+async function getPreIconId(filename) {
     const db = await dbPromise;
 
     const preIconId = await db.get(SQL`
@@ -100,7 +100,7 @@ async function getPreIconId(filename){
 }
 
 //save the uploaded Avatar filename into the database, then retrive the id of it
-async function saveUploadAndGetId(filename){
+async function saveUploadAndGetId(filename) {
     const db = await dbPromise;
 
     const result = await db.run(SQL`
@@ -109,6 +109,39 @@ async function saveUploadAndGetId(filename){
 
     return result.lastID;
 }
+
+//get the subscribe status by subscriber id and blogger id
+async function retrieveSubscribeWithAuthorId(authorId){
+    const db = await dbPromise;
+
+    const subscribers = await db.all(SQL`
+        SELECT subscribed_id FROM subscribles
+        WHERE blogger_id = ${authorId};
+    `);
+
+    return subscribers;
+}
+
+//unsubscribe by subscriber id and blogger id
+async function unsubscribeWithUserIdAndArticleId(userId, articleId) {
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    delete from subscribles
+    where subscribed_id = ${userId}
+    and blogger_id = ${articleId}`);
+    
+}
+
+//subscribe by subscriber id and blogger id
+async function subscribeWithUserIdAndArticleId(userId, articleId) {
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    INSERT INTO subscribles (subscribed_id, blogger_id) VALUES
+	(${userId}, ${articleId})`);
+}    
+
 
 //for editAccount page ⬇️
 //1.get user's info
@@ -215,6 +248,57 @@ async function delectAccount(authToken) {
 }
 //editAccount page ends
 
+//retrieve user's id by authToken
+async function retrieveUserIdWithAuthToken(authToken) {
+    const db = await dbPromise;
+
+    const user_id = await db.get(SQL`
+        SELECT id FROM users
+        WHERE authToken = ${authToken}`);
+
+    return user_id;
+}
+
+//save the uploaded article's image filename into the database, then retrive the id of it
+async function saveImageAndGetId(filename) {
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+        INSERT INTO images (filename) VALUES (${filename});
+    `);
+
+    return result.lastID;
+}
+
+//add new article to the database, including an image if exists
+async function addArticle(content, title, user_id, image_id) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        INSERT INTO articles (content, title, date_time, author_id, image_id)
+        VALUES (${content}, ${title}, datetime('now'), ${user_id}, ${image_id})
+    `);
+}
+
+//retrieve the liked articles by the user_id
+async function retrieveLikedArticlesByUserId(user_id) {
+    const db = await dbPromise;
+
+    const articles = await db.all(SQL`
+        SELECT articles.id, articles.content, articles.title, articles.date_time, 
+        articles.author_id, articles.image_id, users.username AS authorname, users.id AS author_id
+        FROM articles
+        JOIN users ON articles.author_id = users.id
+        WHERE articles.id IN (
+        SELECT likes.article_id
+        FROM likes
+        WHERE likes.user_id = ${user_id}
+        );
+    `);
+
+    return articles;
+}
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -225,6 +309,9 @@ module.exports = {
     hashPassword,
     getPreIconId,
     saveUploadAndGetId,
+    retrieveSubscribeWithAuthorId,
+    unsubscribeWithUserIdAndArticleId,
+    subscribeWithUserIdAndArticleId,
     getUserInfo,
     getAvatars,
     getUserAvatar,
@@ -236,5 +323,9 @@ module.exports = {
     updateMname,
     updateLname,
     updateDateBrith,
-    delectAccount
+    delectAccount,
+    retrieveUserIdWithAuthToken,
+    saveImageAndGetId,
+    addArticle,
+    retrieveLikedArticlesByUserId
 }

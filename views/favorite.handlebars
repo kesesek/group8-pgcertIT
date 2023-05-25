@@ -1,0 +1,21 @@
+<div class="main-container">
+    <div class="main-content">
+        <div class="grid-favArticles">
+            {{#each articles}}
+            {{!-- <div class="grid-content"> --}}
+                <div class="card">
+                    <p>{{this.title}}</p>
+                    <p>{{this.authorname}}</p>
+                    <p>{{this.date_time}}</p>
+                    <p>{{this.content}}</p>
+                    <div class="favorite">
+                        <form action="./removeLikes" method="get">
+                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img src="./images/black favorite.png" width="40px"></button>
+                        </form>
+                    </div>
+                </div>
+            {{!-- </div> --}}
+            {{/each}}
+        </div>   
+    </div>
+</div>
