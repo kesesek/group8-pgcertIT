@@ -1,0 +1,19 @@
+<div class="follow-container">
+    {{#if following}}
+    <ul>
+        {{#each following}}
+        <li>
+            <a href="">
+                <img src="./images/icons/{{this.filename}}" width="40"><span>{{this.username}}</span>
+            </a>
+            <form action="./nofollowing" method="get">
+                <br>
+                <button type="submit" name="bTn" value="{{this.id}}">Unsubscribe</button>
+            </form>
+        </li><br>
+        {{/each}}
+    </ul>
+    {{else}}
+        <p class="noneFollow">You've not followed any blogger~</p>
+    {{/if}}
+</div>

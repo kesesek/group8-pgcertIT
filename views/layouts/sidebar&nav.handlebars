@@ -13,66 +13,91 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="./js/client-side.js"></script>
     <script type="text/javascript" src="./js/client-cookie-helper.js"></script>
-
+    {{!-- add WYSIWYG package --}}
+    <script src="https://cdn.tiny.cloud/1/iou5a9nf8iwyr0m36wgd0ohiwnnewr65yn0dw2x1e5bdh70m/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '.title',
+            height: 110,
+            menubar: false,
+            toolbar: 'bold italic underline',
+            {{!-- toolbar: false, --}}
+            {{!-- formats: {
+            h3: { block: 'h3' }
+        },
+            init_instance_callback: function (editor) {
+                editor.setContent('<h3>Title here...</h3>');
+            } --}}
+        });
+        tinymce.init({
+            selector: '.content',
+            height: 350,
+            menubar: false,
+            plugins: 'lists advlist',
+            toolbar: 'styleselect | bold italic underline | numlist bullist',
+        });
+    </script>
 </head>
+
 <body class="bodywithsidebar">
 
-<div class="header_nav">
-{{!-- header --}}
-<div class="header">
-    <header>
-        <h1>iBlogger</h1>
-    </header>
-</div>
-{{!-- header end --}}
+    <div class="header_nav">
+        {{!-- header --}}
+        <div class="header">
+            <header>
+                <h1>iBlogger</h1>
+            </header>
+        </div>
+        {{!-- header end --}}
 
-{{!-- nav bar --}}
-{{!-- To do: links to be added --}}
-<div class="nav">
-    <ul>
-        <li class="leftnav"><a href="" class="text">Articles</a></li>
-        <li class="rightnav"><a href="" class="text">Log out</a></li>
-        <li class="rightnav"><a href="" class="icon"><img src="./images/icons/panda.png" width="40px"></a></li>
-        <li class="rightnav">
-            <a class="notifications">
-                <span><img src="./images/notification.png"></span>
-                <span class="badge">{{notificationCount}}</span>
-            </a>
-        </li>
-    </ul>
-</div>
-</div>
-{{!-- nav bar end --}}
+        {{!-- nav bar --}}
+        {{!-- To do: links to be added --}}
+        <div class="nav">
+            <ul>
+                <li class="leftnav"><a href="" class="text">Articles</a></li>
+                <li class="rightnav"><a href="" class="text">Log out</a></li>
+                <li class="rightnav"><a href="" class="icon"><img src="./images/icons/panda.png" width="40px"></a></li>
+                <li class="rightnav">
+                    <a class="notifications">
+                        <span><img src="./images/notification.png"></span>
+                        <span class="badge">{{notificationCount}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{!-- nav bar end --}}
 
-{{!-- notification pop up window --}}
-<div class="notification-container hide" id="notification-container">
-    <div class="notification notification-info">
-        <p class="message">Lorem ipsum dolor sit amet.</p> 
+    {{!-- notification pop up window --}}
+    <div class="notification-container hide" id="notification-container">
+        <div class="notification notification-info">
+            <p class="message">Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="notification notification-info">
+            <p class="message">Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="notification notification-info">
+            <p class="message">Lorem ipsum dolor sit amet.</p>
+        </div>
     </div>
-    <div class="notification notification-info">
-        <p class="message">Lorem ipsum dolor sit amet.</p> 
-    </div>
-    <div class="notification notification-info">
-        <p class="message">Lorem ipsum dolor sit amet.</p> 
-    </div>
-</div>
-{{!-- notification pop up window end --}}
+    {{!-- notification pop up window end --}}
 
-{{!-- sidebar⬇️ waiting for links--}}
-<div id="sidebar">
-    <ul>
-        <li><a href="#" class="text">Edit Account</a></li>
-        <li><a href="#" class="text">My Articles</a></li>
-        <li><a href="#" class="text">Add Articles</a></li>
-        <li><a href="#" class="text">My Favorite Articles</a></li>
-        <li><a href="#" class="text">Following</a></li>
-        <li><a href="#" class="text">Follower</a></li>
-        <li><a href="#" class="text">Analytics</a></li>
-    </ul>
-</div>
+    {{!-- sidebar⬇️ waiting for links--}}
+    <div id="sidebar">
+        <ul>
+            <li><a href="#" class="text">My Articles</a></li>
+            <li><a href="/addarticle" class="text">Add Articles</a></li>
+            <li><a href="/favorite" class="text">Favorite Articles</a></li>
+            <li><a href="/following" class="text">Following</a></li>
+            <li><a href="/follower" class="text">Follower</a></li>
+            <li><a href="#" class="text">Analytics</a></li>
+            <li><a href="/editAccount" class="text">Edit Account</a></li>
+        </ul>
+    </div>
 
     <div class="maincontent">
-     {{{body}}}
+        {{{body}}}
     </div>
 </body>
 
