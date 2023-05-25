@@ -11,6 +11,8 @@ const upload = multer({
 const fs = require("fs");
 
 const userDao = require("../modules/user-dao.js");
+const showNotifications = require("../middleware/notifications-middleware.js");
+const articleDao = require("../modules/article-dao.js");
 
 router.get("/login", function (req, res) {
     if (req.cookies.authToken) {
@@ -246,5 +248,26 @@ router.post("/submitArticle", upload.single("imageFile"), async function (req, r
 
     res.redirect("/myarticle");
 });
+
+//when click the "Favorite Articles" button in the side bar, the user can see the favorite articles interface
+router.get("/favorite", async function(req, res){
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
+    
+    res.locals.user_id = user_idObj.id;
+    res.locals.articles = articles;
+    res.render("favorite");
+});
+
+//in the favorite page, when click the dislike button, it will modifify the database and redirect back to the favorite page
+router.get("/removeLikes", showNotifications, async function(req, res){
+    const article_id = req.query.likeAction;
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const user_id = user_idObj.id;
+    await articleDao.removeLikedArticles(user_id, article_id);
+
+    res.redirect("/favorite");
+});
+
 
 module.exports = router;
