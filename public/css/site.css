@@ -296,25 +296,33 @@ a:visited {
   display: none; 
 }
 
+.bTn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 #mylabel {
   display: inline-block;
   padding: 10px 10px;
   background-color: rgb(158, 108, 108);
   color: #fff;
-  font-size: 12px;
+  font-size: 15px;
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.3s ease;
+  margin-right: 10px;
 }
 
 #mylabel:hover {
-  background-color: #da7878;
+  background-color: #db9292;
 }
 
 
 #mybutton {
   display: inline-block;
   padding: 12px 20px;
+  margin-right: 10px;
   background-color: rgb(158, 108, 108);
   color: #fff;
   font-size: 15px;
@@ -325,9 +333,17 @@ a:visited {
 }
 
 #mybutton:hover {
-  background-color: #da7878;
+  background-color: #db9292;
 }
 /* addarticles css end */
+
+/* favorite articles css modified */
+.grid-favArticles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 30px;
+}
+/* favorite articles css modified */
 
 
 /* Home Page */

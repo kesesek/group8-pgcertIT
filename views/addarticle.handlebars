@@ -1,7 +1,9 @@
 <form action="./submitArticle" method="post" enctype="multipart/form-data">
     <textarea class="title" name="title" required>Title here...</textarea>
     <textarea class="content" name="content" required>Content here...</textarea><br>
-    <label for="inpFile" id="mylabel">Upload an image here!</label>
-    <input id="inpFile" type="file" name="imageFile" accept=".png,.jpg,.jpeg,.bmp"><br><br>
-    <button type="submit" id="mybutton">Submit</button>
+    <div class="bTn">
+        <label for="inpFile" id="mylabel">Upload an image</label>
+        <input id="inpFile" type="file" name="imageFile" accept=".png,.jpg,.jpeg,.bmp"><br><br>
+        <button type="submit" id="mybutton">Submit</button>
+    </div>
 </form>
