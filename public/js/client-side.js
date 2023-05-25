@@ -43,6 +43,14 @@ window.addEventListener("load", async function(){
         } else {
             loginLabel.innerHTML = `<a href="./login" class="text">Log in</a>`;
         }
+
+        // check whether the user can go to their personal profile page(login or not)
+        const navIcon = this.document.querySelector(".navIcon");
+        navIcon.addEventListener("click", function(){
+            if (!getCookie("authToken")){
+                alert('Please Log in to go to your personal page!');
+            }
+        })
     }
 
     if (document.querySelector("#username")) {
@@ -177,7 +185,7 @@ window.addEventListener("load", async function(){
 
         async function getNestedCommentsJson(){
             const articleId = getCookieValue("articleId");
-            let commentsResponse = await fetch(`http://localhost:3000/comment/${articleId}`);
+            let commentsResponse = await fetch(`http://localhost:3000/articleComments/${articleId}`);
             let commentsJson = await commentsResponse.json();
             return commentsJson;
         };
@@ -187,9 +195,14 @@ window.addEventListener("load", async function(){
     if (this.document.querySelector(".deleteButton")) {
         const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
         deleteButtonArray.forEach(deleteButton => {
-            deleteButton.addEventListener("click", function () {
+            deleteButton.addEventListener("click", async function () {
+                const comment = await getCommentJson();
+                const article = await getArticleJson();
+                const user = await getUserJson();
                 if (!getCookie("authToken")){
                     alert('Please Log in to delete!');
+                } else if (user.id != article.authorId && user.id != comment.user_id) {
+                    alert('Sorry! You do not have access to delete this comment.');
                 }
             })
         });
@@ -202,6 +215,30 @@ window.addEventListener("load", async function(){
                 }
             })
         });
+
+        // To check whether the user has the access to delete the comment
+        // So that we can alert the user or not 
+        async function getUserJson(){
+            const authToken = getCookieValue("authToken");
+            let userResponse = await fetch(`http://localhost:3000/user/${authToken}`);
+            let userJson = await userResponse.json();
+            return userJson;
+        };
+
+        async function getCommentJson(){
+            const commentId = getCookieValue("commentId");
+            let commentResponse = await fetch(`http://localhost:3000/comment/${commentId}`);
+            let commentJson = await commentResponse.json();
+            return commentJson;
+        };
+
+        async function getArticleJson(){
+            const articleId = getCookieValue("articleId");
+            let articleResponse = await fetch(`http://localhost:3000/comment/${articleId}`);
+            let articleJson = await articleResponse.json();
+            return articleJson;
+        };
+        // check alert end
     }
 });
 

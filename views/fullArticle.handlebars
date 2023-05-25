@@ -2,17 +2,19 @@
     <h1>{{{article.title}}}</h1>
     <h3>{{article.timestamp}}</h3>
     <p><a href="" class="icon"><img src="./images/icons/{{article.path}}" width="40px"></a>
-        <div href="" class="subscribeStatus">
-            {{#if subscribe}}
-            <form action="./unsubscribe" method="get">
-                <button type="submit" class="subscribe" name="subscribeOrNot" value="{{article.articleId}}">unsubscribe</button>
-            </form>
-            {{else}}
-            <form action="./subscribe" method="get">
-                <button type="submit" class="subscribe" name="subscribeOrNot" value="{{article.articleId}}">subscribe</button>
-            </form>
-            {{/if}}
-        </div>
+    <div href="" class="subscribeStatus">
+        {{#if subscribe}}
+        <form action="./unsubscribe" method="get">
+            <button type="submit" class="subscribe" name="subscribeOrNot"
+                value="{{article.articleId}}">unsubscribe</button>
+        </form>
+        {{else}}
+        <form action="./subscribe" method="get">
+            <button type="submit" class="subscribe" name="subscribeOrNot"
+                value="{{article.articleId}}">subscribe</button>
+        </form>
+        {{/if}}
+    </div>
     </p>
     <div class="article-content">
         <p>{{{article.content}}}</p>
@@ -26,7 +28,7 @@
     <div class="comments-block">
         {{!-- {{#if comments}}
         <ul>
-        {{#each comments}}
+            {{#each comments}}
             <li>
                 <div class="comment-header">
                     <img src="./images/icons/{{this.filename}}" width="40px">
@@ -63,12 +65,18 @@
                 </ul>
                 {{/if}}
             </li>
-        {{/each}}
+            {{/each}}
         </ul>
         {{/if}} --}}
     </div>
     <div class="comment-content">
-        <p class="user-comment"><a href="" class="icon"><img src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></p>
-        <p>text editor</p>
+        <p class="user-comment"><a href="" class="icon"><img
+                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></p>
+        <div id="commentEditor" style="width: 82.5%;">
+            <form action="" method="">
+                <textarea class="comment" name="comment" required>Any comments?</textarea><br>
+                <button type="submit" id="commentButton">Submit</button>
+            </form>
+        </div>
     </div>
 </div>

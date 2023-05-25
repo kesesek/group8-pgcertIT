@@ -98,20 +98,26 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 
 
 //for editAcount page⬇️:
-router.get("/editAccount", async function (req, res) {
-    const authToken = req.cookies.authToken;
-    // if(authToken !== null || undefined) {
-    //     console.log(authToken);
-    // } else {
-    //     console.log('null or undefined');
-    // }
+router.get("/editAccount", async function(req, res) {
+    if (req.cookies.authToken) {
+        const authToken = req.cookies.authToken;
+        // if(authToken !== null || undefined) {
+        //     console.log(authToken);
+        // } else {
+        //     console.log('null or undefined');
+        // }
+        
+        res.locals.active_EditAccount = true;
 
-    const user = await userDao.getUserInfo(authToken);
-    const userid = user.id;
-    const userAvatar = await userDao.getUserAvatar(userid);
-    res.locals.user = user;
-    res.locals.userAvatarName = userAvatar;
-    res.render("editAccount", { layout: 'sidebar&nav' });
+        const user = await userDao.getUserInfo(authToken);
+        const userid = user.id;
+        const userAvatar = await userDao.getUserAvatar(userid);
+        res.locals.user = user;
+        res.locals.userAvatarName = userAvatar;
+        res.render("editAccount", {layout: 'sidebar&nav'});
+    } else{
+        res.redirect("/");
+    }
 });
 
 router.post("/verifyOldPassword", async function (req, res) {
@@ -218,7 +224,8 @@ router.post("/delectAccount", async function (req, res) {
 //the page would go to the "addarticle" page
 router.get("/addarticle", function (req, res) {
 
-    res.render("addarticle", { layout: 'sidebar&nav' });
+    res.locals.active_AddArticles = true;
+    res.render("addarticle", {layout: 'sidebar&nav'});
 });
 
 //in the "addarticle" page, user can write a whole new article and save it to the database, the redirect to the "My Articles" page
@@ -257,7 +264,9 @@ router.get("/favorite", async function (req, res) {
 
     res.locals.user_id = user_idObj.id;
     res.locals.articles = articles;
-    res.render("favorite", { layout: 'sidebar&nav' });
+
+    res.locals.active_MyFavoriteArticles = true;
+    res.render("favorite", {layout: 'sidebar&nav'});
 });
 
 //in the favorite page, when click the dislike button, it will modify the database and redirect back to the favorite page
