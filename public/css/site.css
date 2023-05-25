@@ -411,14 +411,21 @@ a:visited {
 #sidebar {
   float: left;
   width: 200px;
-  height: 120vh;
+  height: 100vh;
   overflow: hidden;
   background-color: #db9292;
   z-index: -1;
+  /* position: -webkit-sticky;
+  position: sticky;
+  top: 0; */
+}
+
+#sidebar a.active {
+  background-color: rgb(225, 185, 185);
 }
 
 #sidebar li a:hover:not(.active) {
-  background-color: rgb(158, 108, 108);
+  background-color: rgb(225, 185, 185);
 }
 
 #sidebar ul {
