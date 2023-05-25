@@ -38,6 +38,7 @@ window.addEventListener("load", async function(){
             const logoutLabel = this.document.querySelector(".logout");
             logoutLabel.addEventListener("click", function(){
                 deleteCookie("authToken");
+                deleteCookie("toastMessage");
             })
         } else {
             loginLabel.innerHTML = `<a href="./login" class="text">Log in</a>`;
@@ -203,7 +204,4 @@ window.addEventListener("load", async function(){
         });
     }
 });
-
-
-})
 
