@@ -107,10 +107,7 @@ window.addEventListener("load",function(){
             })
         }
     }
+    
 
-
-
-//for editAccount page⬇️--hly
-//1.verify the new username:
 
 })

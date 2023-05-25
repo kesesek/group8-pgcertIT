@@ -6,6 +6,7 @@
 
 // Setup Express
 const express = require("express");
+const multer = require('multer');
 const app = express();
 const port = 3000;
 
@@ -27,6 +28,16 @@ app.use(cookieParser());
 // Make the "public" folder available statically
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
+
+//setup multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './images/icons');
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
 
 // Use the toaster middleware
 app.use(require("./middleware/toaster-middleware.js"));

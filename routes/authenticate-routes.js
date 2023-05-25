@@ -96,17 +96,9 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 //for editAcount page⬇️:
 router.get("/editAccount", async function(req, res) {
     const authToken = req.cookies.authToken;
-    // if(authToken !== null || undefined) {
-    //     console.log(authToken);
-    // } else {
-    //     console.log('null or undefined');
-    // }
     
     const user = await userDao.getUserInfo(authToken);
-    const userid = user.id;
-    const userAvatar = await userDao.getUserAvatar(userid);
     res.locals.user = user;
-    res.locals.userAvatarName = userAvatar;
     res.render("editAccount", {layout: 'sidebar&nav'});
 });
 
@@ -137,13 +129,13 @@ router.post("/verifyOldPassword", async function(req, res) {
 });
 
 
-router.post("/saveAll", async function(req, res) {
+router.post("/saveAll", upload.single('avatarFileName'),async function(req, res) {
+    console.log('in saveAll');
     const authToken = req.cookies.authToken;
-
-    const fileInfo = req.file;
-    const preAvatar = req.body.presetAvatar;
-    const avatarID = parseInt(req.body.avartarID);
-    const avatarFile = req.body.avartarFile;
+    const olduser = await userDao.getUserInfo(authToken);
+    console.log(olduser);
+    const preAvatar = req.body.checkedAvatar;
+    const avatarFile = req.file;
     const newName = req.body.newName;
     const newPassword = req.body.newPassword;
     const newDb = req.body.newDb;
@@ -151,54 +143,79 @@ router.post("/saveAll", async function(req, res) {
     const newMname = req.body.newMname;
     const newLname = req.body.newLname;
     const newDes = req.body.newDes;
-    console.log(avatarID);
+    console.log(preAvatar);//null
+    console.log(avatarFile);//undefined
+    console.log(newName);//new
 
-    if(avatarFile == undefined) {
+    if(preAvatar) {
+        console.log("1 if");//1 if
         const avatarID = await userDao.getPreIconId(preAvatar);
-        await userDao.updateUserAvatar(authToken, avatarID);
-    } else {
-        //false 新文件 创建ID 更新到user
+        console.log(avatarID);//undefined
+        if(avatarID) {
+            console.log('in ifif');
+            console.log(avatarID.id);
+            await userDao.updateUserAvatar(authToken, avatarID.id);
+        }   
+    } 
+    
+    if(avatarFile){
+        console.log("2 if");
         const oldFileName = avatarFile.path;
-        const newFileName = `./public/images/uploadedFiles/${avatarFile.originalname}`;
+        const newFileName = `./public/images/icons/${avatarFile.originalname}`;
         fs.renameSync(oldFileName, newFileName);
         const newAvatarID = await userDao.saveUploadAndGetId(avatarFile.originalname);
         await userDao.updateUserAvatar(authToken, newAvatarID);
     }
 
-    if(newName !== null) {
+    if(newName) {
+        console.log("3 if");
+
         await userDao.updateUsername(authToken, newName);
     }
 
-    if(newPassword !== null) {
-        await userDao.updatePassword(authToken, newPassword);
+    if(newPassword) {
+        console.log("4 if");
+        const user = await userDao.getUserInfo(authToken);
+        const salt = user.salt;
+        const iteration = user.iterations;
+        console.log('get salt ' + salt);
+        await userDao.updatePassword(authToken, salt, iteration, newPassword);
     }
     
-    if(newDb !== null) {
+    if(newDb) {
+        console.log("4 if");
+
         await userDao.updateDateBrith(authToken, newDb);
     }
 
-    if(newFname !== null) {
+    if(newFname) {
+        console.log("5 if");
+
         await userDao.updateFname(authToken, newFname);
     }
 
-    if(newMname !== null) {
+    if(newMname) {
+        console.log("6 if");
+
         await userDao.updateMname(authToken, newMname);
     }
 
-    if(newLname !== null) {
+    if(newLname) {
+        console.log("7 if");
+
         await userDao.updateLname(authToken, newLname);
     }
 
-    if(newDes !== null) {
+    if(newDes) {
+        console.log("8 if");
+
         await userDao.updateDescription(authToken, newDes);
     }
 
 
     const user = await userDao.getUserInfo(authToken);
-    console.log(user);
     res.locals.user = user;
-
-    res.json({ success: true });
+    res.send({ success: true });
 })
 
 router.post("/delectAccount", async function(req, res){
@@ -206,7 +223,8 @@ router.post("/delectAccount", async function(req, res){
     await userDao.delectAccount(authToken);
 
     res.clearCookie('authToken');
-    res.send({ success: true });
+    console.log(authToken);
+    res.json({success: true});
 })
 //editAccount page ends
 
