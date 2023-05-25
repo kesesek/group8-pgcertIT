@@ -63,7 +63,7 @@ async function retrieveUserIconPathWithAuthToken(authToken) {
     where users.authToken = ${authToken} 
     and users.icon_id = icons.id`);
 
-    return user;   
+    return user;
 }
 
 //get all user names from the database
@@ -111,7 +111,7 @@ async function saveUploadAndGetId(filename) {
 }
 
 //get the subscribe status by subscriber id and blogger id
-async function retrieveSubscribeWithAuthorId(authorId){
+async function retrieveSubscribeWithAuthorId(authorId) {
     const db = await dbPromise;
 
     const subscribers = await db.all(SQL`
@@ -130,7 +130,7 @@ async function unsubscribeWithUserIdAndArticleId(userId, articleId) {
     delete from subscribles
     where subscribed_id = ${userId}
     and blogger_id = ${articleId}`);
-    
+
 }
 
 //subscribe by subscriber id and blogger id
@@ -140,7 +140,7 @@ async function subscribeWithUserIdAndArticleId(userId, articleId) {
     const result = await db.run(SQL`
     INSERT INTO subscribles (subscribed_id, blogger_id) VALUES
 	(${userId}, ${articleId})`);
-}    
+}
 
 
 //for editAccount page ⬇️
@@ -153,7 +153,7 @@ async function getUserInfo(authToken) {
     return user;
 }
 //2.get all avatars
-async function getAvatars(){
+async function getAvatars() {
     const db = await dbPromise;
     const images = await db.all(SQL`
     select id, filename from icons`);
@@ -166,7 +166,7 @@ async function getUserAvatar(userId) {
         select filename from icons, users
         where icons.id = users.icon_id
         and users.id = ${userId}`);
-    
+
     return iconPath;
 }
 
@@ -326,6 +326,41 @@ async function retrieveLikedArticlesByUserId(user_id) {
     return articles;
 }
 
+//retrieve following object by user_id
+async function retrieveFollowingByUserId(user_id) {
+    const db = await dbPromise;
+
+    const following = await db.all(SQL`
+        SELECT u.id, u.username, i.filename
+        FROM users u
+        JOIN icons i ON u.icon_id = i.id
+        WHERE u.id IN (
+        SELECT blogger_id
+        FROM subscribles
+        WHERE subscribed_id = ${user_id});    
+    `);
+
+    return following;
+}
+
+//retrieve follower object by user_id
+async function retrieveFollowerByUserId(user_id) {
+    const db = await dbPromise;
+
+    const follower = await db.all(SQL`
+        SELECT u.id, u.username, i.filename
+        FROM users u
+        JOIN icons i ON u.icon_id = i.id
+        WHERE u.id IN (
+        SELECT subscribed_id
+        FROM subscribles
+        WHERE blogger_id = ${user_id});
+    `);
+
+    return follower;
+}
+
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -354,5 +389,7 @@ module.exports = {
     retrieveUserIdWithAuthToken,
     saveImageAndGetId,
     addArticle,
-    retrieveLikedArticlesByUserId
+    retrieveLikedArticlesByUserId,
+    retrieveFollowingByUserId,
+    retrieveFollowerByUserId
 }

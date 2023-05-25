@@ -1,0 +1,19 @@
+<div class="follow-container">
+    {{#if follower}}
+    <ul>
+        {{#each follower}}
+        <li>
+            <a href="">
+                <img src="./images/icons/{{this.filename}}" width="40"><span>{{this.username}}</span>
+            </a>
+            <form action="./nofollower" method="get">
+                <br>
+                <button type="submit" name="bTn" value="{{this.id}}">Remove</button>
+            </form>
+        </li><br>
+        {{/each}}
+    </ul>
+    {{else}}
+        <p class="noneFollow">You've no follower yet😭</p>
+    {{/if}}
+</div>
