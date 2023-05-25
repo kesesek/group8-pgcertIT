@@ -35,16 +35,22 @@
             plugins: 'lists advlist',
             toolbar: 'styleselect | bold italic underline | numlist bullist',
         });
+        tinymce.init({
+            selector: '.comment',
+            menubar: false,
+            plugins: 'lists advlist',
+            toolbar: 'styleselect | bold italic underline | numlist bullist',
+        });
     </script>
 </head>
 <div class="header_nav">
-{{!-- header --}}
-<div class="header">
-    <header>
-        <h1>iBlogger</h1>
-    </header>
-</div>
-{{!-- header end --}}
+    {{!-- header --}}
+    <div class="header">
+        <header>
+            <h1>iBlogger</h1>
+        </header>
+    </div>
+    {{!-- header end --}}
 
 {{!-- nav bar --}}
 {{!-- To do: links to be added --}}
@@ -67,6 +73,7 @@
     </ul>
 </div>
 {{!-- nav bar end --}}
+
 </div>
 {{!-- notification pop up window --}}
 <div class="notification-container hide" id="notification-container">
