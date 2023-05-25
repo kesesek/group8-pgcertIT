@@ -22,7 +22,7 @@
   }
 
 .nav .leftnav {
-    float: left;
+  float: left;
 } 
 
 .nav .rightnav {
@@ -289,6 +289,366 @@ a:visited {
   margin: 20px 50px;
 }
 /* all article page, articles layout end */
+
+
+/* login page style */
+#login_body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9ebeb;
+}
+
+#login_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  height: 450px;
+  border-radius: 20px;
+  background-color: #db9292;
+  box-shadow: 15px 15px 10px #a48294;
+  overflow: hidden;
+  position: relative;
+}
+
+#login_container form {
+  width: 350px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+#login_container form .ipt {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #f9ebeb;
+  background: none;
+  color: #f9ebeb;
+  font-size: 15px;
+}
+
+#login_container form .ipt::placeholder {
+  color: #f9ebeb;
+  font-size: 15px;
+}
+
+#login_container form #login_btn {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: 2px inset;
+  background-color: #f9ebeb;
+  border-radius: 20px;
+  color: #f9ebeb;
+  background: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#login_container h1 {
+  color:#f9ebeb;
+  font-size: 50px;
+  letter-spacing: 5px;
+  font-weight: 100;
+  text-shadow: 5px 5px 5px rgb(158, 108, 108);
+  z-index: 1;
+}
+
+#login_fail_message {
+  color:#f9ebeb;
+  text-align: center;
+  font-style:italic;
+  font-size: 20px;
+}
+/* login page ends */
+
+/* login&sign-up layout body style */
+.bodywithnav {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header_nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(158, 108, 108);
+}
+
+.nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav ul li {
+  display: inline;
+  margin-left: 10px;
+  float: inline-end;
+}
+
+.header_nav .header {
+  padding-left: 20px;
+}
+
+/*login&sign-up layout body ends */
+
+/* sidebar style ⬇️ */
+#sidebar {
+  float: left;
+  width: 200px;
+  height: 120vh;
+  overflow: hidden;
+  background-color: #db9292;
+  z-index: -1;
+}
+
+#sidebar li a:hover:not(.active) {
+  background-color: rgb(158, 108, 108);
+}
+
+#sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#sidebar ul li {
+  list-style: none;
+}
+
+#sidebar .text {
+  display: block;
+  color: #f9ebeb;
+  text-align: center;
+  padding: 15px 16px;
+  text-decoration: none;
+}
+
+/* #layout_body {
+  margin-top: 50px;
+  margin-left: 300px;
+  float: right;
+} not used*/
+
+.bodywithsidebar {
+  margin: 0;
+  padding: 0;
+  background-color:#f9ebeb;
+}
+
+.maincontent {
+  margin-left: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+  padding:0;
+}
+/* sidebar style ends */
+
+/* editAccount page style⬇️ */
+#edit_account_container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  background-color: #f9ebeb;
+  color:rgb(158, 108, 108);
+  position: relative;
+}
+
+.editipt {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid rgb(158, 108, 108);
+  background: none;
+  color: rgb(158, 108, 108);
+  font-size: 15px;
+}
+
+.editipt ::placeholder {
+  color: rgb(158, 108, 108);
+  font-size: 15px;
+}
+
+#edtForm .btn {
+  width: 80px;
+  height: 30px;
+  outline: none;
+  border: 2px;
+  background-color: rgb(158, 108, 108);
+  border-radius: 20px;
+  color: #f9ebeb;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#edtForm img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+}
+
+#edtForm textarea {
+  width: 300px;
+  height: 60px;
+  border-color: rgb(158, 108, 108);
+  overflow: scroll;
+  border: 1px solid rgb(158, 108, 108);
+  color:rgb(158, 108, 108);
+  font-size: 15px;
+  resize: none;
+}
+
+#textnew {
+  display: flex;
+}
+/* editAccount ends */
+
+/* signup ⬇️*/
+#signuppage {
+  margin: 0;
+  padding: 0 ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9ebeb;
+  color:rgb(158, 108, 108);
+  font-size: 20px;
+}
+
+#signuppage img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+#signuppage .signText {
+  width: 250px;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid rgb(158, 108, 108);
+  background: none;
+  color: rgb(158, 108, 108);
+}
+
+#signpage textarea {
+  width: 300px;
+  height: 60px;
+  border-color: rgb(158, 108, 108);
+  overflow: scroll;
+  border: 1px solid rgb(158, 108, 108);
+  background-color: #f9ebeb;
+  color:rgb(158, 108, 108);
+  font-size: 15px;
+  resize: none;
+}
+
+#textareaBox {
+  display: flex;
+}
+
+#signupBtn {
+  width: 300px;
+  height: 30px;
+  outline: none;
+  border: 2px;
+  background-color: rgb(158, 108, 108);
+  border-radius: 20px;
+  color: #f9ebeb;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+/* signup end */
+
+
+
+
+
+
+/* addarticles css start */
+#inpFile {
+  display: none; 
+}
+
+.bTn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+#mylabel {
+  display: inline-block;
+  padding: 10px 10px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+#mylabel:hover {
+  background-color: #db9292;
+}
+
+
+#mybutton {
+  display: inline-block;
+  padding: 12px 20px;
+  margin-right: 10px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#mybutton:hover {
+  background-color: #db9292;
+}
+/* addarticles css end */
+
+/* favorite articles css modified */
+.grid-favArticles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 30px;
+}
+/* favorite articles css modified */
+
+
 
 /* Home Page */
 .welcomeMessage{

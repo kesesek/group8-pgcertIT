@@ -1,0 +1,249 @@
+<script>
+window.addEventListener('load', function(){
+console.log(document.querySelector("#newnameid"));
+console.log('hey');
+if (document.querySelector("#newnameid")) {
+    //get all user names from the page we created, return the Json
+    async function getAllUserNames() {
+        let userNamesResponse = await fetch("http://localhost:3000/allusernames");
+        let userNamesJson = await userNamesResponse.json();
+
+        return userNamesJson;
+    }
+
+    //display the information about the duplicate usernames
+    const testLabel = document.querySelector("#newNameTest");
+    const userName = document.querySelector("#newnameid");
+    console.log(userName);
+
+
+    //function that check if there are duplicate usernames
+    userName.addEventListener("input", async function () {
+        testLabel.innerHTML = "";
+        let userNameValue = userName.value;
+        console.log(userNameValue);
+
+        const userNamesArray = await getAllUserNames();
+        for (let i = 0; i < userNamesArray.length; i++) {
+            if (userNameValue == userNamesArray[i].username) {
+                testLabel.innerHTML = `User name already exists!`;
+                break;
+            }
+        }
+    });
+} else {
+    console.log('no value');
+}
+
+
+//2.verify the new password:
+if(document.querySelector("#confirmnewid")) {
+    const isMatch = document.querySelector("#passwordMatch");
+    const newPassword = document.querySelector("#newpasswordid");
+    const confirmNew = document.querySelector("#confirmnewid");
+
+    confirmNew.addEventListener("input", async function () {
+        isMatch.innerHTML = "";
+        let passWordValue1 = newPassword.value;
+        let passWordValue2 = confirmNew.value;
+
+        if(passWordValue1 != passWordValue2){
+            isMatch.innerHTML = `Different password input!`;
+        }
+    });
+}
+
+//4.verify old password:
+if(document.querySelector("#oldpasswordid")) {
+    console.log('im in');
+    async function getVerificationResult(){
+        let result = await fetch("http://localhost:3000/verifyOldPassword",{
+            method:"POST",
+            body: JSON.stringify({oldPassword:document.querySelector("#oldpasswordid").value}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+            let flag = await result.json();
+            return flag;
+    }
+
+    const testLabel = document.querySelector("#oldPasswordTest");
+        const oldone = document.querySelector("#oldpasswordid");
+        console.log(oldone);
+
+        oldone.addEventListener("input", async function () {
+            testLabel.innerHTML = "";
+            let oldpassword = oldone.value;
+            console.log(oldpassword);
+
+            const flag = await getVerificationResult();
+                if (!flag) {
+                    testLabel.innerHTML = `Verification failed!`;
+                } else {
+                    const newPasswordInput = document.querySelector("#newpasswordid");
+                    newPasswordInput.disabled = false;
+
+                    const confirmNewPssword = document.querySelector("#confirmnewid");
+                    confirmNewPssword.disabled = false;
+
+                }  
+        });
+}
+
+//5.save changes:
+const saveBtn = document.getElementById('saveBtn');
+saveBtn.addEventListener('click', function(){
+    console.log("clicked");
+    let avatarID = document.getElementByName('presetAvatar').value;
+    let avatarFileName = document.getElementById('editAvatar').files[0];
+    let formData = new FormData();
+    formData.append('file', file);
+
+    let newName = document.getElementById('newnameid').value;
+    let newPassword = document.getElementById('newpasswordid').value;
+    let newDb = document.getElementById('newBd').value;
+    let newFname = document.getElementById('fnameid').value;
+    let newMname = document.getElementById('mnameid').value;
+    let newLname = document.getElementById('lnameid').value;
+    let newDes = document.getElementById('desid').value;
+    console.log('newName');
+    $.ajax({
+        url: "/saveAll",
+        method:"POST",
+        data: {
+            avatarID: avatarID,
+            avatarFile: formData,
+            newName: newName,
+            newPassword: newPassword,
+            newDb: newDb,
+            newFname: newFname,
+            newMname: newMname,
+            newLname: newLname,
+            newDes: newDes
+        },
+        processData: false,
+        contentType:false,
+        success: function() {
+            if(response.success) {
+                alert("Saved!");
+                setTimeout(function(){
+                    window.location.href = "/editAccount";
+                },1000);
+            }
+        },
+        error: function() {
+            alert("Error. Failed to save. Please try again.");
+            setTimeout(function(){
+                window.location.href = "/editAccount";
+            },1000);
+        }
+    });
+    console.log('ajax end');
+});
+
+//6.delect account
+document.getElementById('delectBtn').addEventListener('click', function(){
+    $.ajax({
+        url: "/delectAccount",
+        method: "post",
+        success:function(response) {
+            if(response.success) {
+                alert("Delected! Hope to see you again!");
+                setTimeout(function(){
+                    window.location.href = "/";
+                },1000);
+            } 
+        },
+        error: function() {
+            alert("Error. Failed to delete. Please try again.");
+            setTimeout(function(){
+                window.location.href = "/";
+            },1000);
+        }
+    });
+});
+})
+//todo: saveBtn's not working; checked the pic that user uses; delectBtn is not tested; delectThinkTwice modal
+</script>
+<div id="edit_account_container">
+    {{#if user}}
+    <form id="edtForm" enctype="multipart/form-data">
+        <br>
+        <label for="editAvatar">Avatar: </label>
+        <input id="editAvatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        <p>Or you can choose a predefined avatar: </p>
+        <div>
+            <input type="radio" id="iconOne" name="presetAvatar" value="panda.png" checked>
+            <label for="iconOne"><img src="/images/icons/panda.png" alt="Panda" width="60"></label>
+
+            <input type="radio" id="iconTwo" name="presetAvatar" value="cat.png">
+            <label for="iconTwo"><img src="/images/icons/cat.png" alt="Cat" width="60"></label>
+            
+            <input type="radio" id="iconThree" name="presetAvatar" value="dog.png">
+            <label for="iconThree"><img src="/images/icons/dog.png" alt="Dog" width="60"></label>
+
+            <input type="radio" id="iconFour" name="presetAvatar" value="fox.png">
+            <label for="iconFour"><img src="/images/icons/fox.png" alt="Fox" width="60"></label>
+
+            <input type="radio" id="iconFive" name="presetAvatar" value="hamster.png">
+            <label for="iconFive"><img src="/images/icons/hamster.png" alt="Hamster" width="60"></label>
+
+            <br><br>
+            <input type="radio" id="iconSix" name="presetAvatar" value="koala.png">
+            <label for="iconSix"><img src="/images/icons/koala.png" alt="Koala" width="60"></label>
+
+            <input type="radio" id="iconSeven" name="presetAvatar" value="meiduan.png">
+            <label for="iconSeven"><img src="/images/icons/meiduan.png" alt="American Short-tailed Cat" width="60"></label>
+
+            <input type="radio" id="iconEight" name="presetAvatar" value="orange_cat.png">
+            <label for="iconEight"><img src="/images/icons/orange_cat.png" alt="Orange Cat" width="60"></label>
+
+            <input type="radio" id="iconNine" name="presetAvatar" value="bear.png">
+            <label for="iconNine"><img src="/images/icons/bear.png" alt="Bear" width="60"></label>
+
+            <input type="radio" id="iconTen" name="presetAvatar" value="wolf.png">
+            <label for="iconTen"><img src="/images/icons/wolf.png" alt="Wolf" width="60"></label>
+        </div>
+
+        <br><br>
+        <label for="newnameid">Username: </label>
+        <input placeholder="{{user.username}}" class="editipt" id="newnameid" name="newname" type="text" maxlength="32"><label id="newNameTest" for="newnameid"></label><br><br>
+
+
+        <label for="oldpasswordid">Old password: </label>
+        <input placeholder="enter for verification" type="password" name="oldpassword" class="editipt" id="oldpasswordid">
+        <label id="oldPasswordTest" for="oldpasswordid"></label>
+        <br><br>
+
+        <label for="newpasswordid">New password: </label>
+        <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8"><br><br>
+
+        <label for="confirmnewid">Confirm new password: </label>
+        <input type="password" disabled name="confirmnew" class="editipt" id="confirmnewid">
+        <label id="passwordMatch" for="confirmnewid"></label><br><br>
+
+        <label for="newBd">Date of birth: </label>
+        <input type="date" class="editipt" id="newBd" min="1900-01-01" max="2023-06-01" name="newbirth" placeholder="{{user.date_of_birth}}"><br><br>
+
+        <label for="fnameid">First name: </label>
+        <input class="editipt" id="fnameid" name="fname" type="text" placeholder="{{user.fname}}" maxlength="32"><br><br>
+
+        <label for="mnameid">Middle name: </label>
+        <input class="editipt" id="mnameid" name="mname" type="text" placeholder="{{user.mname}}" maxlength="32"><br><br>
+
+        <label for="lnameid">Last name: </label>
+        <input class="editipt" id="lnameid" name="lname" type="text" placehoder="{{user.lname}}" maxlength="32"><br><br>
+
+        <div id="textnew">
+            <label for="desid">Description: </label>
+            <textarea id="desid" name="des" type="text" maxlength="500" placeholder="{{user.description}}"></textarea><br><br>
+        </div>
+
+        <button class="btn" type="submit" id="saveBtn">Save all changes</button>
+        <button class="btn" type="submit" id="delectBtn">Delect this account</button><br><br>
+
+        
+    </form>
+    {{/if}}
+</div>
