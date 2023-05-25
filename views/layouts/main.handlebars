@@ -52,27 +52,28 @@
     </div>
     {{!-- header end --}}
 
-    {{!-- nav bar --}}
-    {{!-- To do: links to be added --}}
-    <div class="nav">
-        <ul>
-            <li class="leftnav"><a href="./" class="text {{#if active_HomePage}}active{{/if}}">Home Page</a></li>
-            <li class="leftnav"><a href="./allArticles" class="text {{#if active_AllArticlesPage}}active{{/if}}">All
-                    Articles</a></li>
-            <li class="rightnav loginStatus"><a href="./login" class="text">Log in</a></li>
-            <li class="rightnav"><a href="" class="icon"><img
-                        src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></li>
-            <li class="rightnav">
-                <a class="notifications">
-                    <span><img src="./images/notification.png"></span>
-                    {{#if notificationCount}}
-                    <span class="badge">{{notificationCount}}</span>
-                    {{/if}}
-                </a>
-            </li>
-        </ul>
-    </div>
-    {{!-- nav bar end --}}
+{{!-- nav bar --}}
+{{!-- To do: links to be added --}}
+<div class="nav">
+    <ul>
+        <li class="leftnav"><a href="./" class="text {{#if active_HomePage}}active{{/if}}">Home Page</a></li>
+        <li class="leftnav"><a href="./allArticles" class="text {{#if active_AllArticlesPage}}active{{/if}}">All
+                Articles</a></li>
+        <li class="rightnav loginStatus"><a href="./login" class="text">Log in</a></li>
+        <li class="rightnav navIcon"><a href="./editAccount" class="icon"><img
+                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></li>
+        <li class="rightnav">
+            <a class="notifications">
+                <span><img src="./images/notification.png"></span>
+                {{#if notificationCount}}
+                <span class="badge">{{notificationCount}}</span>
+                {{/if}}
+            </a>
+        </li>
+    </ul>
+</div>
+{{!-- nav bar end --}}
+
 </div>
 {{!-- notification pop up window --}}
 <div class="notification-container hide" id="notification-container">

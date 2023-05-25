@@ -5,21 +5,12 @@ const dbPromise = require("./database.js");
 async function retrieveCommentById(commentId) {
     const db = await dbPromise;
 
-    const comments = await db.all(SQL`
-        select c.id, c.content, c.date_time as timestamp, c.parent_id, c.article_id, i.filename, u.username
-        from comments as c, users as u, icons as i
-        where c.article_id = ${articleId}
-        and c.user_id = u.id
-        and u.icon_id = i.id`);
+    const comment = await db.get(SQL`
+        select *
+        from comments
+        where id = ${commentId}`);
     
-    const initialComments = turnNullParentToZero(comments);
-
-    let nestedComments = [];
-    const nestedCommentArray = [{id: 0, children: nestedComments}];
-    
-    const finalArray = makeNestedComments(initialComments, nestedCommentArray);
-    
-    return nestedCommentArray[0].children;
+    return comment;
 }
 
 // retrieve nested comments by article id
@@ -91,8 +82,17 @@ function turnNullParentToZero(commentArray){
     return commentArray;
 }
 
+async function deleteCommentById(commentId){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    delete from comments
+    where id = ${commentId}`);
+}
+
 // Export functions.
 module.exports = {
     retrieveCommentsByArticleId,
-    retrieveCommentById
+    retrieveCommentById,
+    deleteCommentById
 };

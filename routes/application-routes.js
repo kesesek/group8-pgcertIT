@@ -165,14 +165,34 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
                 res.locals.subscribe = true;
             }
         });
+        const comment = await commentDao.retrieveCommentById(req.query.deleteComment);
         // delete comment and its children if have to the comments table
+        res.cookie("commentId", comment.id);
+        if (userId == comment.user_id || userId == res.locals.article.authorId) {
+            await commentDao.deleteCommentById(comment.id);
+        }
     }
 
     res.render("fullArticle");
 
 });
 
-router.get("/comment/:articleId", async function(req, res){
+router.get("/user/:authToken", async function(req, res){
+    const user = await userDao.retrieveUserWithAuthToken(req.params.authToken);
+    res.send(user);
+});
+
+router.get("/article/:articleId", async function(req, res){
+    const article = await articleDao.retrieveArticleById(req.params.articleId);
+    res.send(article);
+});
+
+router.get("/comment/:commentId", async function(req, res){
+    const comment = await commentDao.retrieveCommentById(req.params.commentId);
+    res.send(comment);
+});
+
+router.get("/articleComments/:articleId", async function(req, res){
     const comments = await commentDao.retrieveCommentsByArticleId(req.params.articleId);
     res.send(comments);
 });
