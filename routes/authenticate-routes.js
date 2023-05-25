@@ -34,6 +34,7 @@ router.post("/login", async function (req, res) {
         user.authToken = authToken;
         await userDao.updateUser(user);
         res.cookie("authToken", authToken);
+        res.setToastMessage("Welcome to iBlogger! Start blogging here!");
         res.redirect("/");
     } else {
         res.locals.user = null;
