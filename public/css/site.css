@@ -16,18 +16,18 @@
 }
 
 .nav .icon {
-    display: block;
-    text-align: center;
-    padding: 3px 16px;
-  }
+  display: block;
+  text-align: center;
+  padding: 3px 16px;
+}
 
 .nav .leftnav {
   float: left;
-} 
+}
 
 .nav .rightnav {
-    float: right;
-} 
+  float: right;
+}
 
 .nav li a:hover:not(.active) {
   background-color: #db9292;
@@ -36,99 +36,103 @@
 .nav a.active {
   background-color: #db9292;
 }
+
 /* nav bar style end */
 
 
 /* notification icon */
 .notifications {
-    padding: 11.2px 16px;
-    position: relative;
-    display: inline-block;
-  }
+  padding: 11.2px 16px;
+  position: relative;
+  display: inline-block;
+}
 
-.notifications img{
-  width:min-content;
+.notifications img {
+  width: min-content;
 }
 
 .notifications .badge {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    padding: 3px 8px;
-    border-radius: 50%;
-    background: red;
-    color: white;
-    
-  }
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 3px 8px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+
+}
+
 /* notification icon end*/
 
 /* notification popup window */
-body{
+body {
   position: relative;
 }
 
 .notification-container {
-    position: absolute;
-    top: 90px;
-    right: 200px;
-    width: 350px;
-    max-width: calc(100% - 30px);
+  position: absolute;
+  top: 90px;
+  right: 200px;
+  width: 350px;
+  max-width: calc(100% - 30px);
 }
 
 .notification {
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    color: #fff;
-    font-size: 16px;
-    padding: 5px 20px;
-    line-height: 20px;
-    margin-bottom: 15px;
-    animation: grow 0.5s ease-in forwards;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  color: #fff;
+  font-size: 16px;
+  padding: 5px 20px;
+  line-height: 20px;
+  margin-bottom: 15px;
+  animation: grow 0.5s ease-in forwards;
 }
 
 @keyframes grow {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .hide {
-    animation: shrink 0.3s ease-out forwards;
+  animation: shrink 0.3s ease-out forwards;
 }
 
 @keyframes shrink {
-    to {
-        opacity: 0;
-        transform: scale(0.8);
-    }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
 }
 
 .notification-info {
-    background-color: #d07b1a;
+  background-color: #d07b1a;
 }
 
-.read{
+.read {
   background-color: #ca664f59;
 }
+
 /* notification popup window end*/
 
 /* notification message */
-.flex-container{
+.flex-container {
   display: flex;
 }
 
-.flex-vertical-container{
+.flex-vertical-container {
   display: flex;
   flex-direction: column;
 }
 
-.flex-container .message{
+.flex-container .message {
   padding: 5px 6px;
 }
 
@@ -140,12 +144,12 @@ a:visited {
   color: #706F6F;
 }
 
-.message{
+.message {
   margin: 0;
   text-align: left;
 }
 
-.icon{
+.icon {
   display: block;
   margin: auto;
 }
@@ -153,6 +157,7 @@ a:visited {
 .datastamp {
   color: rgba(240, 229, 228, 0.4);
 }
+
 /* notification message end */
 
 /* login page style */
@@ -219,8 +224,20 @@ a:visited {
   margin-top: 20px;
 }
 
+#signup_btn {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: 2px inset;
+  background-color: #f9ebeb;
+  border-radius: 20px;
+  color: #f9ebeb;
+  background: none;
+  cursor: pointer;
+}
+
 #login_container h1 {
-  color:#f9ebeb;
+  color: #f9ebeb;
   font-size: 50px;
   letter-spacing: 5px;
   font-weight: 100;
@@ -229,15 +246,16 @@ a:visited {
 }
 
 #login_fail_message {
-  color:#f9ebeb;
+  color: #f9ebeb;
   text-align: center;
-  font-style:italic;
+  font-style: italic;
   font-size: 20px;
 }
+
 /* login page end */
 
 /* all article page, articles layout */
-.main-container{
+.main-container {
   display: flex;
   flex-direction: column;
   margin: 0 30px;
@@ -262,13 +280,13 @@ a:visited {
   justify-content: flex-end;
 }
 
-.loginHint{
+.loginHint {
   display: flex;
   justify-content: flex-end;
   color: #db9292;
 }
 
-.loginHint p{
+.loginHint p {
   margin: 0;
 }
 
@@ -277,17 +295,18 @@ a:visited {
   justify-content: center;
 }
 
-#showMoreArticles{
+#showMoreArticles {
   color: #db9292;
   font-size: large;
 }
 
-.sort-container{
+.sort-container {
   font-size: large;
   font-weight: bold;
   color: rgb(158, 108, 108);
   margin: 20px 50px;
 }
+
 /* all article page, articles layout end */
 
 
@@ -355,8 +374,20 @@ a:visited {
   margin-top: 20px;
 }
 
+#signup_btn {
+  width: 250px;
+  height: 40px;
+  outline: none;
+  border: 2px inset;
+  background-color: #f9ebeb;
+  border-radius: 20px;
+  color: #f9ebeb;
+  background: none;
+  cursor: pointer;
+}
+
 #login_container h1 {
-  color:#f9ebeb;
+  color: #f9ebeb;
   font-size: 50px;
   letter-spacing: 5px;
   font-weight: 100;
@@ -365,11 +396,12 @@ a:visited {
 }
 
 #login_fail_message {
-  color:#f9ebeb;
+  color: #f9ebeb;
   text-align: center;
-  font-style:italic;
+  font-style: italic;
   font-size: 20px;
 }
+
 /* login page ends */
 
 /* login&sign-up layout body style */
@@ -456,7 +488,7 @@ a:visited {
 .bodywithsidebar {
   margin: 0;
   padding: 0;
-  background-color:#f9ebeb;
+  background-color: #f9ebeb;
 }
 
 .maincontent {
@@ -466,8 +498,9 @@ a:visited {
   align-items: center;
   flex-direction: column;
   margin: 0 auto;
-  padding:0;
+  padding: 0;
 }
+
 /* sidebar style ends */
 
 /* editAccount page style⬇️ */
@@ -477,7 +510,7 @@ a:visited {
   display: flex;
   align-items: center;
   background-color: #f9ebeb;
-  color:rgb(158, 108, 108);
+  color: rgb(158, 108, 108);
   position: relative;
 }
 
@@ -498,8 +531,8 @@ a:visited {
 }
 
 #edtForm .btn {
-  width: 80px;
-  height: 30px;
+  width: 180px;
+  height: 40px;
   outline: none;
   border: 2px;
   background-color: rgb(158, 108, 108);
@@ -524,25 +557,73 @@ a:visited {
   border-color: rgb(158, 108, 108);
   overflow: scroll;
   border: 1px solid rgb(158, 108, 108);
-  color:rgb(158, 108, 108);
+  color: rgb(158, 108, 108);
   font-size: 15px;
   resize: none;
 }
 
-#textnew {
-  display: flex;
+#thinkTwice {
+  display:none;
+  position:fixed;
+  z-index: 2;
+  left:27%;
+  top:30%;
+ 
+  width:60%;
+  height:40%;
+  overflow: auto;
+  border: rgb(158, 108, 108) solid 2px;
+  border-radius: 10px;
+  background-color:#f9ebeb;
+  text-align: center;
+  
 }
+
+#modalcontent {
+  color:rgb(158, 108, 108);
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+
+}
+
+#thinkTwice button {
+  width: 120px;
+  height: 30px;
+  outline: none;
+  border: 2px;
+  background-color: rgb(158, 108, 108);
+  border-radius: 20px;
+  color: #f9ebeb;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#mask {
+  width:100%;
+  height: 100%;
+  background-color: #cacacac2;
+  opacity:0.6;
+  display:none;
+  position: fixed;
+  left: 0;
+  top:0;
+  z-index: 1;
+}
+
 /* editAccount ends */
 
 /* signup ⬇️*/
 #signuppage {
   margin: 0;
-  padding: 0 ;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f9ebeb;
-  color:rgb(158, 108, 108);
+  color: rgb(158, 108, 108);
   font-size: 20px;
 }
 
@@ -569,7 +650,7 @@ a:visited {
   overflow: scroll;
   border: 1px solid rgb(158, 108, 108);
   background-color: #f9ebeb;
-  color:rgb(158, 108, 108);
+  color: rgb(158, 108, 108);
   font-size: 15px;
   resize: none;
 }
@@ -594,6 +675,7 @@ a:visited {
   left: 50%;
   transform: translate(-50%);
 }
+
 /* signup end */
 
 
@@ -603,7 +685,7 @@ a:visited {
 
 /* addarticles css start */
 #inpFile {
-  display: none; 
+  display: none;
 }
 
 .bTn {
@@ -645,6 +727,7 @@ a:visited {
 #mybutton:hover {
   background-color: #db9292;
 }
+
 /* addarticles css end */
 
 /* favorite articles css modified */
@@ -653,108 +736,111 @@ a:visited {
   grid-template-columns: 1fr 1fr;
   margin: 30px;
 }
+
 /* favorite articles css modified */
 
 
 
 /* Home Page */
-.welcomeMessage{
+.welcomeMessage {
   display: flex;
   flex-direction: column;
   justify-content: center;
   color: rgb(158, 108, 108);
 }
 
-.welcomeMessage h1, .welcomeMessage h2{
+.welcomeMessage h1,
+.welcomeMessage h2 {
   text-align: center;
 }
 
-.likes{
+.likes {
   background-color: #db9292;
   border: none;
 }
 
-.readMore{
+.readMore {
   background-color: #db9292;
   border: rgb(158, 108, 108) 1px solid;
   color: white;
 }
 
-.homePage{
+.homePage {
   margin: 10px;
 }
+
 /* Home Page end */
 
 /* Full Article Page */
-.article-container{
+.article-container {
   background-color: #db9292;
   color: white;
   margin: 50px 150px;
   text-align: center;
 }
 
-.article-container h1{
+.article-container h1 {
   padding: 20px;
 }
 
-.article-container h3{
+.article-container h3 {
   padding: 10px;
 }
 
-.article-content{
-  background-color:rgb(158, 108, 108);
+.article-content {
+  background-color: rgb(158, 108, 108);
   padding: 30px;
 }
 
-.comments-container{
+.comments-container {
   background-color: #db9292;
   color: white;
   margin: 50px 150px;
-  text-align:left;
+  text-align: left;
 }
 
-.comments-container .others-comments{
+.comments-container .others-comments {
   padding: 16px 30px;
 }
 
-.hide-or-show{
-  background-color:rgb(158, 108, 108);
+.hide-or-show {
+  background-color: rgb(158, 108, 108);
   width: fit-content;
 }
 
-.others-comments a{
+.others-comments a {
   color: white;
 }
 
-.comment-content{
-  background-color:rgb(158, 108, 108);
+.comment-content {
+  background-color: rgb(158, 108, 108);
   color: white;
-  text-align:left;
+  text-align: left;
   display: flex;
 }
 
-.comment-content .user-comment{
+.comment-content .user-comment {
   padding: 10px 30px;
   margin: 0;
 }
 
-.comments-block{
+.comments-block {
   padding: 10px;
   margin: 10px;
   border: rgb(158, 108, 108) 3px solid;
 }
 
-.comment-header{
+.comment-header {
   display: flex;
-  justify-content:left;
+  justify-content: left;
 }
 
-.comment-header img{
+.comment-header img {
   display: block;
   padding: 20px;
 }
 
-.comment-header p{
+.comment-header p {
   padding: 10px;
 }
 
@@ -763,12 +849,72 @@ a:visited {
   padding: 10px;
 }
 
-.button-combo{
+.button-combo {
   display: flex;
-  justify-content:right;
+  justify-content: right;
 }
 
-.button-combo button{
+.button-combo button {
   margin: 10px;
 }
+
 /* Full Article Page end */
+
+/* follow page css start */
+.follow-container {
+  background-color: #db9292;
+  box-shadow: 10px 10px 10px #a48294;
+  border-radius: 10px;
+  margin: 65px auto;
+  width: 80%;
+  padding: 40px;
+}
+
+.follow-container ul {
+  list-style: none;
+  margin: auto;
+  padding: 0;
+}
+
+.follow-container li {
+  margin-left: 25%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.follow-container a {
+  color: #333;
+  text-decoration: none;
+}
+
+.follow-container img {
+  border-radius: 50%;
+}
+
+.follow-container span {
+  font-weight: bold;
+  font-size:x-large;
+  margin: 30px;
+}
+
+.follow-container button {
+  background-color: #ff0000;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin: auto;
+}
+
+.follow-container button:hover {
+  transform: scale(1.1);
+}
+
+.noneFollow {
+    color: #f9ebeb;
+    text-align: center;
+    font-style: italic;
+    font-size: 20px;
+}
+/* follow page css end */

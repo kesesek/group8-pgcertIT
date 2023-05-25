@@ -53,7 +53,7 @@ router.get("/allusernames", async function (req, res) {
 //from login page to the sign-up page
 router.get("/signup", function (req, res) {
 
-    res.render("signup", {layout: 'loginSignup'});
+    res.render("signup", { layout: 'loginSignup' });
 });
 
 //get the necessary data from the sign-up page, then create a new user into the database
@@ -86,7 +86,7 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
         icon_id = iconIdObj.id;
     } else {
         const oldFileName = fileInfo.path;
-        const newFileName = `./public/images/uploadedFiles/${fileInfo.originalname}`;
+        const newFileName = `./public/images/icons/${fileInfo.originalname}`;
         fs.renameSync(oldFileName, newFileName);
         icon_id = await userDao.saveUploadAndGetId(fileInfo.originalname);
     }
@@ -99,30 +99,16 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 
 //for editAcount page⬇️:
 router.get("/editAccount", async function(req, res) {
-    if (req.cookies.authToken) {
-        const authToken = req.cookies.authToken;
-        // if(authToken !== null || undefined) {
-        //     console.log(authToken);
-        // } else {
-        //     console.log('null or undefined');
-        // }
-        
-        res.locals.active_EditAccount = true;
-
-        const user = await userDao.getUserInfo(authToken);
-        const userid = user.id;
-        const userAvatar = await userDao.getUserAvatar(userid);
-        res.locals.user = user;
-        res.locals.userAvatarName = userAvatar;
-        res.render("editAccount", {layout: 'sidebar&nav'});
-    } else{
-        res.redirect("/");
-    }
+    const authToken = req.cookies.authToken;
+    
+    const user = await userDao.getUserInfo(authToken);
+    res.locals.user = user;
+    res.render("editAccount", {layout: 'sidebar&nav'});
 });
 
-router.post("/verifyOldPassword", async function(req, res) {
+router.post("/verifyOldPassword", async function (req, res) {
     const oldPassword = req.body.oldPassword;
-    
+
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const oldHashed = user.hashed_password;
@@ -135,7 +121,7 @@ router.post("/verifyOldPassword", async function(req, res) {
 
     const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
 
-    if(hashedInputOldPassword === oldHashed ) {
+    if (hashedInputOldPassword === oldHashed) {
         console.log('true');
         res.json(true);
     } else {
@@ -147,13 +133,15 @@ router.post("/verifyOldPassword", async function(req, res) {
 });
 
 
-router.post("/saveAll", async function(req, res) {
-    const authToken = req.cookies.authToken;
 
-    const fileInfo = req.file;
-    const preAvatar = req.body.presetAvatar;
-    const avatarID = parseInt(req.body.avartarID);
-    const avatarFile = req.body.avartarFile;
+router.post("/saveAll", upload.single('avatarFileName'),async function(req, res) {
+    console.log('in saveAll');
+
+    const authToken = req.cookies.authToken;
+    const olduser = await userDao.getUserInfo(authToken);
+    console.log(olduser);
+    const preAvatar = req.body.checkedAvatar;
+    const avatarFile = req.file;
     const newName = req.body.newName;
     const newPassword = req.body.newPassword;
     const newDb = req.body.newDb;
@@ -161,62 +149,87 @@ router.post("/saveAll", async function(req, res) {
     const newMname = req.body.newMname;
     const newLname = req.body.newLname;
     const newDes = req.body.newDes;
-    console.log(avatarID);
+    console.log(preAvatar);//null
+    console.log(avatarFile);//undefined
+    console.log(newName);//new
 
-    if(avatarFile == undefined) {
+
+    if (avatarFile == undefined) {
         const avatarID = await userDao.getPreIconId(preAvatar);
-        await userDao.updateUserAvatar(authToken, avatarID);
-    } else {
-        //false 新文件 创建ID 更新到user
+        console.log(avatarID);//undefined
+        if(avatarID) {
+            console.log('in ifif');
+            console.log(avatarID.id);
+            await userDao.updateUserAvatar(authToken, avatarID.id);
+        }   
+    } 
+    
+    if(avatarFile){
+        console.log("2 if");
         const oldFileName = avatarFile.path;
-        const newFileName = `./public/images/uploadedFiles/${avatarFile.originalname}`;
+        const newFileName = `./public/images/icons/${avatarFile.originalname}`;
         fs.renameSync(oldFileName, newFileName);
         const newAvatarID = await userDao.saveUploadAndGetId(avatarFile.originalname);
         await userDao.updateUserAvatar(authToken, newAvatarID);
     }
 
-    if(newName !== null) {
+    if(newName) {
+        console.log("3 if");
+
         await userDao.updateUsername(authToken, newName);
     }
 
-    if(newPassword !== null) {
-        await userDao.updatePassword(authToken, newPassword);
+    if(newPassword) {
+        console.log("4 if");
+        const user = await userDao.getUserInfo(authToken);
+        const salt = user.salt;
+        const iteration = user.iterations;
+        console.log('get salt ' + salt);
+        await userDao.updatePassword(authToken, salt, iteration, newPassword);
     }
     
-    if(newDb !== null) {
+    if(newDb) {
+        console.log("4 if");
+
         await userDao.updateDateBrith(authToken, newDb);
     }
 
-    if(newFname !== null) {
+    if(newFname) {
+        console.log("5 if");
+
         await userDao.updateFname(authToken, newFname);
     }
 
-    if(newMname !== null) {
+    if(newMname) {
+        console.log("6 if");
+
         await userDao.updateMname(authToken, newMname);
     }
 
-    if(newLname !== null) {
+    if(newLname) {
+        console.log("7 if");
+
         await userDao.updateLname(authToken, newLname);
     }
 
-    if(newDes !== null) {
-        await userDao.updateDescription(authToken, newDes);
+    if(newDes) {
+        console.log("8 if");
+      await userDao.updateDescription(authToken, newDes);
     }
 
 
     const user = await userDao.getUserInfo(authToken);
-    console.log(user);
     res.locals.user = user;
-
-    res.json({ success: true });
+    res.send({ success: true });
 })
 
-router.post("/delectAccount", async function(req, res){
+router.post("/delectAccount", async function (req, res) {
     const authToken = req.cookies.authToken;
     await userDao.delectAccount(authToken);
 
     res.clearCookie('authToken');
-    res.send({ success: true });
+    console.log(authToken);
+    res.json({success: true});
 })
 //editAccount page ends
 
@@ -231,24 +244,24 @@ router.get("/addarticle", function (req, res) {
 //in the "addarticle" page, user can write a whole new article and save it to the database, the redirect to the "My Articles" page
 router.post("/submitArticle", upload.single("imageFile"), async function (req, res) {
     let title = req.body.title;
-    if(title == "" || title == "<p>Title here...</p>"){
+    if (title == "" || title == "<p>Title here...</p>") {
         title = "[Untitled]";
     }
     let content = req.body.content;
-    if(content == "" || content == "<p>Content here...</p>"){
+    if (content == "" || content == "<p>Content here...</p>") {
         content = "[Empty]";
     }
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const user_id = user_idObj.id;
     const fileInfo = req.file;
     let image_id;
-    if(fileInfo != undefined){
+    if (fileInfo != undefined) {
         const oldFileName = fileInfo.path;
         const newFileName = `./public/images/uploadedFiles/${fileInfo.originalname}`;
         fs.renameSync(oldFileName, newFileName);
         image_id = await userDao.saveImageAndGetId(fileInfo.originalname);
     }
-    if(image_id == undefined){
+    if (image_id == undefined) {
         image_id = null;
     }
 
@@ -258,24 +271,63 @@ router.post("/submitArticle", upload.single("imageFile"), async function (req, r
 });
 
 //when click the "Favorite Articles" button in the side bar, the user can see the favorite articles interface
-router.get("/favorite", async function(req, res){
+router.get("/favorite", async function (req, res) {
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
 
     res.locals.user_id = user_idObj.id;
     res.locals.articles = articles;
+
     res.locals.active_MyFavoriteArticles = true;
     res.render("favorite", {layout: 'sidebar&nav'});
 });
 
-//in the favorite page, when click the dislike button, it will modifify the database and redirect back to the favorite page
-router.get("/removeLikes", showNotifications, async function(req, res){
+//in the favorite page, when click the dislike button, it will modify the database and redirect back to the favorite page
+router.get("/removeLikes", showNotifications, async function (req, res) {
     const article_id = req.query.likeAction;
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const user_id = user_idObj.id;
     await articleDao.removeLikedArticles(user_id, article_id);
 
     res.redirect("/favorite");
+});
+
+//when click the "following" button in the side bar, it will display the following page
+router.get("/following", async function (req, res) {
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const following = await userDao.retrieveFollowingByUserId(user_idObj.id);
+
+    res.locals.following = following;
+    res.locals.active_Following = true;
+    res.render("following", { layout: 'sidebar&nav' });
+});
+
+//when click the "Unsubcribe" button in the following page, it will modify the database then redirect back to the following page
+router.get("/nofollowing", async function(req, res){
+    const blogger_id = req.query.bTn;
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    await userDao.unsubscribeWithUserIdAndArticleId(user_idObj.id, blogger_id);
+
+    res.redirect("/following");
+});
+
+//when click the "follower" button in the side bar, it will display the follower page
+router.get("/follower", async function(req, res){
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const follower = await userDao.retrieveFollowerByUserId(user_idObj.id);
+
+    res.locals.follower = follower;
+    res.locals.active_Follower = true;
+    res.render("follower", { layout: 'sidebar&nav' });
+});
+
+//when click the "remove" button in the follower page, it will modify the database then redirect back to the follower page
+router.get("/nofollower", async function(req, res){
+    const fans_id = req.query.bTn;
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    await userDao.unsubscribeWithUserIdAndArticleId(fans_id, user_idObj.id);
+
+    res.redirect("/follower");
 });
 
 
