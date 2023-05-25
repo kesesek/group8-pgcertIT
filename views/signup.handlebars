@@ -1,7 +1,7 @@
-<div>
+<div id="signuppage">
     {{!-- Using form get the data from sign-up page --}}
     <form action="./signup" method="POST" enctype="multipart/form-data">
-
+        <br>
         <label for="avatar">Avatar: </label>
         <input id="avatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
         <p>Or you can choose a predefined avatar: </p>
@@ -21,6 +21,8 @@
             <input type="radio" id="icon5" name="presetAvatar" value="hamster.png">
             <label for="icon5"><img src="/images/icons/hamster.png" alt="Hamster" width="60"></label>
 
+            <br><br>
+
             <input type="radio" id="icon6" name="presetAvatar" value="koala.png">
             <label for="icon6"><img src="/images/icons/koala.png" alt="Koala" width="60"></label>
 
@@ -39,30 +41,36 @@
         <br><br>
 
 
-        <label for="username">*Username: </label>
-        <input id="username" name="username" type="text" required><label id="test" for="username"></label><br><br>
+        <label for="username">* Username: </label>
+        <input class="signText" id="username" name="username" type="text"  maxlength="32" required><label id="test" for="username"></label><br><br>
 
-        <label for="password">*Password: </label>
-        <input id="password" name="password" type="password" required><br><br>
+        <label for="password">* Password: </label>
+        <input class="signText" id="password" name="password" type="password" minlength="8" maxlength="20" required><br><br>
 
-        <label for="comPassword">*Comfirm password: </label>
-        <input id="comPassword" name="comPassword" type="password" required><label id="pass" for="comPassword"></label><br><br>
+        <label for="comPassword">* Comfirm password: </label>
+        <input class="signText" id="comPassword" name="comPassword" type="password" required><label id="pass" for="comPassword"></label><br><br>
 
-        <label for="dateOfBirth">*Date of birth: </label>
-        <input id="dateOfBirth" name="dateOfBirth" type="date" required><br><br>
+        <label for="dateOfBirth">* Date of birth: </label>
+        <input class="signText" id="dateOfBirth" name="dateOfBirth" type="date" min="1900-01-01" max="2023-06-01" required><br><br>
 
-        <label for="fname">*First name: </label>
-        <input id="fname" name="fname" type="text" required><br><br>
+        <label for="fname">* First name: </label>
+        <input class="signText" id="fname" name="fname" type="text" maxlength="32" required><br><br>
 
         <label for="mname">Middle name: </label>
-        <input id="mname" name="mname" type="text"><br><br>
+        <input class="signText" id="mname" name="mname" type="text" maxlength="32"><br><br>
 
-        <label for="lname">*Last name: </label>
-        <input id="lname" name="lname" type="text" required><br><br>
+        <label for="lname">* Last name: </label>
+        <input class="signText" id="lname" name="lname" type="text" maxlength="32" required><br><br>
 
-        <label for="des">Description: </label>
-        <textarea id="des" name="des" type="text">Write something about you...</textarea><br><br>
-
-        <button type="submit">Sign up!</button>
+        <div id="textareaBox">
+            <label for="des">Description: </label>
+            <textarea id="des" name="des" type="text" maxlength="500">Write something about you...</textarea><br><br>
+        </div>
+        <br>
+        <button type="submit" id="signupBtn">Sign up!</button>
+        <br>
+        <p></p>
+        <br>
+        <p></p>
     </form>
 </div>

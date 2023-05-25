@@ -50,7 +50,7 @@ router.get("/allusernames", async function (req, res) {
 //from login page to the sign-up page
 router.get("/signup", function (req, res) {
 
-    res.render("signup");
+    res.render("signup", {layout: 'loginSignup'});
 });
 
 //get the necessary data from the sign-up page, then create a new user into the database
@@ -92,6 +92,124 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 
     res.redirect("/login");
 });
+
+
+//for editAcount page⬇️:
+router.get("/editAccount", async function(req, res) {
+    const authToken = req.cookies.authToken;
+    // if(authToken !== null || undefined) {
+    //     console.log(authToken);
+    // } else {
+    //     console.log('null or undefined');
+    // }
+    
+    const user = await userDao.getUserInfo(authToken);
+    const userid = user.id;
+    const userAvatar = await userDao.getUserAvatar(userid);
+    res.locals.user = user;
+    res.locals.userAvatarName = userAvatar;
+    res.render("editAccount", {layout: 'sidebar&nav'});
+});
+
+router.post("/verifyOldPassword", async function(req, res) {
+    const oldPassword = req.body.oldPassword;
+    
+    const authToken = req.cookies.authToken;
+    const user = await userDao.getUserInfo(authToken);
+    const oldHashed = user.hashed_password;
+    console.log(oldHashed);
+    const salt = user.salt;
+    console.log(salt);
+
+    const iterations = user.iterations;
+    console.log(iterations);
+
+    const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
+
+    if(hashedInputOldPassword === oldHashed ) {
+        console.log('true');
+        res.json(true);
+    } else {
+        console.log('false');
+
+        res.json(false);
+    }
+
+});
+
+
+router.post("/saveAll", async function(req, res) {
+    const authToken = req.cookies.authToken;
+
+    const fileInfo = req.file;
+    const preAvatar = req.body.presetAvatar;
+    const avatarID = parseInt(req.body.avartarID);
+    const avatarFile = req.body.avartarFile;
+    const newName = req.body.newName;
+    const newPassword = req.body.newPassword;
+    const newDb = req.body.newDb;
+    const newFname = req.body.newFname;
+    const newMname = req.body.newMname;
+    const newLname = req.body.newLname;
+    const newDes = req.body.newDes;
+    console.log(avatarID);
+
+    if(avatarFile == undefined) {
+        const avatarID = await userDao.getPreIconId(preAvatar);
+        await userDao.updateUserAvatar(authToken, avatarID);
+    } else {
+        //false 新文件 创建ID 更新到user
+        const oldFileName = avatarFile.path;
+        const newFileName = `./public/images/uploadedFiles/${avatarFile.originalname}`;
+        fs.renameSync(oldFileName, newFileName);
+        const newAvatarID = await userDao.saveUploadAndGetId(avatarFile.originalname);
+        await userDao.updateUserAvatar(authToken, newAvatarID);
+    }
+
+    if(newName !== null) {
+        await userDao.updateUsername(authToken, newName);
+    }
+
+    if(newPassword !== null) {
+        await userDao.updatePassword(authToken, newPassword);
+    }
+    
+    if(newDb !== null) {
+        await userDao.updateDateBrith(authToken, newDb);
+    }
+
+    if(newFname !== null) {
+        await userDao.updateFname(authToken, newFname);
+    }
+
+    if(newMname !== null) {
+        await userDao.updateMname(authToken, newMname);
+    }
+
+    if(newLname !== null) {
+        await userDao.updateLname(authToken, newLname);
+    }
+
+    if(newDes !== null) {
+        await userDao.updateDescription(authToken, newDes);
+    }
+
+
+    const user = await userDao.getUserInfo(authToken);
+    console.log(user);
+    res.locals.user = user;
+
+    res.json({ success: true });
+})
+
+router.post("/delectAccount", async function(req, res){
+    const authToken = req.cookies.authToken;
+    await userDao.delectAccount(authToken);
+
+    res.clearCookie('authToken');
+    res.send({ success: true });
+})
+//editAccount page ends
 
 //when click the "Add Articles" button from the side bar
 //the page would go to the "addarticle" page

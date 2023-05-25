@@ -56,11 +56,14 @@ window.addEventListener("load",function(){
         //display the information about the duplicate usernames
         const testLabel = document.querySelector("#test");
         const userName = document.querySelector("#username");
+        console.log(userName);
 
         //function that check if there are duplicate usernames
         userName.addEventListener("input", async function () {
             testLabel.innerHTML = "";
             let userNameValue = userName.value;
+            console.log(userNameValue);
+
             const userNamesArray = await getAllUserNames();
             for (let i = 0; i < userNamesArray.length; i++) {
                 if (userNameValue == userNamesArray[i].username) {
@@ -104,4 +107,10 @@ window.addEventListener("load",function(){
             })
         }
     }
-});
+
+
+
+//for editAccount page⬇️--hly
+//1.verify the new username:
+
+})
