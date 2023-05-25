@@ -594,6 +594,45 @@ a:visited {
 
 
 
+/* addarticles css start */
+#inpFile {
+  display: none; 
+}
+
+#mylabel {
+  display: inline-block;
+  padding: 10px 10px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+#mylabel:hover {
+  background-color: #da7878;
+}
+
+
+#mybutton {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#mybutton:hover {
+  background-color: #da7878;
+}
+/* addarticles css end */
+
+
 
 /* Home Page */
 .welcomeMessage{
@@ -612,3 +651,4 @@ a:visited {
   border: none;
 }
 /* Home Page end */
+

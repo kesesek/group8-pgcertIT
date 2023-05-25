@@ -110,6 +110,7 @@ async function saveUploadAndGetId(filename){
     return result.lastID;
 }
 
+
 //for editAccount page ⬇️
 //1.get user's info
 async function getUserInfo(authToken) {
@@ -242,6 +243,38 @@ async function delectAccount(authToken) {
 }
 //editAccount page ends
 
+//retrieve user's id by authToken
+async function retrieveUserIdWithAuthToken(authToken) {
+    const db = await dbPromise;
+
+    const user_id = await db.get(SQL`
+        SELECT id FROM users
+        WHERE authToken = ${authToken}`);
+
+    return user_id;
+}
+
+//save the uploaded article's image filename into the database, then retrive the id of it
+async function saveImageAndGetId(filename){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+        INSERT INTO images (filename) VALUES (${filename});
+    `);
+
+    return result.lastID;
+}
+
+//add new article to the database, including an image if exists
+async function addArticle(content, title, user_id, image_id){
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        INSERT INTO articles (content, title, date_time, author_id, image_id)
+        VALUES (${content}, ${title}, datetime('now'), ${user_id}, ${image_id})
+    `);
+}
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -263,5 +296,8 @@ module.exports = {
     updateMname,
     updateLname,
     updateDateBrith,
-    delectAccount
+    delectAccount,
+    retrieveUserIdWithAuthToken,
+    saveImageAndGetId,
+    addArticle
 }
