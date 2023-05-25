@@ -58,7 +58,11 @@ router.get("/sortArticles", showNotifications, async function(req, res) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
     }
-    res.locals.article = await articleDao.retrieveArticlesByOrder(userId, req.query.sort);
+    const articles = await articleDao.retrieveArticlesByOrder(userId, req.query.sort);
+    articles.forEach(article => {
+        article.content = article.content.substring(0,100) + "...";
+    });
+    res.locals.article = articles;
 
     res.render("allArticles");
 
@@ -117,7 +121,6 @@ router.get("/article", showNotifications, async function(req, res) {
     }
     res.cookie("articleId", req.query.fullArticle);
     // res.locals.comments = await commentDao.retrieveCommentsByArticleId(req.query.fullArticle);
-
 
     res.render("fullArticle");
 
