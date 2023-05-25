@@ -110,6 +110,39 @@ async function saveUploadAndGetId(filename){
     return result.lastID;
 }
 
+//get the subscribe status by subscriber id and blogger id
+async function retrieveSubscribeWithAuthorId(authorId){
+    const db = await dbPromise;
+
+    const subscribers = await db.all(SQL`
+        SELECT subscribed_id FROM subscribles
+        WHERE blogger_id = ${authorId};
+    `);
+
+    return subscribers;
+}
+
+//unsubscribe by subscriber id and blogger id
+async function unsubscribeWithUserIdAndArticleId(userId, articleId) {
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    delete from subscribles
+    where subscribed_id = ${userId}
+    and blogger_id = ${articleId}`);
+    
+}
+
+//subscribe by subscriber id and blogger id
+async function subscribeWithUserIdAndArticleId(userId, articleId) {
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    INSERT INTO subscribles (subscribed_id, blogger_id) VALUES
+	(${userId}, ${articleId})`);
+    
+}
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -119,5 +152,8 @@ module.exports = {
     createUser,
     hashPassword,
     getPreIconId,
-    saveUploadAndGetId
+    saveUploadAndGetId,
+    retrieveSubscribeWithAuthorId,
+    unsubscribeWithUserIdAndArticleId,
+    subscribeWithUserIdAndArticleId
 }
