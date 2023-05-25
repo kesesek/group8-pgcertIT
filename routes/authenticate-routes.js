@@ -285,6 +285,7 @@ router.get("/following", async function (req, res) {
     const following = await userDao.retrieveFollowingByUserId(user_idObj.id);
 
     res.locals.following = following;
+    res.locals.active_Following = true;
     res.render("following", { layout: 'sidebar&nav' });
 });
 
@@ -303,6 +304,7 @@ router.get("/follower", async function(req, res){
     const follower = await userDao.retrieveFollowerByUserId(user_idObj.id);
 
     res.locals.follower = follower;
+    res.locals.active_Follower = true;
     res.render("follower", { layout: 'sidebar&nav' });
 });
 
