@@ -274,7 +274,9 @@ router.post("/submitArticle", upload.single("imageFile"), async function (req, r
 router.get("/favorite", async function (req, res) {
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
-
+    articles.forEach(article => {
+        article.content = article.content.substring(0,100) + "...";
+    });
     res.locals.user_id = user_idObj.id;
     res.locals.articles = articles;
 
