@@ -42,6 +42,10 @@ function makeNestedComments(commentArray, nestedCommentArray){
         for (let i = 0; i < commentArray.length; i++) {
             let comment = commentArray[i];
             let findParent = false;
+            // // test
+            // nestedCommentArray.forEach(element => {
+            //     console.log(element);
+            // });
             nestedCommentArray.forEach(parent => {
                 if (parent.id == comment.parent_id) {
                     if (!parent.children) {
@@ -82,6 +86,7 @@ function turnNullParentToZero(commentArray){
     return commentArray;
 }
 
+// delete comment and its children by comment id
 async function deleteCommentById(commentId){
     const db = await dbPromise;
 
@@ -90,9 +95,19 @@ async function deleteCommentById(commentId){
     where id = ${commentId}`);
 }
 
+// add new comment to article
+async function addCommentToArticle(content, articleId, userId){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    INSERT INTO comments (content, date_time, parent_id, article_id, user_id) VALUES
+	(${content}, datetime('now'), NULL, ${articleId}, ${userId})`);
+}
+
 // Export functions.
 module.exports = {
     retrieveCommentsByArticleId,
     retrieveCommentById,
-    deleteCommentById
+    deleteCommentById,
+    addCommentToArticle
 };
