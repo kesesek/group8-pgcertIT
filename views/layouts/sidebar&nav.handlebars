@@ -32,22 +32,16 @@
         });
         tinymce.init({
             selector: '.content',
+            height: 350,
             menubar: false,
             plugins: 'lists advlist',
             toolbar: 'styleselect | bold italic underline | numlist bullist',
         });
     </script>
 </head>
+
 <body class="bodywithsidebar">
 
-<div class="header_nav">
-{{!-- header --}}
-<div class="header">
-    <header>
-        <h1>iBlogger</h1>
-    </header>
-</div>
-{{!-- header end --}}
 
 {{!-- nav bar --}}
 {{!-- To do: links to be added --}}
@@ -115,7 +109,7 @@
 </div>
 
     <div class="maincontent">
-     {{{body}}}
+        {{{body}}}
     </div>
 </body>
 
