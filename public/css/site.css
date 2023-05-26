@@ -898,13 +898,15 @@ a:visited {
 }
 
 .follow-container button {
-  background-color: #ff0000;
+  background-color: #fff;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  color: #fff;
+  font-weight: bolder;
+  color: #db9292;
   cursor: pointer;
   margin: auto;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 .follow-container button:hover {

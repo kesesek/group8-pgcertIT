@@ -14,7 +14,7 @@ const userDao = require("../modules/user-dao.js");
 const showNotifications = require("../middleware/notifications-middleware.js");
 const articleDao = require("../modules/article-dao.js");
 
-router.get("/login", function (req, res) {
+router.get("/login", showNotifications, function (req, res) {
     if (req.cookies.authToken) {
         res.redirect("/");
     } else {
@@ -23,7 +23,7 @@ router.get("/login", function (req, res) {
     }
 });
 
-router.post("/login", async function (req, res) {
+router.post("/login", showNotifications, async function (req, res) {
     const username = req.body.username_input;
     const password = req.body.password_input;
 
@@ -51,7 +51,7 @@ router.get("/allusernames", async function (req, res) {
 });
 
 //from login page to the sign-up page
-router.get("/signup", function (req, res) {
+router.get("/signup", showNotifications, function (req, res) {
 
     res.render("signup", { layout: 'loginSignup' });
 });
@@ -59,7 +59,7 @@ router.get("/signup", function (req, res) {
 //get the necessary data from the sign-up page, then create a new user into the database
 //middle name and description could be null
 //if user do not upload a photo as his Avatar, then the predifined Avatar(panda.png) would be used
-router.post("/signup", upload.single("avatar"), async function (req, res) {
+router.post("/signup", showNotifications, upload.single("avatar"), async function (req, res) {
     const userName = req.body.username;
     const fName = req.body.fname;
     let mName = req.body.mname;
@@ -98,15 +98,15 @@ router.post("/signup", upload.single("avatar"), async function (req, res) {
 
 
 //for editAcount page⬇️:
-router.get("/editAccount", async function(req, res) {
+router.get("/editAccount", showNotifications, async function (req, res) {
     const authToken = req.cookies.authToken;
-    
+
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
-    res.render("editAccount", {layout: 'sidebar&nav'});
+    res.render("editAccount", { layout: 'sidebar&nav' });
 });
 
-router.post("/verifyOldPassword", async function (req, res) {
+router.post("/verifyOldPassword", showNotifications, async function (req, res) {
     const oldPassword = req.body.oldPassword;
 
     const authToken = req.cookies.authToken;
@@ -134,7 +134,7 @@ router.post("/verifyOldPassword", async function (req, res) {
 
 
 
-router.post("/saveAll", upload.single('avatarFileName'),async function(req, res) {
+router.post("/saveAll", showNotifications, upload.single('avatarFileName'), async function (req, res) {
     console.log('in saveAll');
 
     const authToken = req.cookies.authToken;
@@ -157,14 +157,14 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
     if (avatarFile == undefined) {
         const avatarID = await userDao.getPreIconId(preAvatar);
         console.log(avatarID);//undefined
-        if(avatarID) {
+        if (avatarID) {
             console.log('in ifif');
             console.log(avatarID.id);
             await userDao.updateUserAvatar(authToken, avatarID.id);
-        }   
-    } 
-    
-    if(avatarFile){
+        }
+    }
+
+    if (avatarFile) {
         console.log("2 if");
         const oldFileName = avatarFile.path;
         const newFileName = `./public/images/icons/${avatarFile.originalname}`;
@@ -173,13 +173,13 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
         await userDao.updateUserAvatar(authToken, newAvatarID);
     }
 
-    if(newName) {
+    if (newName) {
         console.log("3 if");
 
         await userDao.updateUsername(authToken, newName);
     }
 
-    if(newPassword) {
+    if (newPassword) {
         console.log("4 if");
         const user = await userDao.getUserInfo(authToken);
         const salt = user.salt;
@@ -187,34 +187,34 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
         console.log('get salt ' + salt);
         await userDao.updatePassword(authToken, salt, iteration, newPassword);
     }
-    
-    if(newDb) {
+
+    if (newDb) {
         console.log("4 if");
 
         await userDao.updateDateBrith(authToken, newDb);
     }
 
-    if(newFname) {
+    if (newFname) {
         console.log("5 if");
 
         await userDao.updateFname(authToken, newFname);
     }
 
-    if(newMname) {
+    if (newMname) {
         console.log("6 if");
 
         await userDao.updateMname(authToken, newMname);
     }
 
-    if(newLname) {
+    if (newLname) {
         console.log("7 if");
 
         await userDao.updateLname(authToken, newLname);
     }
 
-    if(newDes) {
+    if (newDes) {
         console.log("8 if");
-      await userDao.updateDescription(authToken, newDes);
+        await userDao.updateDescription(authToken, newDes);
     }
 
 
@@ -223,26 +223,26 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
     res.send({ success: true });
 })
 
-router.post("/delectAccount", async function (req, res) {
+router.post("/delectAccount", showNotifications, async function (req, res) {
     const authToken = req.cookies.authToken;
     await userDao.delectAccount(authToken);
 
     res.clearCookie('authToken');
     console.log(authToken);
-    res.json({success: true});
+    res.json({ success: true });
 })
 //editAccount page ends
 
 //when click the "Add Articles" button from the side bar
 //the page would go to the "addarticle" page
-router.get("/addarticle", function (req, res) {
+router.get("/addarticle", showNotifications, function (req, res) {
 
     res.locals.active_AddArticles = true;
-    res.render("addarticle", {layout: 'sidebar&nav'});
+    res.render("addarticle", { layout: 'sidebar&nav' });
 });
 
 //in the "addarticle" page, user can write a whole new article and save it to the database, the redirect to the "My Articles" page
-router.post("/submitArticle", upload.single("imageFile"), async function (req, res) {
+router.post("/submitArticle", showNotifications, upload.single("imageFile"), async function (req, res) {
     let title = req.body.title;
     if (title == "" || title == "<p>Title here...</p>") {
         title = "[Untitled]";
@@ -271,17 +271,17 @@ router.post("/submitArticle", upload.single("imageFile"), async function (req, r
 });
 
 //when click the "Favorite Articles" button in the side bar, the user can see the favorite articles interface
-router.get("/favorite", async function (req, res) {
+router.get("/favorite", showNotifications, async function (req, res) {
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
     articles.forEach(article => {
-        article.content = article.content.substring(0,100) + "...";
+        article.content = article.content.substring(0, 100) + "...";
     });
     res.locals.user_id = user_idObj.id;
     res.locals.articles = articles;
 
     res.locals.active_MyFavoriteArticles = true;
-    res.render("favorite", {layout: 'sidebar&nav'});
+    res.render("favorite", { layout: 'sidebar&nav' });
 });
 
 //in the favorite page, when click the dislike button, it will modify the database and redirect back to the favorite page
@@ -295,7 +295,7 @@ router.get("/removeLikes", showNotifications, async function (req, res) {
 });
 
 //when click the "following" button in the side bar, it will display the following page
-router.get("/following", async function (req, res) {
+router.get("/following", showNotifications, async function (req, res) {
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const following = await userDao.retrieveFollowingByUserId(user_idObj.id);
 
@@ -305,7 +305,7 @@ router.get("/following", async function (req, res) {
 });
 
 //when click the "Unsubcribe" button in the following page, it will modify the database then redirect back to the following page
-router.get("/nofollowing", async function(req, res){
+router.get("/nofollowing", showNotifications, async function (req, res) {
     const blogger_id = req.query.bTn;
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     await userDao.unsubscribeWithUserIdAndArticleId(user_idObj.id, blogger_id);
@@ -314,7 +314,7 @@ router.get("/nofollowing", async function(req, res){
 });
 
 //when click the "follower" button in the side bar, it will display the follower page
-router.get("/follower", async function(req, res){
+router.get("/follower", showNotifications, async function (req, res) {
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const follower = await userDao.retrieveFollowerByUserId(user_idObj.id);
 
@@ -324,7 +324,7 @@ router.get("/follower", async function(req, res){
 });
 
 //when click the "remove" button in the follower page, it will modify the database then redirect back to the follower page
-router.get("/nofollower", async function(req, res){
+router.get("/nofollower", showNotifications, async function (req, res) {
     const fans_id = req.query.bTn;
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     await userDao.unsubscribeWithUserIdAndArticleId(fans_id, user_idObj.id);
