@@ -142,8 +142,10 @@ router.get("/replyComment", showNotifications, async function(req, res) {
                 res.locals.subscribe = true;
             }
         });
-        // reply comment to the comments table
-
+        // reply comment to a comment
+        await commentDao.addCommentToComment(req.query.comment, req.query.commentId, res.locals.article.articleId, userId);
+    }else{
+        res.locals.deleteNoAccess = "Please Log in to comment!";
     }
 
     res.render("fullArticle");
@@ -175,7 +177,6 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
             res.locals.deleteNoAccess = "Sorry! You do not have access to delete this comment.";
         }
     } else {
-        console.log("log out status");
         res.locals.deleteNoAccess = "Please Log in to delete!";
     }
 
@@ -201,6 +202,32 @@ router.get("/comment/:commentId", async function(req, res){
 router.get("/articleComments/:articleId", async function(req, res){
     const comments = await commentDao.retrieveCommentsByArticleId(req.params.articleId);
     res.send(comments);
+});
+
+router.get("/commentArticle", showNotifications, async function(req, res) {
+  
+    res.locals.title = "Full Article";
+
+    res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
+    
+    let userId = 0;
+    if (req.cookies.authToken) {
+        const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
+        userId = user.id;
+        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        subscribers.forEach(subscriber => {
+            if (subscriber.subscribed_id == userId) {
+                res.locals.subscribe = true;
+            }
+        });
+        // add comment to the comments table
+        await commentDao.addCommentToArticle(req.query.comment, res.locals.article.articleId, userId);
+    } else{
+        res.locals.deleteNoAccess = "Please Log in to comment!";
+    }
+
+    res.redirect("/article");
+
 });
 
 router.get("/unsubscribe", showNotifications, async function(req, res) {
@@ -249,28 +276,5 @@ router.get("/subscribe", showNotifications, async function(req, res) {
 
 });
 
-router.get("/commentArticle", showNotifications, async function(req, res) {
-  
-    res.locals.title = "Full Article";
-
-    res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
-    
-    let userId = 0;
-    if (req.cookies.authToken) {
-        const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
-        userId = user.id;
-        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
-        subscribers.forEach(subscriber => {
-            if (subscriber.subscribed_id == userId) {
-                res.locals.subscribe = true;
-            }
-        });
-        // add comment to the comments table
-        await commentDao.addCommentToArticle(req.query.comment, res.locals.article.articleId, userId);
-    }
-
-    res.redirect("/article");
-
-});
 
 module.exports = router;
