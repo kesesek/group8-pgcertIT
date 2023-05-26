@@ -23,12 +23,13 @@
             menubar: false,
             toolbar: 'bold italic underline',
             {{!-- toolbar: false, --}}
-            {{!-- formats: {
-            h3: { block: 'h3' }
-        },
             init_instance_callback: function (editor) {
-                editor.setContent('<h3>Title here...</h3>');
-            } --}}
+            editor.on('focus', function () {
+                if (editor.getContent() === '<p>Title here...</p>') {
+                    editor.setContent('');
+                }
+            });
+        }
         });
         tinymce.init({
             selector: '.content',
@@ -36,6 +37,13 @@
             menubar: false,
             plugins: 'lists advlist',
             toolbar: 'styleselect | bold italic underline | numlist bullist',
+            init_instance_callback: function (editor) {
+            editor.on('focus', function () {
+                if (editor.getContent() === '<p>Content here...</p>') {
+                    editor.setContent('');
+                }
+            });
+        }
         });
     </script>
 </head>
