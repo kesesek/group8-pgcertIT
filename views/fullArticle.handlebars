@@ -77,7 +77,7 @@
                     src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></p>
         <div id="commentEditor" style="width: 82.5%;">
             <form action="./commentArticle" method="get">
-                <textarea name="comment" required>Any comments?</textarea><br>
+                <textarea name="comment" class="commentContent" placeholder="Any comments?" required></textarea><br>
                 <button type="submit" id="commentButton" name="articleId" value="{{article.articleId}}">Submit</button>
             </form>
         </div>

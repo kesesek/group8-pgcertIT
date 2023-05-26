@@ -42,10 +42,7 @@ function makeNestedComments(commentArray, nestedCommentArray){
         for (let i = 0; i < commentArray.length; i++) {
             let comment = commentArray[i];
             let findParent = false;
-            // // test
-            // nestedCommentArray.forEach(element => {
-            //     console.log(element);
-            // });
+            // // console.log(nestedCommentArray);
             nestedCommentArray.forEach(parent => {
                 if (parent.id == comment.parent_id) {
                     if (!parent.children) {
@@ -56,20 +53,33 @@ function makeNestedComments(commentArray, nestedCommentArray){
                     i--;
                     findParent = true;
                     // console.log("findparent");
-                    // console.log(comment.id);
+                    // console.log(comment);
+                    // console.log("commentArray");
+                    // console.log(commentArray);
                 }
 
-                if (!findParent) {
-                    // console.log("parent.children");
-                    // console.log(parent.children);
-                    // console.log(commentArray);
-                    if (commentArray.length == 0) {
-                        return nestedCommentArray;
-                    }
-                    return makeNestedComments(commentArray, parent.children);
-                }
+                // if (!findParent) {
+                //     // console.log("parent.children");
+                //     // console.log(parent.children);
+                //     // console.log(commentArray);
+                //     // if (commentArray.length == 0) {
+                //     //     return nestedCommentArray;
+                //     // }
+                //     if (parent.children) {
+                //         return makeNestedComments(commentArray, parent.children);
+                //     }
+                // }
             });
+
+            // console.log("nestedCommentArray");
+            // console.log(nestedCommentArray);
             
+        }
+
+        if (commentArray.length != 0) {
+            nestedCommentArray.forEach(parent => {
+                return makeNestedComments(commentArray, parent.children);
+            });
         }
     };
 }
@@ -104,10 +114,20 @@ async function addCommentToArticle(content, articleId, userId){
 	(${content}, datetime('now'), NULL, ${articleId}, ${userId})`);
 }
 
+// add new comment to a comment
+async function addCommentToComment(content, parentId, articleId, userId){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    INSERT INTO comments (content, date_time, parent_id, article_id, user_id) VALUES
+	(${content}, datetime('now'), ${parentId}, ${articleId}, ${userId})`);
+}
+
 // Export functions.
 module.exports = {
     retrieveCommentsByArticleId,
     retrieveCommentById,
     deleteCommentById,
-    addCommentToArticle
+    addCommentToArticle,
+    addCommentToComment
 };

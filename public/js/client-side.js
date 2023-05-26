@@ -171,32 +171,32 @@ window.addEventListener("load", async function(){
                 </div>
                 <p class="comment-text">${comment.content}</p>
                 <div class="button-combo">
-                    <form action="./replyComment" method="get">
-                        <div class="replyButton">
-                            <button type="submit" name="replyComment" value=${comment.id}>Reply</button>
-                        </div>
-                    </form>
+                    <div class="replyButton">
+                        <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
+                    </div>
                     <form action="./deleteComment" method="get">
                         <div class="deleteButton">
                             <button type="submit" name="deleteComment" value=${comment.id}>Delete</button>
                         </div>
                     </form>
+                </div>
+                <div class="replyText">
                 </div>`;
                 if (comment.children) {
                     const childrenArray = comment.children;
                     list += commentRecursion(childrenArray);
                 }
                 list += `
-                </li>
-                </ul>`;
+                </li>`;
             });
+            list += `</ul>`;
             // console.log(list);
             return list;
         }
 
         async function getNestedCommentsJson(){
             const articleId = getCookieValue("articleId");
-            let commentsResponse = await fetch(`http://localhost:3000/articleComments/${articleId}`);
+            let commentsResponse = await fetch(`/articleComments/${articleId}`);
             let commentsJson = await commentsResponse.json();
             return commentsJson;
         };
@@ -229,16 +229,36 @@ window.addEventListener("load", async function(){
         // });
 
         const replyButtonArray = this.document.querySelectorAll(".replyButton");
-        replyButtonArray.forEach(replyButton => {
+        const replyTextArray = this.document.querySelectorAll(".replyText");
+        const replyCommentArray = this.document.querySelectorAll(".replyComment");
+        for (let index = 0; index < replyButtonArray.length; index++) {
+            const replyButton = replyButtonArray[index];
+            let replyDisplay = false;
             replyButton.addEventListener("click", function () {
+                const replyText = replyTextArray[index];
+                const replyComment = replyCommentArray[index];
                 if (!getCookie("authToken")){
                     alert('Please Log in to reply!');
+                } else{
+                    if (!replyDisplay) {
+                        replyText.innerHTML = `
+                        <div id="commentEditor" style="width: 82.5%;">
+                            <form action="./replyComment" method="get">
+                                <textarea name="comment" class="commentContent" placeholder="Any comments?" required></textarea><br>
+                                <button type="submit" id="commentButton" name="commentId" value=${replyComment.value}>Submit</button>
+                            </form>
+                        </div>`;
+                        replyDisplay = true;
+                    } else{
+                        replyText.innerHTML = '';
+                        replyDisplay = false;
+                    }
                 }
             })
-        });
+        };
 
         const commentButton = this.document.querySelector("#commentButton");
-        commentButton.addEventListener("click", function () {
+        commentButton.addEventListener("click", async function () {
             if (!getCookie("authToken")){
                 alert('Please Log in to comment!');
             }
