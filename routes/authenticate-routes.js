@@ -103,6 +103,7 @@ router.get("/editAccount", showNotifications, async function (req, res) {
 
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
+    res.locals.active_EditAccount = true;
     res.render("editAccount", { layout: 'sidebar&nav' });
 });
 

@@ -6,6 +6,7 @@ const showNotifications = require("../middleware/notifications-middleware.js");
 const articleDao = require("../modules/article-dao.js");
 const userDao = require("../modules/user-dao.js");
 const commentDao = require("../modules/comment-dao.js");
+const notificationDao = require("../modules/notification-dao.js");
 
 router.get("/", showNotifications, async function(req, res) {
   
@@ -119,11 +120,42 @@ router.get("/article", showNotifications, async function(req, res) {
             }
         });
     }
-    // res.cookie("articleId", req.query.fullArticle);
-    // res.locals.comments = await commentDao.retrieveCommentsByArticleId(req.query.fullArticle);
 
     res.render("fullArticle");
 
+});
+
+router.post("/readFollower", showNotifications, async function(req, res) {
+  
+    res.locals.title = "Follower";
+
+    // check if there has cookies notificationId? If yes, change notification table and clear the cookies
+    if (req.cookies.notificationId) {
+        await notificationDao.changeReadStatusWithNotificationId(req.cookies.notificationId);
+        res.clearCookie("notificationId");
+    }
+
+    res.redirect("/follower");
+
+});
+
+router.post("/readNotification", showNotifications, async function(req, res) {
+  
+    res.locals.title = "Full Article";
+
+    // check if there has cookies notificationId? If yes, change notification table and clear the cookies
+    if (req.cookies.notificationId) {
+        await notificationDao.changeReadStatusWithNotificationId(req.cookies.notificationId);
+        res.clearCookie("notificationId");
+    }
+
+    res.redirect("/article");
+
+});
+
+router.get("/notification/:notificationId", async function(req, res){
+    const notifications = await notificationDao.retrieveNotificationWithNotificationId(req.params.notificationId);
+    res.send(notifications);
 });
 
 router.get("/replyComment", showNotifications, async function(req, res) {

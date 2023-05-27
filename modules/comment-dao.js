@@ -123,11 +123,23 @@ async function addCommentToComment(content, parentId, articleId, userId){
 	(${content}, datetime('now'), ${parentId}, ${articleId}, ${userId})`);
 }
 
+async function retrieveArticleIdByCommentId(commentId) {
+    const db = await dbPromise;
+
+    const articleId = await db.get(SQL`
+        select article_id 
+        from comments
+        where id = ${commentId}`);
+    
+    return articleId;
+}
+
 // Export functions.
 module.exports = {
     retrieveCommentsByArticleId,
     retrieveCommentById,
     deleteCommentById,
     addCommentToArticle,
-    addCommentToComment
+    addCommentToComment,
+    retrieveArticleIdByCommentId
 };
