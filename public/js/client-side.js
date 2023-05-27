@@ -31,6 +31,26 @@ window.addEventListener("load", async function(){
             })
         });
 
+        // turn to an article page from the notifications list
+        if (this.document.querySelector(".notificationId")) {
+            const notificationIdArray = this.document.querySelectorAll(".notificationId");
+            notificationIdArray.forEach(notificationId => {
+                notificationId.addEventListener("mouseover", async function(){
+                    const notification = await getNotificationJson(notificationId.value);
+                    setCookie("notificationId", notificationId.value, 1);
+                    if (notification.article_id) {
+                        setCookie("articleId", notification.article_id, 1);
+                    }
+                })
+            });
+        }
+
+        async function getNotificationJson(notificationId){
+            let notificationResponse = await fetch(`/notification/${notificationId}`);
+            let notificationJson = await notificationResponse.json();
+            return notificationJson;
+        };
+
         // change the login/logout label depends on the cookies
         const loginLabel = this.document.querySelector(".loginStatus");
         if (getCookie("authToken")) {

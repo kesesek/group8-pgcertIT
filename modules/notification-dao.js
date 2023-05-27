@@ -34,9 +34,46 @@ async function retrieveUsernameByUserId(userId) {
     return username;
 }
 
+async function retrieveAllNotificationWithauthTokenOrderByTimeAndRead(userAuthToken) {
+    const db = await dbPromise;
+
+    const allNotifications = await db.all(SQL`
+        select n.id, n.date_time, n.isRead, n.message, n.comment_id, n.article_id, n.user_id, n.receiver_id
+        from notifications as n, users as u
+        where u.id = n.receiver_id
+        and u.authToken = ${userAuthToken}
+        order by n.isRead, n.date_time`);
+    
+    return allNotifications;
+}
+
+async function retrieveNotificationWithNotificationId(notificationId) {
+    const db = await dbPromise;
+
+    const notification = await db.get(SQL`
+        select *
+        from notifications
+        where id = ${notificationId}`);
+    
+    return notification;
+}
+
+async function changeReadStatusWithNotificationId(notificationId) {
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+        update notifications
+        set isRead = 1
+        where id = ${notificationId}`);
+    
+}
+
 // Export functions.
 module.exports = {
     retrieveNotificationByStatus,
     retrieveIconByUserId,
-    retrieveUsernameByUserId
+    retrieveUsernameByUserId,
+    retrieveAllNotificationWithauthTokenOrderByTimeAndRead,
+    retrieveNotificationWithNotificationId,
+    changeReadStatusWithNotificationId
 };

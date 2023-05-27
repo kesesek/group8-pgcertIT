@@ -189,7 +189,7 @@ INSERT  INTO notifications VALUES
 	(1, datetime('now'), false, 'XX creates a new article.', NULL, 1, 2, 10),
 	(2, datetime('now'), false, 'XX makes to a comment.', 1, NULL, 1, 2),
 	(3, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 3, 10),
-	(4, datetime('now'), false, 'XX replies to a comment.', 10, NULL, 10, 1),
+	(4, datetime('now'), false, 'XX replies to a comment.', 10, 4, 10, 1),
 	(5, datetime('now'), false, 'XX creates a new article.', NULL, 6, 10, 1),
 	(6, datetime('now'), false, 'XX creates a new article.', NULL, 8, 9, 1),
 	(7, datetime('now'), false, 'XX makes to a comment.', 15, NULL, 2, 3),

@@ -82,18 +82,30 @@
     </div>
     {{else if notificationMessages}}
     {{#each notificationMessages}}
-    <div class="notification notification-info">
-        <div class="flex-container">
-            <div class="flex-vertical-container">
-                <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
-                <p class="message">{{this.username}}</p>
-            </div>
-            <div class="flex-vertical-container">
-                <p class="message"><a>{{this.message}}</a></p>
-                <p class="message datastamp">{{this.datastamp}}</p>
+    {{#if this.articleId}}
+    <form action="./readNotification" method="post">
+    {{else}}
+    <form action="./readFollower" method="post">
+    {{/if}}
+    <button type="submit" class="notificationId" value="{{this.id}}">
+        {{#if this.isread}}
+        <div class="notification notification-info read">
+        {{else}}
+        <div class="notification notification-info">
+        {{/if}}
+            <div class="flex-container">
+                <div class="flex-vertical-container">
+                    <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
+                    <p class="message">{{this.username}}</p>
+                </div>
+                <div class="flex-vertical-container">
+                    <p class="message">{{this.message}}</p>
+                    <p class="message datastamp">{{this.datastamp}}</p>
+                </div>
             </div>
         </div>
-    </div>
+    </button>
+    </form>
     {{/each}}
     {{else}}
     <div class="notification notification-info">
