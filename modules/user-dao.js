@@ -189,7 +189,7 @@ async function updateUsername(authToken, name) {
 
 async function updatePassword(authToken, salt, iteration, password) {
     const db = await dbPromise;
-    
+
     const hashedPassword = hashPassword(password, salt, iteration);
     await db.run(SQL`
         update users
@@ -333,6 +333,80 @@ async function retrieveFollowerByUserId(user_id) {
     return follower;
 }
 
+//retrieve target user's all articles
+async function retrieveUserArticlesByTargetId(targetId) {
+    const db = await dbPromise;
+
+    const articles = await db.all(SQL`
+        SELECT articles.id, articles.content, articles.title, articles.date_time, 
+        articles.author_id, articles.image_id, users.username AS authorname
+        FROM articles
+        JOIN users ON articles.author_id = users.id
+        WHERE articles.author_id = ${targetId}
+        ORDER BY articles.date_time DESC;
+    `);
+
+    return articles;
+}
+
+//retrieve the liked article Ids by the user_id
+async function retrieveLikedArticleIdsByUserId(user_id) {
+    const db = await dbPromise;
+
+    const articleIds = await db.all(SQL`
+        SELECT likes.article_id
+        FROM likes
+        WHERE likes.user_id = ${user_id};
+    `);
+
+    return articleIds;
+}
+
+//retrieve author by article id
+async function retrieveAuthorIdByArticleId(article_id) {
+    const db = await dbPromise;
+
+    const author_id = await db.get(SQL`
+        SELECT author_id FROM articles
+        WHERE id = ${article_id};
+    `);
+
+    return author_id;
+}
+
+//delete an article by article_id
+async function deleteArticleById(article_id) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        DELETE FROM articles
+        WHERE id = ${article_id};    
+    `);
+}
+
+//retrieve an article information by article id
+async function getArticleById(article_id) {
+    const db = await dbPromise;
+
+    const article = await db.get(SQL`
+        SELECT * FROM articles
+        WHERE id = ${article_id};
+    `);
+
+    return article;
+}
+
+//update article information by article id
+async function updateArticleById(article_id, content, title, image_id) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        UPDATE articles
+        SET content = ${content}, title = ${title}, image_id = ${image_id}
+        WHERE id = ${article_id};    
+    `);
+}
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -363,5 +437,11 @@ module.exports = {
     addArticle,
     retrieveLikedArticlesByUserId,
     retrieveFollowingByUserId,
-    retrieveFollowerByUserId
+    retrieveFollowerByUserId,
+    retrieveUserArticlesByTargetId,
+    retrieveLikedArticleIdsByUserId,
+    retrieveAuthorIdByArticleId,
+    deleteArticleById,
+    getArticleById,
+    updateArticleById
 }

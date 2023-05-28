@@ -237,13 +237,19 @@ router.post("/delectAccount", showNotifications, async function (req, res) {
 
 //when click the "Add Articles" button from the side bar
 //the page would go to the "addarticle" page
-router.get("/addarticle", showNotifications, function (req, res) {
+router.get("/addarticle", showNotifications, async function (req, res) {
+    const article_id = req.query.edit;
+    let article;
+    if (article_id !== undefined) {
+        article = await userDao.getArticleById(article_id);
+        res.locals.article = article;
+    }
 
     res.locals.active_AddArticles = true;
     res.render("addarticle", { layout: 'sidebar&nav' });
 });
 
-//in the "addarticle" page, user can write a whole new article and save it to the database, the redirect to the "My Articles" page
+//in the "addarticle" page, user can write a whole new article and save it to the database, then redirect to the "My Articles" page
 router.post("/submitArticle", showNotifications, upload.single("imageFile"), async function (req, res) {
     let title = req.body.title;
     if (title == "" || title == "<p>Title here...</p>") {
@@ -267,7 +273,13 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
         image_id = null;
     }
 
-    await userDao.addArticle(content, title, user_id, image_id);
+    const article_id = req.body.article;
+    if (article_id !== "") {
+        await userDao.updateArticleById(article_id, content, title, image_id);
+    } else {
+        await userDao.addArticle(content, title, user_id, image_id);
+    }
+
     // insert new 'publish an article' notifications to the notification table
     const followerArray = await userDao.retrieveFollowerByUserId(user_id);
     const articleId = await articleDao.retrieveArticleByContentTitleUserId(content, title, user_id);
@@ -275,7 +287,7 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
         await notificationDao.addNotificationWithNewArticle(articleId.id, user_id, follower.id);
     });
 
-    res.redirect("/myarticle");
+    res.redirect("/profile");
 });
 
 //when click the "Favorite Articles" button in the side bar, the user can see the favorite articles interface
@@ -339,6 +351,73 @@ router.get("/nofollower", showNotifications, async function (req, res) {
 
     res.redirect("/follower");
 });
+
+//when go to the other user's profile, the page will display the target user's articles
+router.get("/profile", showNotifications, async function (req, res) {
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    let targetId = req.query.otherUserId;
+    if (targetId == undefined || targetId == user_idObj.id) {
+        res.locals.active_myArticle = true;
+        targetId = user_idObj.id;
+    }
+    const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
+    const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
+    for (let i = 0; i < articles.length; i++) {
+        articles[i].content = articles[i].content.substring(0, 100) + "...";
+        for (let j = 0; j < likedArticleIds.length; j++) {
+            if (articles[i].id === likedArticleIds[j].article_id) {
+                articles[i].isLiked = true;
+                break;
+            } else {
+                articles[i].isLiked = false;
+            }
+        }
+        if (targetId == user_idObj.id) {
+            articles[i].canModify = true;
+        } else {
+            articles[i].canModify = false;
+        }
+    }
+    res.locals.articles = articles;
+
+    res.render("profile", { layout: 'sidebar&nav' });
+});
+
+//user remove liked articles in the profile page
+router.get("/removeCollect", showNotifications, async function (req, res) {
+    const article_id = req.query.likeAction;
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const user_id = user_idObj.id;
+    await articleDao.removeLikedArticles(user_id, article_id);
+
+    const targetIdObj = await userDao.retrieveAuthorIdByArticleId(article_id);
+    const targetId = targetIdObj.author_id;
+
+    res.redirect(`/profile?otherUserId=${targetId}`);
+});
+
+//user add like to the article in the profile page
+router.get("/addCollect", showNotifications, async function (req, res) {
+    const article_id = req.query.likeAction;
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+    const user_id = user_idObj.id;
+    await articleDao.insertLikedArticles(user_id, article_id);
+
+    const targetIdObj = await userDao.retrieveAuthorIdByArticleId(article_id);
+    const targetId = targetIdObj.author_id;
+
+    res.redirect(`/profile?otherUserId=${targetId}`);
+});
+
+router.get("/deleteArticle", showNotifications, async function (req, res) {
+    const article_id = req.query.delete;
+    await userDao.deleteArticleById(article_id);
+
+    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+
+    res.redirect(`/profile?otherUserId=${user_idObj.id}`);
+});
+
 
 
 module.exports = router;

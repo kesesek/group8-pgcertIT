@@ -3,12 +3,12 @@
     <ul>
         {{#each following}}
         <li>
-            <a href="">
-                <img src="./images/icons/{{this.filename}}" width="40"><span>{{this.username}}</span>
-            </a>
+            <form action="./profile" method="get">
+                <button type="submit" class="bTn2" name="otherUserId" value="{{this.id}}"><img src="./images/icons/{{this.filename}}" width="40"><span>{{this.username}}</span></button>
+            </form>
             <form action="./nofollowing" method="get">
                 <br>
-                <button type="submit" name="bTn" value="{{this.id}}">Unsubscribe</button>
+                <button type="submit" class="bTn" name="bTn" value="{{this.id}}">Unsubscribe</button>
             </form>
         </li><br>
         {{/each}}
