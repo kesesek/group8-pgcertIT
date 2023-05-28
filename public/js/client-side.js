@@ -158,8 +158,12 @@ window.addEventListener("load", async function(){
         const hideCommentButton = this.document.querySelector(".hideButton");
         const commentBlock = this.document.querySelector(".comments-block");
         const comments = await getNestedCommentsJson();
-        const result = commentRecursion(comments);
-        commentBlock.innerHTML = result;
+        if (comments.length == 0) {
+            commentBlock.innerHTML = `<p>No comments yet.</p>`
+        } else{
+            const result = commentRecursion(comments);
+            commentBlock.innerHTML = result;
+        }
         let commentHide = false;
         hideCommentButton.addEventListener("click", async function(){
             if (commentHide) {
@@ -167,8 +171,12 @@ window.addEventListener("load", async function(){
                 hideCommentButton.innerHTML = 'Hide Comments';
                 commentHide = false;
                 const comments = await getNestedCommentsJson();
-                const result = commentRecursion(comments);
-                commentBlock.innerHTML = result;
+                if (comments.length == 0) {
+                    commentBlock.innerHTML = `<p>No comments yet.</p>`
+                } else{
+                    const result = commentRecursion(comments);
+                    commentBlock.innerHTML = result;
+                }
             } else {
                 commentBlock.classList.add('hide');
                 hideCommentButton.innerHTML = 'Show Comments';

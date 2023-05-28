@@ -108,6 +108,11 @@ router.get("/article", showNotifications, async function(req, res) {
     res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
+
+    if (res.locals.article.imageId) {
+        const imagePath = await articleDao.retrieveImageById(res.locals.article.imageId);
+        res.locals.imagePath = imagePath.filename;
+    }
     
     let userId = 0;
     if (req.cookies.authToken) {

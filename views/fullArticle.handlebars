@@ -21,6 +21,9 @@
     </p>
     <div class="article-content">
         <p>{{{article.content}}}</p>
+        {{#if imagePath}}
+        <p class="article-image"><img src="./images/uploadedFiles/{{imagePath}}" width="500px"></p>
+        {{/if}}
     </div>
 </div>
 
@@ -29,48 +32,6 @@
         <p class="hide-or-show"><a class="hideButton">Hide Comments</a></p>
     </div>
     <div class="comments-block">
-        {{!-- {{#if comments}}
-        <ul>
-            {{#each comments}}
-            <li>
-                <div class="comment-header">
-                    <img src="./images/icons/{{this.filename}}" width="40px">
-                    <p>{{this.username}}</p>
-                    <p>{{this.timestamp}}</p>
-                </div>
-                <p class="comment-text">{{this.content}}</p>
-                {{#if this.children}}
-                <ul>
-                    {{#each this.children}}
-                    <li>
-                        <div class="comment-header">
-                            <img src="./images/icons/{{this.filename}}" width="40px">
-                            <p>{{this.username}}</p>
-                            <p>{{this.timestamp}}</p>
-                        </div>
-                        <p class="comment-text">{{this.content}}</p>
-                        {{#if this.children}}
-                        <ul>
-                            {{#each this.children}}
-                            <li>
-                                <div class="comment-header">
-                                    <img src="./images/icons/{{this.filename}}" width="40px">
-                                    <p>{{this.username}}</p>
-                                    <p>{{this.timestamp}}</p>
-                                </div>
-                                <p class="comment-text">{{this.content}}</p>
-                            </li>
-                            {{/each}}
-                        </ul>
-                        {{/if}}
-                    </li>
-                    {{/each}}
-                </ul>
-                {{/if}}
-            </li>
-            {{/each}}
-        </ul>
-        {{/if}} --}}
     </div>
     <div class="comment-content">
         <p class="user-comment"><a href="" class="icon"><img
