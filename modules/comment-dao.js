@@ -134,6 +134,19 @@ async function retrieveArticleIdByCommentId(commentId) {
     return articleId;
 }
 
+async function retrieveCommentIdByCommentArticleAndUser(comment, articleId, userId) {
+    const db = await dbPromise;
+
+    const commentIdArray = await db.all(SQL`
+        select id 
+        from comments
+        where content = ${comment}
+        and article_id = ${articleId}
+        and user_id = ${userId}`);
+    
+    return commentIdArray[commentIdArray.length-1];
+}
+
 // Export functions.
 module.exports = {
     retrieveCommentsByArticleId,
@@ -141,5 +154,6 @@ module.exports = {
     deleteCommentById,
     addCommentToArticle,
     addCommentToComment,
-    retrieveArticleIdByCommentId
+    retrieveArticleIdByCommentId,
+    retrieveCommentIdByCommentArticleAndUser
 };

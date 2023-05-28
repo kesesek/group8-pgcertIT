@@ -13,6 +13,7 @@ const fs = require("fs");
 const userDao = require("../modules/user-dao.js");
 const showNotifications = require("../middleware/notifications-middleware.js");
 const articleDao = require("../modules/article-dao.js");
+const notificationDao = require("../modules/notification-dao.js");
 
 router.get("/login", showNotifications, function (req, res) {
     if (req.cookies.authToken) {
@@ -267,6 +268,12 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
     }
 
     await userDao.addArticle(content, title, user_id, image_id);
+    // insert new 'publish an article' notifications to the notification table
+    const followerArray = await userDao.retrieveFollowerByUserId(user_id);
+    const articleId = await articleDao.retrieveArticleByContentTitleUserId(content, title, user_id);
+    followerArray.forEach(async follower => {
+        await notificationDao.addNotificationWithNewArticle(articleId.id, user_id, follower.id);
+    });
 
     res.redirect("/myarticle");
 });

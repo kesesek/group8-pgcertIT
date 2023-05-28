@@ -111,6 +111,18 @@ async function retrieveArticleById(articleId) {
     return article;
 }
 
+// retrieve article by content, title and userId
+async function retrieveArticleByContentTitleUserId(content, title, user_id) {
+    const db = await dbPromise;
+
+    const articleId = await db.all(SQL`
+        select id from articles 
+        where content = ${content}
+        and title = ${title}
+        and author_id = ${user_id}`);
+
+    return articleId[articleId.length-1];
+}
 
 // Export functions.
 module.exports = {
@@ -119,5 +131,6 @@ module.exports = {
     retrieveArticlesByOrder,
     insertLikedArticles,
     removeLikedArticles,
-    retrieveArticleById
+    retrieveArticleById,
+    retrieveArticleByContentTitleUserId
 };
