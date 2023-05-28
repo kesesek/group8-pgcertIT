@@ -262,7 +262,7 @@ confirmdelect.addEventListener('click' ,function(){
         <label id="passwordMatch" for="confirmnewid"></label><br><br>
 
         <label for="newBd">Date of birth: </label>
-        <input type="date" class="editipt" id="newBd" min="1900-01-01" max="2023-06-01" name="newbirth" placeholder="{{user.date_of_birth}}"><br><br>
+        <input type="date" class="editipt" id="newBd" min="1900-01-01" max="2023-06-01" name="newbirth" value="{{user.date_of_birth}}"><br><br>
 
         <label for="fnameid">First name: </label>
         <input class="editipt" id="fnameid" name="fname" type="text" placeholder="{{user.fname}}" maxlength="32"><br><br>
@@ -271,7 +271,7 @@ confirmdelect.addEventListener('click' ,function(){
         <input class="editipt" id="mnameid" name="mname" type="text" placeholder="{{user.mname}}" maxlength="32"><br><br>
 
         <label for="lnameid">Last name: </label>
-        <input class="editipt" id="lnameid" name="lname" type="text" placehoder="{{user.lname}}" maxlength="32"><br><br>
+        <input class="editipt" id="lnameid" name="lname" type="text" placeholder="{{user.lname}}" maxlength="32"><br><br>
 
         <div id="textnew">
             <label for="desid">Description: </label>
