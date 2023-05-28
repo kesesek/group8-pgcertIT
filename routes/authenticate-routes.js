@@ -100,6 +100,7 @@ router.post("/signup", showNotifications, upload.single("avatar"), async functio
 
 //for editAcount page⬇️:
 router.get("/editAccount", showNotifications, async function (req, res) {
+    res.locals.title = "Edit Account";
     const authToken = req.cookies.authToken;
 
     const user = await userDao.getUserInfo(authToken);
@@ -238,6 +239,7 @@ router.post("/delectAccount", showNotifications, async function (req, res) {
 //when click the "Add Articles" button from the side bar
 //the page would go to the "addarticle" page
 router.get("/addarticle", showNotifications, async function (req, res) {
+    res.locals.title = "Add Articles";
     const article_id = req.query.edit;
     let article;
     if (article_id !== undefined) {
@@ -292,6 +294,7 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
 
 //when click the "Favorite Articles" button in the side bar, the user can see the favorite articles interface
 router.get("/favorite", showNotifications, async function (req, res) {
+    res.locals.title = "Favorite Articles";
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
     articles.forEach(article => {
@@ -354,33 +357,39 @@ router.get("/nofollower", showNotifications, async function (req, res) {
 
 //when go to the other user's profile, the page will display the target user's articles
 router.get("/profile", showNotifications, async function (req, res) {
-    const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
-    let targetId = req.query.otherUserId;
-    if (targetId == undefined || targetId == user_idObj.id) {
-        res.locals.active_myArticle = true;
-        targetId = user_idObj.id;
-    }
-    const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
-    const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
-    for (let i = 0; i < articles.length; i++) {
-        articles[i].content = articles[i].content.substring(0, 100) + "...";
-        for (let j = 0; j < likedArticleIds.length; j++) {
-            if (articles[i].id === likedArticleIds[j].article_id) {
-                articles[i].isLiked = true;
-                break;
+    res.locals.title = "User Articles";
+    if (req.cookies.authToken) {
+        const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
+        let targetId = req.query.otherUserId;
+        if (targetId == undefined || targetId == user_idObj.id) {
+            res.locals.active_myArticle = true;
+            targetId = user_idObj.id;
+        }
+        const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
+        const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
+        for (let i = 0; i < articles.length; i++) {
+            articles[i].content = articles[i].content.substring(0, 100) + "...";
+            for (let j = 0; j < likedArticleIds.length; j++) {
+                if (articles[i].id === likedArticleIds[j].article_id) {
+                    articles[i].isLiked = true;
+                    break;
+                } else {
+                    articles[i].isLiked = false;
+                }
+            }
+            if (targetId == user_idObj.id) {
+                articles[i].canModify = true;
             } else {
-                articles[i].isLiked = false;
+                articles[i].canModify = false;
             }
         }
-        if (targetId == user_idObj.id) {
-            articles[i].canModify = true;
-        } else {
-            articles[i].canModify = false;
-        }
-    }
-    res.locals.articles = articles;
+        res.locals.articles = articles;
 
-    res.render("profile", { layout: 'sidebar&nav' });
+        res.render("profile", { layout: 'sidebar&nav' });
+    } else {
+        res.redirect("/");
+    }
+    
 });
 
 //user remove liked articles in the profile page
