@@ -176,6 +176,12 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         });
         // reply comment to a comment
         await commentDao.addCommentToComment(req.query.comment, req.query.commentId, res.locals.article.articleId, userId);
+        // insert new 'reply a comment' notifications to the notification table
+        const followerArray = await userDao.retrieveFollowerByUserId(userId);
+        const commentId = await commentDao.retrieveCommentIdByCommentArticleAndUser(req.query.comment, res.locals.article.articleId, userId);
+        followerArray.forEach(async follower => {
+            await notificationDao.addNotificationWithReplyComment(commentId.id, res.locals.article.articleId, userId, follower.id);
+        });
     }else{
         res.locals.deleteNoAccess = "Please Log in to comment!";
     }
@@ -254,6 +260,12 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
         });
         // add comment to the comments table
         await commentDao.addCommentToArticle(req.query.comment, res.locals.article.articleId, userId);
+        // insert new 'make a comment' notifications to the notification table
+        const followerArray = await userDao.retrieveFollowerByUserId(userId);
+        const commentId = await commentDao.retrieveCommentIdByCommentArticleAndUser(req.query.comment, res.locals.article.articleId, userId);
+        followerArray.forEach(async follower => {
+            await notificationDao.addNotificationWithCommentToArticle(commentId.id, res.locals.article.articleId, userId, follower.id);
+        });
     } else{
         res.locals.deleteNoAccess = "Please Log in to comment!";
     }
@@ -273,6 +285,7 @@ router.get("/unsubscribe", showNotifications, async function(req, res) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
         await userDao.unsubscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
+        await notificationDao.deleteNotificationWithNewSubscribe(userId, res.locals.article.authorId);
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
@@ -296,6 +309,7 @@ router.get("/subscribe", showNotifications, async function(req, res) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
         await userDao.subscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
+        await notificationDao.addNotificationWithNewSubscribe(userId, res.locals.article.authorId);
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
