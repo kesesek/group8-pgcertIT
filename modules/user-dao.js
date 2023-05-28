@@ -123,23 +123,23 @@ async function retrieveSubscribeWithAuthorId(authorId) {
 }
 
 //unsubscribe by subscriber id and blogger id
-async function unsubscribeWithUserIdAndArticleId(userId, articleId) {
+async function unsubscribeWithUserIdAndArticleId(userId, authorId) {
     const db = await dbPromise;
 
     const result = await db.run(SQL`
     delete from subscribles
     where subscribed_id = ${userId}
-    and blogger_id = ${articleId}`);
+    and blogger_id = ${authorId}`);
 
 }
 
 //subscribe by subscriber id and blogger id
-async function subscribeWithUserIdAndArticleId(userId, articleId) {
+async function subscribeWithUserIdAndArticleId(userId, authorId) {
     const db = await dbPromise;
 
     const result = await db.run(SQL`
     INSERT INTO subscribles (subscribed_id, blogger_id) VALUES
-	(${userId}, ${articleId})`);
+	(${userId}, ${authorId})`);
 }
 
 

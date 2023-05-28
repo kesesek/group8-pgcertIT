@@ -29,7 +29,8 @@ async function showNotifications(req, res, next) {
                 let articleId = null;
                 if (singleNotification.article_id){
                     articleId = singleNotification.article_id;
-                } else if (singleNotification.comment_id) {
+                }
+                if (singleNotification.comment_id) {
                     articleId = await commentDao.retrieveArticleIdByCommentId(singleNotification.comment_id);
                     articleId = articleId.article_id;
                 }
