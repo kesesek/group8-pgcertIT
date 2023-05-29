@@ -614,7 +614,7 @@ async function retrieveTargetProfileById(targetId) {
             u.date_of_birth,
             ic.filename AS icon_filename,
             COUNT(DISTINCT a.id) AS article_count,
-            SUM(DISTINCT l.user_id) AS likes_count,
+            COUNT(DISTINCT l.user_id) AS likes_count,
             COUNT(DISTINCT s1.subscribed_id) AS Follower_count,
             COUNT(DISTINCT s2.blogger_id) AS Following_count
         FROM 
