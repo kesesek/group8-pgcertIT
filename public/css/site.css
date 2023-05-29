@@ -874,6 +874,109 @@ a:-webkit-any-link {
 
 /* Full Article Page end */
 
+
+/* analytics page⬇️ */
+#analytics_container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background-color: #f9ebeb;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.parts {
+  display:flex;
+  flex-wrap:nowrap;
+  
+}
+
+.parts div {
+  background-color:#db9292;
+}
+
+.analyticscard {
+  flex:1;
+  height: 150px;
+  margin:10px;
+  display: flex;
+  
+  color:#f9ebeb;
+}
+
+.leftpart {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.rightpart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+
+.analyticscard *{
+  margin: 0;
+}
+
+.analyticschart {
+  flex:1;
+  height:250px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.analyticschart * {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+.analyticsarticle {
+  flex:1;
+  height:150px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:#f9ebeb;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#articleTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.analyticsarticle * {
+  margin:0;
+}
+
+#showTitle {
+  color:rgb(158, 108, 108);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#chartTitle {
+  
+  color:#f9ebeb;
+}
+
+
+
 /* follow page css start */
 .follow-container {
   background-color: #db9292;

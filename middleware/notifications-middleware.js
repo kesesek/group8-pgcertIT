@@ -2,6 +2,7 @@ const notificationDao = require("../modules/notification-dao.js");
 const userDao = require("../modules/user-dao.js");
 
 const commentDao = require("../modules/comment-dao.js");
+const articleDao = require("../modules/article-dao.js");
 
 async function showNotifications(req, res, next) {
 
@@ -39,6 +40,11 @@ async function showNotifications(req, res, next) {
                 if (singleNotification.isRead == 1) {
                     isRead = true;
                 }
+
+                let article = null;
+                if (articleId) {
+                    article = await articleDao.retrieveArticleById(articleId);
+                }
     
                 notificationMessages[index] = {
                     "id": id,
@@ -47,7 +53,8 @@ async function showNotifications(req, res, next) {
                     "message": message,
                     "datastamp": datestamp,
                     "articleId": articleId,
-                    "isread": isRead
+                    "isread": isRead,
+                    "articleTitle": article.title 
                 };
             }
         }
