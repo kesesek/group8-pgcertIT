@@ -1,0 +1,132 @@
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<script type="module">
+    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
+    
+    async function getCommentsNuminTenDays() {
+        let response = await fetch("http://localhost:3000/commentdata");
+        let commentData = await response.json();
+
+        return commentData;
+    }
+
+    const tenDaysData = await getCommentsNuminTenDays();
+
+    const minDate = tenDaysData[0].date;
+    const maxDate = tenDaysData[tenDaysData.length - 1].date;
+
+    const container = document.querySelector("#commentcolunm");
+        const chart = Plot.plot({
+            marks: [
+            Plot.barY(tenDaysData, {
+                 x: "date",
+                  y:"commentNum", 
+                  fill:"#B9C9E5", 
+                  
+            }),
+            Plot.axisX({anchor: "bottom", label: null,tickRotate: -30})],
+            width: container.offsetWidth,
+            height: container.offsetHeight,
+            
+            y: {
+            label: "The total number of comments",
+            axis: "left"
+            }
+        });
+  
+    container.appendChild(chart);
+
+    async function getPopularityData() {
+        let response = await fetch("http://localhost:3000/popularitydata");
+        let popularityData = await response.json();
+
+        return popularityData;
+    }
+
+    const popularityData = await getPopularityData();
+    const lineContainer = document.querySelector('#popularityline');
+    const linePlot = Plot.plot({
+        marks: [
+            Plot.line(popularityData, { x: "index", y: "popularity", fill:"#B9C9E5" })
+        ],
+        width: lineContainer.offsetWidth,
+        height: lineContainer.offsetHeight,
+        x: {
+            label: "Your nth article"
+        },
+        y: {
+            label: "Popularity"
+        }
+    });
+
+    lineContainer.appendChild(linePlot);
+  
+</script>
+
+
+<div id="analytics_container">
+    <br>
+    <div id="cards" class="parts">
+        <div id="followercard" class="analyticscard">
+            <div clsaa="leftpart"><img src="./images/subscribe.png"></div>
+            <div class="rightpart">
+                <h3>follower: </h3>
+                <br>
+                <p>{{followernumber}}</p>
+            </div>
+        </div>
+
+        <div id="commentcard" class="analyticscard">
+            <div class="leftpart"><img src="./images/communication.png"></div>
+            <div class="rightpart">
+                <h3>comments you got: </h3>
+                <br>
+                <p>{{commentsnumber}}</p>
+            </div>
+        </div>
+
+        
+        <div id="likescard" class="analyticscard">
+            <div class="leftpart"><img src="./images/like.png"></div>
+            <div class="rightpart">
+                <h3>likes you got: </h3>
+                <br>
+                <p>{{likes}}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+
+
+    
+    <div id="charts" class="parts">
+        <div id="commentcolunm" class="analyticschart">
+            <h3 id="chartTitle">Number of comments received per day</h3>
+        </div>
+        <div id="popularityline" class="analyticschart">
+            <h3 id="chartTitle">Popular variations for each of your articles</h3>
+        </div>
+    </div>
+    <br>
+
+    <div class="parts" id="showTitle"><h3>Your Top Three Popular Articles</h3></div>
+
+    <div id="toparticles" class="parts">
+        {{#if topThree}}
+        {{#each topThree}}
+        <div class="analyticsarticle">
+            <h4 id="articleTitle">{{this.[1]}}</h4>
+            <p>{{this.[2]}}</p>
+            <p>comments: {{this.[3]}}</p>
+            <p>likes: {{this.[4]}}</p>
+            <p>popularity: {{this.[5]}}</p>
+        </div>
+        {{/each}}
+        {{else}}
+        <div>
+            <p>There is no articles yet..</p>
+            <a href="#">Click to create one now!</a>
+        </div>
+        {{/if}}
+    </div>
+</div>

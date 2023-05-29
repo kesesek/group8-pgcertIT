@@ -299,6 +299,146 @@ async function retrieveLikedArticlesByUserId(user_id) {
     return articles;
 }
 
+
+//for analytics page but maybe other pages can also use
+//1. get follower numbers:
+async function countFollower(user_id) {
+    const db = await dbPromise;//subscribed_id is fan's id
+    const followers = await db.all(SQL`
+    SELECT subscribed_id From subscribles
+    WHERE blogger_id = ${user_id}
+    `);
+    return followers.length;
+}
+
+//2.get following number:
+async function countFollowing(user_id) {
+    const db = await dbPromise;
+    const following = await db.all(SQL`
+    SELECT blogger_id FROM subscribles
+    WHERE subscribed_id = ${user_id}
+    `);
+    return following.length;
+}
+
+//3.get total likes:
+async function countlikes(user_id) {
+    const articles = await getAllArticle(user_id);
+
+    let likes = 0;
+    for(let i = 0; i < articles.length; i++) {
+        let article_id = articles[i].id;
+        const thislikes = await countArticlelike(article_id);
+        likes += thislikes;
+    }
+    return likes;
+}
+
+//4.get numbers of articles'comments:
+async function countArticleComment(article_id) {
+    const db = await dbPromise;
+    const comments = await db.all(SQL`
+    SELECT id FROM comments
+    WHERE article_id = ${article_id}
+    `);
+    return comments.length;
+}
+
+//5.get an article's likes:
+async function countArticlelike(article_id) {
+    const db = await dbPromise;
+    const wholikes = await db.all(SQL`
+        SELECT user_id FROM likes
+        WHERE article_id = ${article_id}
+        `);
+        
+    const thislikes = wholikes.length;
+    return thislikes;
+}
+
+//6.get articles' popularity:
+function getArticlePopularity(commentsNum, likesNum){
+    const popularity  = commentsNum * 15 + likesNum *10;
+    return popularity;
+}
+
+
+
+//7.get top  popular articles of a user:
+async function getTopThree(user_id) {
+    const articleArray = await getAllArticle(user_id);
+    let allarticleInfoArray = [];
+    if(articleArray) {
+        for(let i = 0; i < articleArray.length; i++) {
+            let title = articleArray[i].title;
+            let commentsNum = await countArticleComment(articleArray[i].id);
+            let likesNum = await countArticlelike(articleArray[i].id);
+            let popularity = getArticlePopularity(commentsNum, likesNum);
+            let time = articleArray[i].date_time;
+            let thisArticleInfo = [articleArray[i].id, title, time, commentsNum, likesNum, popularity];
+            allarticleInfoArray.push(thisArticleInfo);
+        }
+        const sortedArray = allarticleInfoArray.sort((a, b) => b[5] - a[5]);
+        const topThree = sortedArray.slice(0, 3);
+        return topThree;
+
+    } else {
+        return allarticleInfoArray;
+    }
+}
+
+
+//8.get the number of daily comments of an article:
+async function dailyCommentNumber(date, article_id) {
+    const db = await dbPromise;
+    const commentsArray = await db.all(SQL`
+    SELECT id FROM comments
+    WHERE DATE(date_time) = ${date}
+    AND article_id = ${article_id}
+    `);
+
+    return commentsArray.length;
+}
+
+//9.get the total number of comments received on all posts by a user：
+async function totalNumberofUserPosts(user_id) {
+    const articleArray = await getAllArticle(user_id);
+    let total = 0;
+
+    if(articleArray){
+        for(let i = 0; i < articleArray.length; i++){
+            let thisArticleComments = await countArticleComment(articleArray[i].id);
+            total += thisArticleComments;
+        }
+    }
+    return total;
+}
+
+//10.get the daily total number of comments received on all posts by a user：
+async function dailyAllArticleCommentsNumber(date, user_id) {
+    const articleArray = await getAllArticle(user_id);
+    let total = 0;
+    if(articleArray) {
+        for(let i = 0; i < articleArray.length; i++) {
+            let thisArticleComments = await dailyCommentNumber(date, articleArray[i].id);
+            total += thisArticleComments;
+        }
+    }
+    return total;
+}
+
+//11.get the user's articles:
+async function getAllArticle(user_id) {
+    const db = await dbPromise;
+    const articles = await db.all(SQL`
+    SELECT * FROM articles
+    WHERE author_id = ${user_id}
+    `);
+
+    return articles;
+}
+
+
 //retrieve following object by user_id
 async function retrieveFollowingByUserId(user_id) {
     const db = await dbPromise;
@@ -407,6 +547,7 @@ async function updateArticleById(article_id, content, title, image_id) {
     `);
 }
 
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -436,6 +577,17 @@ module.exports = {
     saveImageAndGetId,
     addArticle,
     retrieveLikedArticlesByUserId,
+    countFollower,
+    countFollowing,
+    countlikes,
+    countArticlelike,
+    countArticleComment,
+    getArticlePopularity,
+    getTopThree,
+    dailyCommentNumber,
+    totalNumberofUserPosts,
+    dailyAllArticleCommentsNumber,
+    getAllArticle
     retrieveFollowingByUserId,
     retrieveFollowerByUserId,
     retrieveUserArticlesByTargetId,
