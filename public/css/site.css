@@ -49,9 +49,7 @@ font-family: 'Courier New', Courier, monospace;
 }
 
 .nav a.active {
-  color:#7990ff;
-  font-weight: bolder;
-  font-size: larger;
+  background-color: rgb(225, 185, 185);
 }
 
 /* nav bar style end */
@@ -514,6 +512,10 @@ a:-webkit-any-link {
   position: relative;
   align-items: stretch;
 }
+
+/* .sidebarSameHeight{
+  display: flex;
+} */
 
 /* sidebar style ends */
 
@@ -984,6 +986,166 @@ a:-webkit-any-link {
 }
 
 
+
+/* follow page css start */
+.follow-container {
+  background-color: #db9292;
+  box-shadow: 10px 10px 10px #a48294;
+  border-radius: 10px;
+  margin: 65px auto;
+  width: 80%;
+  padding: 40px;
+}
+
+.follow-container ul {
+  list-style: none;
+  margin: auto;
+  padding: 0;
+}
+
+.follow-container li {
+  margin-left: 25%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.follow-container a {
+  color: #333;
+  text-decoration: none;
+}
+
+.follow-container img {
+  border-radius: 50%;
+}
+
+.follow-container span {
+  font-weight: bold;
+  font-size: x-large;
+  margin: 30px;
+}
+
+.follow-container .bTn {
+  background-color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  color: #db9292;
+  cursor: pointer;
+  margin-right: auto;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.follow-container .bTn2 {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.follow-container .bTn:hover {
+  transform: scale(1.1);
+}
+
+.noneFollow {
+  color: #f9ebeb;
+  text-align: center;
+  font-style: italic;
+  font-size: 20px;
+}
+
+.nonefav {
+  color: #db9292;
+  text-align: center;
+  font-style: italic;
+  font-size: 25px;
+  margin-top: 85%;
+}
+
+.noneWritten {
+  color: #db9292;
+  text-align: center;
+  font-style: italic;
+  font-size: 25px;
+  margin-top: 65%;
+}
+/* follow page css end */
+
+/* profile page butttons start */
+
+#editProfile {
+  background-color: #fff;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  color: #db9292;
+  cursor: pointer;
+  margin: 6px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+#deleteProfile {
+  background-color: #fff;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bolder;
+  color: #db9292;
+  cursor: pointer;
+  margin: 6px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+#editProfile:hover {
+  transform: scale(1.1);
+}
+
+#deleteProfile:hover {
+  transform: scale(1.1);
+}
+
+/* profile page butttons end */
+
+/* other user's profile starts */
+
+.otherUserProfile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9ebeb;
+  width: 50%;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px auto -30px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.otherUserProfile ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.otherUserProfile li {
+  margin-bottom: 10px;
+}
+
+.otherUserProfile img {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.otherUserProfile li:first-child {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.otherUserProfile li:not(:first-child) {
+  font-size: 16px;
+}
+
 /* follow page css start */
 .follow-container {
   background-color: #db9292;
@@ -1102,3 +1264,17 @@ a:-webkit-any-link {
 }
 
 /* profile page butttons end */
+.otherUserProfile li:nth-child(4) {
+  font-style: italic;
+  color: #999999;
+}
+
+.otherUserProfile li:nth-child(6),
+.otherUserProfile li:nth-child(7),
+.otherUserProfile li:nth-child(8),
+.otherUserProfile li:nth-child(9) {
+  font-weight: bold;
+  color: #db9292;
+}
+
+/* other user's profile ends */

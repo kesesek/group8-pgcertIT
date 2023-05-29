@@ -31,6 +31,7 @@ CREATE TABLE users (
 	hashed_password VARCHAR(512) NOT NULL,
 	icon_id INTEGER NOT NULL,
 	authToken VARCHAR(128),
+	isAdmin INTEGER DEFAULT 0 NOT NULL,
 	FOREIGN KEY (icon_id) REFERENCES icons (id) ON DELETE CASCADE
 );
 
@@ -104,9 +105,11 @@ INSERT INTO icons (id, filename) VALUES
 	(8, 'dog.png'),
 	(9, 'panda.png'),
 	(10, 'cat.png');
-	
+
+INSERT INTO users (id, username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id, isAdmin) VALUES
+	(1, 'bandalls', 'Robert', 'De', 'Niro', 'One of the greatest actors of all time, Robert De Niro was born on August 17, 1943 in Manhattan, New York City, to artists Virginia (Admiral) and Robert De Niro Sr.', '1943-08-17', '1', 9999, 'db6c8b5fefa69587f033b3ba64a7deeeaf536bd656b30057a95b03dbc8f7d3b778fe8584d18b331df355fb2d3154e93881a62124fd79d58103cc64d9c29bc5e11cb7455b3b0d4772bbdfb9eb595498c3f8275ac723fce0b8d0b06649910755e0e9bf1d59581ef842e8a6ec77de8d99e870a6def100154a9759318be8bfcff1c3451b18c7f286cdd92f2fad83842c6871e6104a4ac34d08744035a64595bc31f86956f1e52f91e3fd56bf233e60500f8f5e311af189a1f88a5f15be92a307bb9f177c539209fc3b9c7add5f3f7700c2285f334d7ebba3cbd62d6fddd7cc119deba49655fed92aea7344d35bdd6d1c2994960d9a82bd4d790b6cfde42457da2dd1', 2, 1);
+
 INSERT INTO users (id, username, fname, mname, lname, description, date_of_birth, salt, iterations, hashed_password, icon_id) VALUES
-	(1, 'bandalls', 'Robert', 'De', 'Niro', 'One of the greatest actors of all time, Robert De Niro was born on August 17, 1943 in Manhattan, New York City, to artists Virginia (Admiral) and Robert De Niro Sr.', '1943-08-17', '1', 9999, 'db6c8b5fefa69587f033b3ba64a7deeeaf536bd656b30057a95b03dbc8f7d3b778fe8584d18b331df355fb2d3154e93881a62124fd79d58103cc64d9c29bc5e11cb7455b3b0d4772bbdfb9eb595498c3f8275ac723fce0b8d0b06649910755e0e9bf1d59581ef842e8a6ec77de8d99e870a6def100154a9759318be8bfcff1c3451b18c7f286cdd92f2fad83842c6871e6104a4ac34d08744035a64595bc31f86956f1e52f91e3fd56bf233e60500f8f5e311af189a1f88a5f15be92a307bb9f177c539209fc3b9c7add5f3f7700c2285f334d7ebba3cbd62d6fddd7cc119deba49655fed92aea7344d35bdd6d1c2994960d9a82bd4d790b6cfde42457da2dd1', 2),
 	(2, 'wattlexp','Jack', NULL, 'Nicholson', 'Jack Nicholson, an American actor, producer, director and screenwriter, is a three-time Academy Award winner and twelve-time nominee.', '1937-04-22', '2', 9999, 'ddf12e17e1775cf1e21e39135d42643f23e45132f3d161a8d39d82e5fca0339462718a0555e6bb5c6596e8b57565b937c95ea12276dbffbe1bb5d73d34487aaca12bfd5650f12471a063aa02ec17ca5e95795cba7dc601e9b115e18f4d7ac7a0e1b0459dd1cc25ce8639b89e038943e42b53b8535dd04afadeba047b97bfe28f1aa7750df0f48103e9ef715c6a1569bc1819ba025177d5d095c6815efac42c254ee5749e42651447c3bcb6463a55fb4069feafd7a9fc9284501188cc697562461f93831104ba8409fb0ca1758299b269560717f481fd35edffd2d228d5c810f423ab1061573f32571b8d8b8fa67514d73aaf8e5a043f7bd15ada18194b27a46f', 3),
 	(3, 'sweetiele','Marlon', NULL, 'Brando', 'Marlon Brando is widely considered the greatest movie actor of all time, rivaled only by the more theatrically oriented Laurence Olivier in terms of esteem.', '1989-06-04', '3', 9999, '8b603053284bb4aac8e16102bdcbf3b02400015894776b7826b819a50a0a2cea7e1267b5a7a40de04de6915f5adb76a727727c34f4e9ef72f63313f48f6aae8c9316f812a396efeb4dc89fa550ae5ae9a686b4214ea0dc0840de18de2baa110d0dc84cface4ff9d11ce3452f51032f0994b04672ab25a8576afc4ff33e296787a2d4a7ac89b3e3971a6fdcf9f4e7d17f6e2bd8fedb340b1e0fbf027038e19944dd7554bc193b1e0c2f5d5ba173b89694004476eaa4de7227495f954e5ea627dbbc000776fa310ce07e5c8a954bc870b76e5f36fcbc63003e6ac392d435788c289ee57162b899d6b587375c463b8ab30c96df5143693fae0b9ddefb578afa76e2', 1),
 	(4, 'hyperyaufarer','Denzel', NULL, 'Washington', 'Denzel Hayes Washington, Jr. was born on December 28, 1954 in Mount Vernon, New York. He is the middle of three children of a beautician mother, Lennis, from Georgia, and a Pentecostal minister father, Denzel Washington, Sr., from Virginia.', '1954-12-28', '4', 9999, 'a4686e16d43acef9d6efa7acdf2f1908ebdff1cf535406df26c73b01e4820db461a0ebe78036c1ebf5234d89db49d31e4e4de9abc4c141011d491f3e0da422a47b688338e2e5699c17244dc6b75afcab10182d0a07ce5e5d8b11829b4641ad7ebebbcf7534d6f097a0431eab990db1b6c4e7dd1df0ad7e42f84623cf73459d5ab4c87fceb3dee5afb30f4d34cf13cdf309c3507c5130e735386a00f3e113437e25e7c5fdb7e8b0b076fa3a7c4f8e75264bcc198e4896384277a0e464368c81c12f55d85fb8760ebe9fb37fbac187b0eeaa2dbe9ddd535484bd1d25f45983928af108385f4813f0163ce1664ef7552a7846faa37988828a610ee2c18876ae9bd9', 5),
@@ -186,15 +189,15 @@ INSERT INTO comments (id, content, date_time, parent_id, article_id, user_id) VA
 	(16, 'Pokem ipsum dolor sit amet Rotom Cherrim Boulder Badge Shellos Mismagius in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Celadon Department Store Rhyhorn consectetur adipisicing elit Whirlipede Marsh Badge Glalie Crustle. Rising Badge Drowzee Delcatty Turtwig Pansage Pokemon Clefairy. Bubble Darkrai Delibird Seedot James Ho-oh Manaphy. Charizard Rampardos gotta catch them all Slakoth Missingno Starly Victini.', datetime('now'), NULL, 10, 10);
 	
 INSERT  INTO notifications VALUES
-	(1, datetime('now'), false, 'XX creates a new article.', NULL, 1, 2, 10),
-	(2, datetime('now'), false, 'XX makes to a comment.', 1, NULL, 1, 2),
-	(3, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 3, 10),
-	(4, datetime('now'), false, 'XX replies to a comment.', 10, 4, 10, 1),
-	(5, datetime('now'), false, 'XX creates a new article.', NULL, 6, 10, 1),
-	(6, datetime('now'), false, 'XX creates a new article.', NULL, 8, 9, 1),
-	(7, datetime('now'), false, 'XX makes to a comment.', 15, NULL, 2, 3),
-	(8, datetime('now'), false, 'XX replies to a comment.', 9, NULL, 8, 3),
-	(9, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 7, 5),
-	(10, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 1, 4);
+	(1, datetime('now'), false, 'published an article', NULL, 1, 1, 2),
+	(2, datetime('now'), false, 'made a comment', 1, 1, 2, 1),
+	(3, datetime('now'), false, 'starts following you', NULL, NULL, 3, 1),
+	(4, datetime('now'), false, 'replied a comment', 10, 4, 7, 2),
+	(5, datetime('now'), false, 'published an article', NULL, 6, 5, 2),
+	(6, datetime('now'), false, 'published an article', NULL, 8, 8, 9),
+	(7, datetime('now'), false, 'made a comment', 15, 9, 5, 2),
+	(8, datetime('now'), false, 'replied a comment', 9, 3, 9, 4),
+	(9, datetime('now'), false, 'starts following you', NULL, NULL, 4, 5),
+	(10, datetime('now'), false, 'starts following you', NULL, NULL, 4, 1);
 	
 	

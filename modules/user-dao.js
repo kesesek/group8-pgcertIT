@@ -485,6 +485,57 @@ async function retrieveUserArticlesByTargetId(targetId) {
     return articles;
 }
 
+
+//retrieve following object by user_id
+async function retrieveFollowingByUserId(user_id) {
+    const db = await dbPromise;
+
+    const following = await db.all(SQL`
+        SELECT u.id, u.username, i.filename
+        FROM users u
+        JOIN icons i ON u.icon_id = i.id
+        WHERE u.id IN (
+        SELECT blogger_id
+        FROM subscribles
+        WHERE subscribed_id = ${user_id});    
+    `);
+
+    return following;
+}
+
+//retrieve follower object by user_id
+async function retrieveFollowerByUserId(user_id) {
+    const db = await dbPromise;
+
+    const follower = await db.all(SQL`
+        SELECT u.id, u.username, i.filename
+        FROM users u
+        JOIN icons i ON u.icon_id = i.id
+        WHERE u.id IN (
+        SELECT subscribed_id
+        FROM subscribles
+        WHERE blogger_id = ${user_id});
+    `);
+
+    return follower;
+}
+
+//retrieve target user's all articles
+async function retrieveUserArticlesByTargetId(targetId) {
+    const db = await dbPromise;
+
+    const articles = await db.all(SQL`
+        SELECT articles.id, articles.content, articles.title, articles.date_time, 
+        articles.author_id, articles.image_id, users.username AS authorname
+        FROM articles
+        JOIN users ON articles.author_id = users.id
+        WHERE articles.author_id = ${targetId}
+        ORDER BY articles.date_time DESC;
+    `);
+
+    return articles;
+}
+
 //retrieve the liked article Ids by the user_id
 async function retrieveLikedArticleIdsByUserId(user_id) {
     const db = await dbPromise;
@@ -543,6 +594,99 @@ async function updateArticleById(article_id, content, title, image_id) {
     `);
 }
 
+// for api requirements
+//check user is admin or not. If it is, return true, else return false.
+async function checkUserAdmin(authToken) {
+    const db = await dbPromise;
+
+    const adminStatus = await db.get(SQL`
+        SELECT isAdmin FROM users
+        WHERE authToken = ${authToken};
+    `);
+
+    let isAdmin = false;
+    if (adminStatus.isAdmin == 1) {
+        isAdmin = true;
+    }
+    return isAdmin;
+}
+
+//retrieve all users profiles and authored articles
+async function retrieveAllUserProfilesAndArticles() {
+    const db = await dbPromise;
+
+    const articleIds = await db.all(SQL`
+        select u.id, u.username, u.fname, u.mname, u.lname, u.description, u.date_of_birth, u.icon_id, count(a.id) as numberOfArticles
+        FROM users as u
+        left join articles as a
+        on u.id = a.author_id
+        group by u.id;`);
+
+    return articleIds;
+}
+
+//delect user by id
+async function delectUserById(userId) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        DELETE FROM users
+        WHERE id = ${userId}`);
+
+}
+
+//delect user by id
+async function delectUserAuthToken(authToken) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        update users
+        set authToken = NULL
+        where authToken = ${authToken}`);
+
+}
+// api requirements end
+
+//retrieve target user's profile along with their articles count, likes count, following count and follower count
+async function retrieveTargetProfileById(targetId) {
+    const db = await dbPromise;
+
+    const targetProfile = await db.get(SQL`
+        SELECT 
+            u.username,
+            u.fname,
+            u.mname,
+            u.lname,
+            u.description,
+            u.date_of_birth,
+            ic.filename AS icon_filename,
+            COUNT(DISTINCT a.id) AS article_count,
+            COUNT(DISTINCT l.user_id) AS likes_count,
+            COUNT(DISTINCT s1.subscribed_id) AS Follower_count,
+            COUNT(DISTINCT s2.blogger_id) AS Following_count
+        FROM 
+            users u
+            LEFT JOIN icons ic ON u.icon_id = ic.id
+            LEFT JOIN articles a ON u.id = a.author_id
+            LEFT JOIN likes l ON a.id = l.article_id
+            LEFT JOIN subscribles s1 ON u.id = s1.blogger_id
+            LEFT JOIN subscribles s2 ON u.id = s2.subscribed_id
+        WHERE 
+            u.id = ${targetId}
+        GROUP BY 
+            u.username,
+            u.fname,
+            u.mname,
+            u.lname,
+            u.description,
+            u.date_of_birth,
+            ic.filename;
+    `);
+
+    return targetProfile;
+}
+
+
 module.exports = {
     updateUser,
     retrieveUserWithCredentials,
@@ -590,5 +734,11 @@ module.exports = {
     retrieveAuthorIdByArticleId,
     deleteArticleById,
     getArticleById,
-    updateArticleById
+    updateArticleById,
+    updateArticleById,
+    checkUserAdmin,
+    retrieveAllUserProfilesAndArticles,
+    delectUserById,
+    delectUserAuthToken,
+    retrieveTargetProfileById
 }

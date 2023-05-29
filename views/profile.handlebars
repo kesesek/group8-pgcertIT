@@ -1,5 +1,20 @@
 <div class="main-container">
     <div class="main-content">
+        {{#if T}}
+        <div class="otherUserProfile">
+            <ul>
+                <li><img src="images/icons/{{T.icon_filename}}" width="40px"></li>
+                <li>Username: {{T.username}}</li>
+                <li>Name: {{T.fname}} {{T.mname}} {{T.lname}}</li>
+                <li>Description: {{T.description}}</li>
+                <li>Birthday: {{T.date_of_birth}}</li>
+                <li>Articles number: {{T.article_count}}</li>
+                <li>Likes number: {{T.likes_count}}</li>
+                <li>Follower number: {{T.Follower_count}}</li>
+                <li>Following number: {{T.Following_count}}</li>
+            </ul>
+        </div>
+        {{/if}}
         {{#if articles}}
         <div class="grid-favArticles">
             {{#each articles}}
@@ -18,11 +33,13 @@
 
                         {{#if this.isLiked}}
                         <form action="./removeCollect" method="get">
-                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img src="./images/black favorite.png" width="40px"></button>
+                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img
+                                    src="./images/black favorite.png" width="40px"></button>
                         </form>
                         {{else}}
                         <form action="./addCollect" method="get">
-                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img src="./images/outline favorite.png" width="40px"></button>
+                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img
+                                    src="./images/outline favorite.png" width="40px"></button>
                         </form>
                         {{/if}}
 

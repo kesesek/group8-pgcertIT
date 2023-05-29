@@ -111,27 +111,22 @@ router.get("/editAccount", showNotifications, async function (req, res) {
 
 router.post("/verifyOldPassword", showNotifications, async function (req, res) {
     const oldPassword = req.body.oldPassword;
-
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const oldHashed = user.hashed_password;
     const salt = user.salt;
-
     const iterations = user.iterations;
-
     const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
 
     if(hashedInputOldPassword === oldHashed ) {
         res.json(true);
     } else {
-
         res.json(false);
     }
-
 });
 
+router.post("/saveAll", showNotifications, upload.single('avatarFileName'), async function (req, res) {
 
-router.post("/saveAll", upload.single('avatarFileName'),async function(req, res) {
     const authToken = req.cookies.authToken;
     const olduser = await userDao.getUserInfo(authToken);
     const preAvatar = req.body.checkedAvatar;
@@ -144,6 +139,7 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
     const newLname = req.body.newLname;
     const newDes = req.body.newDes;
 
+
     if(preAvatar) {
         const avatarID = await userDao.getPreIconId(preAvatar);
         if(avatarID) {
@@ -151,7 +147,9 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
         }   
     } 
     
-    if(avatarFile){
+    
+
+    if (avatarFile) {
         const oldFileName = avatarFile.path;
         const newFileName = `./public/images/icons/${avatarFile.originalname}`;
         fs.renameSync(oldFileName, newFileName);
@@ -159,39 +157,40 @@ router.post("/saveAll", upload.single('avatarFileName'),async function(req, res)
         await userDao.updateUserAvatar(authToken, newAvatarID);
     }
 
-    if(newName) {
+
+    if (newName) {
         await userDao.updateUsername(authToken, newName);
     }
 
-    if(newPassword) {
+    if (newPassword) {
         const user = await userDao.getUserInfo(authToken);
         const salt = user.salt;
         const iteration = user.iterations;
         await userDao.updatePassword(authToken, salt, iteration, newPassword);
     }
+
     
     if(newDb) {
-
         await userDao.updateDateBrith(authToken, newDb);
     }
 
-    if(newFname) {
 
+    if(newFname) {
         await userDao.updateFname(authToken, newFname);
     }
 
     if(newMname) {
-
         await userDao.updateMname(authToken, newMname);
     }
+
 
     if(newLname) {
 
         await userDao.updateLname(authToken, newLname);
     }
 
-    if(newDes) {
 
+    if(newDes) {
         await userDao.updateDescription(authToken, newDes);
     }
 
@@ -207,6 +206,7 @@ router.post("/delectAccount", showNotifications, async function (req, res) {
 
     res.clearCookie('authToken');
     res.json({success: true});
+
 })
 //editAccount page ends
 
@@ -331,13 +331,16 @@ router.get("/nofollower", showNotifications, async function (req, res) {
 
 //when go to the other user's profile, the page will display the target user's articles
 router.get("/profile", showNotifications, async function (req, res) {
-    res.locals.title = "User Articles";
+    res.locals.title = "User profile";
     if (req.cookies.authToken) {
         const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
         let targetId = req.query.otherUserId;
         if (targetId == undefined || targetId == user_idObj.id) {
             res.locals.active_myArticle = true;
             targetId = user_idObj.id;
+        }else{
+            const targetProfile = await userDao.retrieveTargetProfileById(targetId);
+            res.locals.T = targetProfile;
         }
         const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
         const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
@@ -404,7 +407,10 @@ router.get("/deleteArticle", showNotifications, async function (req, res) {
 
 
 // analytics page⬇️
-router.get('/analytics', async function(req, res){
+router.get('/analytics', showNotifications, async function(req, res){
+    res.locals.title = "Analytics";
+    res.locals.active_Analytics = true;
+
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const user_id = user.id;
