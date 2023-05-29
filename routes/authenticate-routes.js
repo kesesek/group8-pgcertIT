@@ -407,7 +407,10 @@ router.get("/deleteArticle", showNotifications, async function (req, res) {
 
 
 // analytics page⬇️
-router.get('/analytics', async function(req, res){
+router.get('/analytics', showNotifications, async function(req, res){
+    res.locals.title = "Analytics";
+    res.locals.active_Analytics = true;
+
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const user_id = user.id;

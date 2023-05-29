@@ -41,9 +41,10 @@ async function showNotifications(req, res, next) {
                     isRead = true;
                 }
 
-                let article = null;
+                let articleTitle = null;
                 if (articleId) {
-                    article = await articleDao.retrieveArticleById(articleId);
+                    const article = await articleDao.retrieveArticleById(articleId);
+                    articleTitle = article.title;
                 }
     
                 notificationMessages[index] = {
@@ -54,7 +55,7 @@ async function showNotifications(req, res, next) {
                     "datastamp": datestamp,
                     "articleId": articleId,
                     "isread": isRead,
-                    "articleTitle": article.title 
+                    "articleTitle": articleTitle 
                 };
             }
         }
