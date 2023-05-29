@@ -189,15 +189,15 @@ INSERT INTO comments (id, content, date_time, parent_id, article_id, user_id) VA
 	(16, 'Pokem ipsum dolor sit amet Rotom Cherrim Boulder Badge Shellos Mismagius in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Celadon Department Store Rhyhorn consectetur adipisicing elit Whirlipede Marsh Badge Glalie Crustle. Rising Badge Drowzee Delcatty Turtwig Pansage Pokemon Clefairy. Bubble Darkrai Delibird Seedot James Ho-oh Manaphy. Charizard Rampardos gotta catch them all Slakoth Missingno Starly Victini.', datetime('now'), NULL, 10, 10);
 	
 INSERT  INTO notifications VALUES
-	(1, datetime('now'), false, 'XX creates a new article.', NULL, 1, 2, 10),
-	(2, datetime('now'), false, 'XX makes to a comment.', 1, 1, 1, 2),
-	(3, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 3, 10),
-	(4, datetime('now'), false, 'XX replies to a comment.', 10, 4, 10, 1),
-	(5, datetime('now'), false, 'XX creates a new article.', NULL, 6, 10, 1),
-	(6, datetime('now'), false, 'XX creates a new article.', NULL, 8, 9, 1),
-	(7, datetime('now'), false, 'XX makes to a comment.', 15, NULL, 2, 3),
-	(8, datetime('now'), false, 'XX replies to a comment.', 9, NULL, 8, 3),
-	(9, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 7, 5),
-	(10, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 1, 4);
+	(1, datetime('now'), false, 'published an article', NULL, 1, 1, 2),
+	(2, datetime('now'), false, 'made a comment', 1, 1, 2, 1),
+	(3, datetime('now'), false, 'starts following you', NULL, NULL, 3, 1),
+	(4, datetime('now'), false, 'replied a comment', 10, 4, 7, 2),
+	(5, datetime('now'), false, 'published an article', NULL, 6, 5, 2),
+	(6, datetime('now'), false, 'published an article', NULL, 8, 8, 9),
+	(7, datetime('now'), false, 'made a comment', 15, 9, 5, 2),
+	(8, datetime('now'), false, 'replied a comment', 9, 3, 9, 4),
+	(9, datetime('now'), false, 'starts following you', NULL, NULL, 4, 5),
+	(10, datetime('now'), false, 'starts following you', NULL, NULL, 4, 1);
 	
 	
