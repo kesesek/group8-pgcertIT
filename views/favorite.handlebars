@@ -1,21 +1,30 @@
 <div class="main-container">
     <div class="main-content">
+        {{#if articles}}
         <div class="grid-favArticles">
             {{#each articles}}
             {{!-- <div class="grid-content"> --}}
                 <div class="card">
-                    <p>{{this.title}}</p>
+                    <p>{{{this.title}}}</p>
                     <p>{{this.authorname}}</p>
                     <p>{{this.date_time}}</p>
-                    <p>{{this.content}}</p>
+                    <p>{{{this.content}}}</p>
+                    <form action="./article" method="get">
+                        <button type="submit" class="readMore" name="fullArticle" value="{{this.id}}">Read more</button>
+                    </form>
                     <div class="favorite">
                         <form action="./removeLikes" method="get">
-                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img src="./images/black favorite.png" width="40px"></button>
+                            <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img
+                                    src="./images/black favorite.png" width="40px"></button>
                         </form>
                     </div>
                 </div>
-            {{!-- </div> --}}
+                {{!--
+            </div> --}}
             {{/each}}
-        </div>   
+        </div>
+        {{else}}
+        <p class="nonefav">No more favorite articles~</p>
+        {{/if}}
     </div>
 </div>

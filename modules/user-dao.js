@@ -63,7 +63,7 @@ async function retrieveUserIconPathWithAuthToken(authToken) {
     where users.authToken = ${authToken} 
     and users.icon_id = icons.id`);
 
-    return user;   
+    return user;
 }
 
 //get all user names from the database
@@ -111,7 +111,7 @@ async function saveUploadAndGetId(filename) {
 }
 
 //get the subscribe status by subscriber id and blogger id
-async function retrieveSubscribeWithAuthorId(authorId){
+async function retrieveSubscribeWithAuthorId(authorId) {
     const db = await dbPromise;
 
     const subscribers = await db.all(SQL`
@@ -123,24 +123,24 @@ async function retrieveSubscribeWithAuthorId(authorId){
 }
 
 //unsubscribe by subscriber id and blogger id
-async function unsubscribeWithUserIdAndArticleId(userId, articleId) {
+async function unsubscribeWithUserIdAndArticleId(userId, authorId) {
     const db = await dbPromise;
 
     const result = await db.run(SQL`
     delete from subscribles
     where subscribed_id = ${userId}
-    and blogger_id = ${articleId}`);
-    
+    and blogger_id = ${authorId}`);
+
 }
 
 //subscribe by subscriber id and blogger id
-async function subscribeWithUserIdAndArticleId(userId, articleId) {
+async function subscribeWithUserIdAndArticleId(userId, authorId) {
     const db = await dbPromise;
 
     const result = await db.run(SQL`
     INSERT INTO subscribles (subscribed_id, blogger_id) VALUES
-	(${userId}, ${articleId})`);
-}    
+	(${userId}, ${authorId})`);
+}
 
 
 //for editAccount page ⬇️
@@ -153,7 +153,7 @@ async function getUserInfo(authToken) {
     return user;
 }
 //2.get all avatars
-async function getAvatars(){
+async function getAvatars() {
     const db = await dbPromise;
     const images = await db.all(SQL`
     select id, filename from icons`);
@@ -166,7 +166,7 @@ async function getUserAvatar(userId) {
         select filename from icons, users
         where icons.id = users.icon_id
         and users.id = ${userId}`);
-    
+
     return iconPath;
 }
 
@@ -189,7 +189,7 @@ async function updateUsername(authToken, name) {
 
 async function updatePassword(authToken, salt, iteration, password) {
     const db = await dbPromise;
-    
+
     const hashedPassword = hashPassword(password, salt, iteration);
     await db.run(SQL`
         update users
@@ -431,12 +431,117 @@ async function getAllArticle(user_id) {
     const db = await dbPromise;
     const articles = await db.all(SQL`
     SELECT * FROM articles
-    WHERE author_id = ${user_id}
+    WHERE author_id = ${user_id}`);
+    return articles;
+}
+
+//retrieve following object by user_id
+async function retrieveFollowingByUserId(user_id) {
+    const db = await dbPromise;
+
+    const following = await db.all(SQL`
+        SELECT u.id, u.username, i.filename
+        FROM users u
+        JOIN icons i ON u.icon_id = i.id
+        WHERE u.id IN (
+        SELECT blogger_id
+        FROM subscribles
+        WHERE subscribed_id = ${user_id});    
+    `);
+
+    return following;
+}
+
+//retrieve follower object by user_id
+async function retrieveFollowerByUserId(user_id) {
+    const db = await dbPromise;
+
+    const follower = await db.all(SQL`
+        SELECT u.id, u.username, i.filename
+        FROM users u
+        JOIN icons i ON u.icon_id = i.id
+        WHERE u.id IN (
+        SELECT subscribed_id
+        FROM subscribles
+        WHERE blogger_id = ${user_id});
+    `);
+
+    return follower;
+}
+
+//retrieve target user's all articles
+async function retrieveUserArticlesByTargetId(targetId) {
+    const db = await dbPromise;
+
+    const articles = await db.all(SQL`
+        SELECT articles.id, articles.content, articles.title, articles.date_time, 
+        articles.author_id, articles.image_id, users.username AS authorname
+        FROM articles
+        JOIN users ON articles.author_id = users.id
+        WHERE articles.author_id = ${targetId}
+        ORDER BY articles.date_time DESC;
     `);
 
     return articles;
 }
 
+//retrieve the liked article Ids by the user_id
+async function retrieveLikedArticleIdsByUserId(user_id) {
+    const db = await dbPromise;
+
+    const articleIds = await db.all(SQL`
+        SELECT likes.article_id
+        FROM likes
+        WHERE likes.user_id = ${user_id};
+    `);
+
+    return articleIds;
+}
+
+//retrieve author by article id
+async function retrieveAuthorIdByArticleId(article_id) {
+    const db = await dbPromise;
+
+    const author_id = await db.get(SQL`
+        SELECT author_id FROM articles
+        WHERE id = ${article_id};
+    `);
+
+    return author_id;
+}
+
+//delete an article by article_id
+async function deleteArticleById(article_id) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        DELETE FROM articles
+        WHERE id = ${article_id};    
+    `);
+}
+
+//retrieve an article information by article id
+async function getArticleById(article_id) {
+    const db = await dbPromise;
+
+    const article = await db.get(SQL`
+        SELECT * FROM articles
+        WHERE id = ${article_id};
+    `);
+
+    return article;
+}
+
+//update article information by article id
+async function updateArticleById(article_id, content, title, image_id) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        UPDATE articles
+        SET content = ${content}, title = ${title}, image_id = ${image_id}
+        WHERE id = ${article_id};    
+    `);
+}
 
 module.exports = {
     updateUser,
@@ -477,5 +582,13 @@ module.exports = {
     dailyCommentNumber,
     totalNumberofUserPosts,
     dailyAllArticleCommentsNumber,
-    getAllArticle
+    getAllArticle,
+    retrieveFollowingByUserId,
+    retrieveFollowerByUserId,
+    retrieveUserArticlesByTargetId,
+    retrieveLikedArticleIdsByUserId,
+    retrieveAuthorIdByArticleId,
+    deleteArticleById,
+    getArticleById,
+    updateArticleById
 }

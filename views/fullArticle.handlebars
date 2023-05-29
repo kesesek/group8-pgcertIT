@@ -1,4 +1,7 @@
 <div class="article-container">
+    {{#if deleteNoAccess}}
+    <p id="login_fail_message">{{deleteNoAccess}}</p>
+    {{/if}}
     <h1>{{{article.title}}}</h1>
     <h3>{{article.timestamp}}</h3>
     <p><a href="" class="icon"><img src="./images/icons/{{article.path}}" width="40px"></a>
@@ -18,6 +21,9 @@
     </p>
     <div class="article-content">
         <p>{{{article.content}}}</p>
+        {{#if imagePath}}
+        <p class="article-image"><img src="./images/uploadedFiles/{{imagePath}}" width="500px"></p>
+        {{/if}}
     </div>
 </div>
 
@@ -25,57 +31,15 @@
     <div class="others-comments">
         <p class="hide-or-show"><a class="hideButton">Hide Comments</a></p>
     </div>
-    <div class="comments-block">
-        {{!-- {{#if comments}}
-        <ul>
-            {{#each comments}}
-            <li>
-                <div class="comment-header">
-                    <img src="./images/icons/{{this.filename}}" width="40px">
-                    <p>{{this.username}}</p>
-                    <p>{{this.timestamp}}</p>
-                </div>
-                <p class="comment-text">{{this.content}}</p>
-                {{#if this.children}}
-                <ul>
-                    {{#each this.children}}
-                    <li>
-                        <div class="comment-header">
-                            <img src="./images/icons/{{this.filename}}" width="40px">
-                            <p>{{this.username}}</p>
-                            <p>{{this.timestamp}}</p>
-                        </div>
-                        <p class="comment-text">{{this.content}}</p>
-                        {{#if this.children}}
-                        <ul>
-                            {{#each this.children}}
-                            <li>
-                                <div class="comment-header">
-                                    <img src="./images/icons/{{this.filename}}" width="40px">
-                                    <p>{{this.username}}</p>
-                                    <p>{{this.timestamp}}</p>
-                                </div>
-                                <p class="comment-text">{{this.content}}</p>
-                            </li>
-                            {{/each}}
-                        </ul>
-                        {{/if}}
-                    </li>
-                    {{/each}}
-                </ul>
-                {{/if}}
-            </li>
-            {{/each}}
-        </ul>
-        {{/if}} --}}
+    <div class="comments-block" id="comments">
     </div>
     <div class="comment-content">
         <p class="user-comment"><a href="" class="icon"><img
                     src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></p>
         <div id="commentEditor" style="width: 82.5%;">
-            <form action="" method="">
-                <textarea class="comment" name="comment" required>Any comments?</textarea><br>
-                <button type="submit" id="commentButton">Submit</button>
+            <form action="./commentArticle" method="get">
+                <textarea name="comment" class="commentContent" placeholder="Any comments?" required></textarea><br>
+                <button type="submit" id="commentButton" name="articleId" value="{{article.articleId}}">Submit</button>
             </form>
         </div>
     </div>

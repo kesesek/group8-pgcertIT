@@ -31,7 +31,7 @@ CREATE TABLE users (
 	hashed_password VARCHAR(512) NOT NULL,
 	icon_id INTEGER NOT NULL,
 	authToken VARCHAR(128),
-	FOREIGN KEY (icon_id) REFERENCES icons (id)
+	FOREIGN KEY (icon_id) REFERENCES icons (id) ON DELETE CASCADE
 );
 
 CREATE TABLE subscribles (
@@ -55,7 +55,7 @@ CREATE TABLE articles (
 	author_id INTEGER NOT NULL,
 	image_id INTEGER,
 	FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE CASCADE,
-	FOREIGN KEY (image_id) REFERENCES images (id)
+	FOREIGN KEY (image_id) REFERENCES images (id) ON DELETE CASCADE
 );
 
 CREATE TABLE likes (
@@ -67,11 +67,11 @@ CREATE TABLE likes (
 );
 
 CREATE TABLE comments (
-	id INTEGER NOT NULL PRIMARY KEY,
+	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	content VARCHAR(8000) NOT NULL,
 	date_time TIMESTAMP NOT NULL,
 	parent_id INTEGER,
-	article_id INTEGER,
+	article_id INTEGER NOT NULL,
 	user_id INTEGER NOT NULL,
 	FOREIGN KEY (parent_id) REFERENCES comments (id) ON DELETE CASCADE,
 	FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE,
@@ -170,14 +170,14 @@ INSERT INTO likes (user_id, article_id) VALUES
 INSERT INTO comments (id, content, date_time, parent_id, article_id, user_id) VALUES
 	(1, 'Pokem ipsum dolor sit amet Maractus Ralts Slakoth Machop Registeel Rhydon. Kanto Kabuto Ash Ketchum Rotom Hoothoot Shellos Mantyke. Sonic Boom Jellicent Mamoswine Kangaskhan Thunder Badge Cradily Poison. Fire Vanillish Hoenn Espeon Pewter City Garchomp Blitzle. Wing Attack Ampharos ut enim ad minim veniam but nothing happened Azumarill Gothitelle Minccino.', datetime('now'), NULL, 1, 2),
 	(2, 'Bug Cacturne Slakoth Omastar Pinsir Trubbish Purugly. Normal Tympole Wooper gotta catch em all Vanillite Tentacruel Feraligatr. Leech Life Jynx Reuniclus Nidorino Pokemon 4Ever Mineral Badge Maractus. Teleport Skiploom Scizor Soda Pop Mewtwo Strikes Back Hypno Shedinja. Fighting Bronzong Riolu Missingno Archen Rare Candy Lotad.', datetime('now'), NULL, 1, 3),
-	(3, 'Good job~', datetime('now'), 1, NULL, 4),
-	(4, 'Excellent!', datetime('now'), 3, NULL, 2),
+	(3, 'Good job~', datetime('now'), 1, 1, 4),
+	(4, 'Excellent!', datetime('now'), 3, 1, 2),
 	(5, 'Hive Badge Murkrow Roserade Banette Entei Grumpig Serperior. Blue Sealeo Tyrogue Nidoqueen Garbodor Aron Rising Badge. Mewtwo Strikes Back Munchlax Kingler Larvitar Ash Ketchum Blizzard Meganium. Zephyr Badge in voluptate velit esse cillum dolore eu fugiat nulla pariatur Lavender Town Kricketune Smeargle Plusle Cubone. Leech Life Blissey Abomasnow surrender now or prepare to fight Glaceon Relicanth Vanillite.', datetime('now'), NULL, 2, 4),
 	(6, 'Fire Bibarel Flygon Skarmory Accelgor Golurk Empoleon. Gold Crawdaunt Vulpix Servine Gible Bulbasaur Abomasnow. Body Slam Vine Whip Nidoqueen Vulpix Professor Oak Golbat Graveler. Flamethrower Vulpix Aron Zweilous Delibird Lileep Porygon. Body Slam Zapdos Poliwrath Piloswine Rhyhorn Blitzle Togetic.', datetime('now'), NULL, 3, 5),
 	(7, 'Thundershock Ho-oh Grimer Walrein Wartortle I wanna be the very best Trapinch. Pokemon Heroes Vaporeon Dragonair Espeon Beartic Kyurem Mienshao. Poison Koffing Nidoran Drapion Spearow gotta catch them all Wormadam. Meowth, that is right Kingler Steelix Growlithe Dragonite Herdier Vine Whip. Charmander Cresselia Mint Berry Ducklett Spoink Dragonair Swalot.', datetime('now'),NULL, 4, 8),
-	(8, 'I cannot agree more~~', datetime('now'), 5, NULL, 10),
-	(9, 'Yes, you are right!', datetime('now'), 6, NULL, 9),
-	(10, 'Make America great again!', datetime('now'), 7, NULL, 7),
+	(8, 'I cannot agree more~~', datetime('now'), 5, 2, 10),
+	(9, 'Yes, you are right!', datetime('now'), 6, 3, 9),
+	(10, 'Make America great again!', datetime('now'), 7, 4, 7),
 	(11, 'Pokem ipsum dolor sit amet Magby Dragon Rage Vanillish Sneasel Pidgey Lairon. Earth Badge Houndoom Gible Chimecho Simisear Heatmor Pelipper. Misty Minun Gastrodon Celadon Department Store S.S. Anne Shiftry Heracross. Pokemon 4Ever to catch them is my real test Fire Missingno Nuzleaf Gorebyss Red. Normal Arceus Gary Rotom Houndoom Murkrow in a world we must defend.', datetime('now'), NULL, 5, 3),
 	(12, 'We are blasting off again Zorua Mandibuzz Woobat Piloswine Junichi Masuda Pichu. Thunder Badge Kecleon Mystery Gift Palkia Leech Life Glameow Delibird. Silver Pokemon, it is you and me bicycle Natu Scraggy Meowth Bidoof. Volcano Badge Sapphire Patrat Golduck incididunt ut labore gym Lunatone. Pokemon 4Ever Metagross Archen Muk Yanmega Lairon Loudred.', datetime('now'), NULL, 6, 10),
 	(13, 'Sed do eiusmod tempor incididunt Eevee Venipede Mareep Keldeo you are not wearing shorts Relicanth. Pokemon Luxray Tirtouga Harden Larvitar Snubbull Makuhita. Poison Sting Rotom Mamoswine you are not wearing shorts Rage Bidoof Horsea. Lorem ipsum dolor sit amet Marill Rotom Dark Cyndaquil I like shorts lorem ipsum dolor sit amet. Blastoise Metagross Kabuto Smeargle Lillipup Manaphy Pallet Town.', datetime('now'), NULL, 7, 8),
@@ -189,7 +189,7 @@ INSERT  INTO notifications VALUES
 	(1, datetime('now'), false, 'XX creates a new article.', NULL, 1, 2, 10),
 	(2, datetime('now'), false, 'XX makes to a comment.', 1, NULL, 1, 2),
 	(3, datetime('now'), false, 'A news subscriber starts following you.', NULL, NULL, 3, 10),
-	(4, datetime('now'), false, 'XX replies to a comment.', 10, NULL, 10, 1),
+	(4, datetime('now'), false, 'XX replies to a comment.', 10, 4, 10, 1),
 	(5, datetime('now'), false, 'XX creates a new article.', NULL, 6, 10, 1),
 	(6, datetime('now'), false, 'XX creates a new article.', NULL, 8, 9, 1),
 	(7, datetime('now'), false, 'XX makes to a comment.', 15, NULL, 2, 3),

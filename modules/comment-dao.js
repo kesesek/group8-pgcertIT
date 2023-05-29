@@ -42,6 +42,7 @@ function makeNestedComments(commentArray, nestedCommentArray){
         for (let i = 0; i < commentArray.length; i++) {
             let comment = commentArray[i];
             let findParent = false;
+            // // console.log(nestedCommentArray);
             nestedCommentArray.forEach(parent => {
                 if (parent.id == comment.parent_id) {
                     if (!parent.children) {
@@ -52,20 +53,33 @@ function makeNestedComments(commentArray, nestedCommentArray){
                     i--;
                     findParent = true;
                     // console.log("findparent");
-                    // console.log(comment.id);
+                    // console.log(comment);
+                    // console.log("commentArray");
+                    // console.log(commentArray);
                 }
 
-                if (!findParent) {
-                    // console.log("parent.children");
-                    // console.log(parent.children);
-                    // console.log(commentArray);
-                    if (commentArray.length == 0) {
-                        return nestedCommentArray;
-                    }
-                    return makeNestedComments(commentArray, parent.children);
-                }
+                // if (!findParent) {
+                //     // console.log("parent.children");
+                //     // console.log(parent.children);
+                //     // console.log(commentArray);
+                //     // if (commentArray.length == 0) {
+                //     //     return nestedCommentArray;
+                //     // }
+                //     if (parent.children) {
+                //         return makeNestedComments(commentArray, parent.children);
+                //     }
+                // }
             });
+
+            // console.log("nestedCommentArray");
+            // console.log(nestedCommentArray);
             
+        }
+
+        if (commentArray.length != 0) {
+            nestedCommentArray.forEach(parent => {
+                return makeNestedComments(commentArray, parent.children);
+            });
         }
     };
 }
@@ -82,6 +96,7 @@ function turnNullParentToZero(commentArray){
     return commentArray;
 }
 
+// delete comment and its children by comment id
 async function deleteCommentById(commentId){
     const db = await dbPromise;
 
@@ -90,9 +105,55 @@ async function deleteCommentById(commentId){
     where id = ${commentId}`);
 }
 
+// add new comment to article
+async function addCommentToArticle(content, articleId, userId){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    INSERT INTO comments (content, date_time, parent_id, article_id, user_id) VALUES
+	(${content}, datetime('now'), NULL, ${articleId}, ${userId})`);
+}
+
+// add new comment to a comment
+async function addCommentToComment(content, parentId, articleId, userId){
+    const db = await dbPromise;
+
+    const result = await db.run(SQL`
+    INSERT INTO comments (content, date_time, parent_id, article_id, user_id) VALUES
+	(${content}, datetime('now'), ${parentId}, ${articleId}, ${userId})`);
+}
+
+async function retrieveArticleIdByCommentId(commentId) {
+    const db = await dbPromise;
+
+    const articleId = await db.get(SQL`
+        select article_id 
+        from comments
+        where id = ${commentId}`);
+    
+    return articleId;
+}
+
+async function retrieveCommentIdByCommentArticleAndUser(comment, articleId, userId) {
+    const db = await dbPromise;
+
+    const commentIdArray = await db.all(SQL`
+        select id 
+        from comments
+        where content = ${comment}
+        and article_id = ${articleId}
+        and user_id = ${userId}`);
+    
+    return commentIdArray[commentIdArray.length-1];
+}
+
 // Export functions.
 module.exports = {
     retrieveCommentsByArticleId,
     retrieveCommentById,
-    deleteCommentById
+    deleteCommentById,
+    addCommentToArticle,
+    addCommentToComment,
+    retrieveArticleIdByCommentId,
+    retrieveCommentIdByCommentArticleAndUser
 };

@@ -1,9 +1,11 @@
-<form action="./submitArticle" method="post" enctype="multipart/form-data">
-    <textarea class="title" name="title" required>Title here...</textarea>
-    <textarea class="content" name="content" required>Content here...</textarea><br>
-    <div class="bTn">
-        <label for="inpFile" id="mylabel">Upload an image</label>
-        <input id="inpFile" type="file" name="imageFile" accept=".png,.jpg,.jpeg,.bmp"><br><br>
-        <button type="submit" id="mybutton">Submit</button>
-    </div>
-</form>
+<div style="width: 95%; margin: 2.5%">
+    <form action="./submitArticle" method="post" enctype="multipart/form-data">
+        <textarea class="title" name="title" required></textarea>
+        <textarea class="content" name="content" required></textarea><br>
+        <div class="bTn">
+            <label for="inpFile" id="mylabel">Upload an image</label>
+            <input id="inpFile" type="file" name="imageFile" accept=".png,.jpg,.jpeg,.bmp"><br>
+            <button type="submit" id="mybutton" name="article" value="{{article.id}}">Submit</button>
+        </div>
+    </form>
+</div>
