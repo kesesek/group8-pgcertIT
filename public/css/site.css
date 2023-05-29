@@ -570,8 +570,8 @@ a:-webkit-any-link {
 }
 
 #edtForm textarea {
-  width: 300px;
-  height: 60px;
+  width: 400px;
+  height: 80px;
   border-color: rgb(158, 108, 108);
   overflow: scroll;
   border: 1px solid rgb(158, 108, 108);
@@ -1154,3 +1154,12 @@ a:-webkit-any-link {
 }
 
 /* other user's profile ends */
+
+.card2 {
+  background-color: #db9292;
+  width: 500px;
+  margin: 30px 20px;
+  border-radius: 10px;
+  color: #f9ebeb;
+  text-align: center;
+}
