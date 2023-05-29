@@ -115,20 +115,17 @@ router.post("/verifyOldPassword", showNotifications, async function (req, res) {
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const oldHashed = user.hashed_password;
-    console.log(oldHashed);
     const salt = user.salt;
-    console.log(salt);
 
     const iterations = user.iterations;
-    console.log(iterations);
 
     const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
 
-    if (hashedInputOldPassword === oldHashed) {
-        console.log('true');
+
+    if(hashedInputOldPassword === oldHashed ) {
+
         res.json(true);
     } else {
-        console.log('false');
 
         res.json(false);
     }
@@ -138,11 +135,9 @@ router.post("/verifyOldPassword", showNotifications, async function (req, res) {
 
 
 router.post("/saveAll", showNotifications, upload.single('avatarFileName'), async function (req, res) {
-    console.log('in saveAll');
 
     const authToken = req.cookies.authToken;
     const olduser = await userDao.getUserInfo(authToken);
-    console.log(olduser);
     const preAvatar = req.body.checkedAvatar;
     const avatarFile = req.file;
     const newName = req.body.newName;
@@ -152,23 +147,18 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
     const newMname = req.body.newMname;
     const newLname = req.body.newLname;
     const newDes = req.body.newDes;
-    console.log(preAvatar);//null
-    console.log(avatarFile);//undefined
-    console.log(newName);//new
 
 
-    if (avatarFile == undefined) {
+    if(preAvatar) {
         const avatarID = await userDao.getPreIconId(preAvatar);
-        console.log(avatarID);//undefined
-        if (avatarID) {
-            console.log('in ifif');
-            console.log(avatarID.id);
+        if(avatarID) {
             await userDao.updateUserAvatar(authToken, avatarID.id);
-        }
-    }
+        }   
+    } 
+    
+    
 
     if (avatarFile) {
-        console.log("2 if");
         const oldFileName = avatarFile.path;
         const newFileName = `./public/images/icons/${avatarFile.originalname}`;
         fs.renameSync(oldFileName, newFileName);
@@ -176,47 +166,40 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
         await userDao.updateUserAvatar(authToken, newAvatarID);
     }
 
-    if (newName) {
-        console.log("3 if");
 
+    if (newName) {
         await userDao.updateUsername(authToken, newName);
     }
 
     if (newPassword) {
-        console.log("4 if");
         const user = await userDao.getUserInfo(authToken);
         const salt = user.salt;
         const iteration = user.iterations;
-        console.log('get salt ' + salt);
         await userDao.updatePassword(authToken, salt, iteration, newPassword);
     }
 
-    if (newDb) {
-        console.log("4 if");
-
+    
+    if(newDb) {
         await userDao.updateDateBrith(authToken, newDb);
     }
 
-    if (newFname) {
-        console.log("5 if");
 
+    if(newFname) {
         await userDao.updateFname(authToken, newFname);
     }
 
-    if (newMname) {
-        console.log("6 if");
-
+    if(newMname) {
         await userDao.updateMname(authToken, newMname);
     }
 
-    if (newLname) {
-        console.log("7 if");
+
+    if(newLname) {
 
         await userDao.updateLname(authToken, newLname);
     }
 
-    if (newDes) {
-        console.log("8 if");
+
+    if(newDes) {
         await userDao.updateDescription(authToken, newDes);
     }
 
@@ -231,8 +214,8 @@ router.post("/delectAccount", showNotifications, async function (req, res) {
     await userDao.delectAccount(authToken);
 
     res.clearCookie('authToken');
-    console.log(authToken);
-    res.json({ success: true });
+    res.json({success: true});
+
 })
 //editAccount page ends
 
@@ -427,6 +410,93 @@ router.get("/deleteArticle", showNotifications, async function (req, res) {
     res.redirect(`/profile?otherUserId=${user_idObj.id}`);
 });
 
+
+
+// analytics page⬇️
+router.get('/analytics', async function(req, res){
+    const authToken = req.cookies.authToken;
+    const user = await userDao.getUserInfo(authToken);
+    const user_id = user.id;
+
+    const followernumber = await userDao.countFollower(user_id);
+    const commentsnumber = await userDao.totalNumberofUserPosts(user_id);
+    const likes = await userDao.countlikes(user_id);
+    const topThree = await userDao.getTopThree(user_id);
+
+    res.locals.user = user;
+    res.locals.followernumber = followernumber;
+    res.locals.commentsnumber = commentsnumber;
+    res.locals.likes = likes;
+
+    if(topThree) {
+        res.locals.topThree = topThree;
+    }
+
+    res.render("analytics", {layout: 'sidebar&nav'});
+})
+
+router.get('/commentdata', async function(req,res){
+    const authToken = req.cookies.authToken;
+    const user = await userDao.getUserInfo(authToken);
+    const user_id = user.id;
+
+    let tenDaysData = [];
+    let currentDate = new Date();
+    for(let i = 0; i < 10; i++){
+        let date = new Date(currentDate);
+        date.setDate(date.getDate() - i);
+        let year = date.getFullYear();
+
+        let month = date.getMonth() + 1; 
+        if(month < 10) {
+            month = '0' + month;
+        }
+
+        let day = date.getDate();
+        if(day < 10) {
+            day = '0' + day;
+        }
+
+        let formattedDate = `${year}-${month}-${day}`;
+        let commentNum = await userDao.dailyAllArticleCommentsNumber(formattedDate, user_id);
+
+        let thisdate = `${month}-${day}`;
+        let thiscomments = commentNum;
+        let obj = {
+            date:thisdate,
+            commentNum:thiscomments
+        };
+
+        tenDaysData.unshift(obj);
+    }
+    res.send(tenDaysData);
+});
+
+router.get('/popularitydata', async function(req, res){
+    const authToken = req.cookies.authToken;
+    const user = await userDao.getUserInfo(authToken);
+    const user_id = user.id;
+
+    let popularitydata = [];
+    const articleArray = await userDao.getAllArticle(user_id);
+    if(articleArray) {
+        for(let i = 0; i < articleArray.length; i ++) {
+            let thisID = articleArray[i].id;
+            let thisLikes = await userDao.countArticlelike(thisID);
+            let thisComments = await userDao.countArticleComment(thisID);
+            let thisPopularity = userDao.getArticlePopularity(thisComments, thisLikes);
+            let thisArticle = {id:thisID, popularity:thisPopularity};
+            popularitydata.push(thisArticle);
+        }
+        popularitydata.sort((a, b) => a.id - b.id);
+        popularitydata = popularitydata.map((obj, index) => ({
+            ...obj,
+            index: index + 1
+          }));
+    }
+    res.send(popularitydata);
+
+});
 
 
 module.exports = router;
