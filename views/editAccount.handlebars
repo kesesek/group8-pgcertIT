@@ -1,6 +1,5 @@
 <script>
 window.addEventListener('load', function(){
-    console.log('hey');
     //1.verify same names
     if (document.querySelector("#newnameid")) {
     async function getAllUserNames() {
@@ -12,13 +11,11 @@ window.addEventListener('load', function(){
 
     const testLabel = document.querySelector("#newNameTest");
     const userName = document.querySelector("#newnameid");
-    console.log(userName);
 
 
     userName.addEventListener("input", async function () {
         testLabel.innerHTML = "";
         let userNameValue = userName.value;
-        console.log(userNameValue);
 
         const userNamesArray = await getAllUserNames();
         for (let i = 0; i < userNamesArray.length; i++) {
@@ -50,7 +47,6 @@ if(document.querySelector("#confirmnewid")) {
 
 //3.verify old password:
 if(document.querySelector("#oldpasswordid")) {
-    console.log('im in');
     async function getVerificationResult(){
         let result = await fetch("http://localhost:3000/verifyOldPassword",{
             method:"POST",
@@ -65,12 +61,10 @@ if(document.querySelector("#oldpasswordid")) {
 
     const testLabel = document.querySelector("#oldPasswordTest");
         const oldone = document.querySelector("#oldpasswordid");
-        console.log(oldone);
 
         oldone.addEventListener("input", async function () {
             testLabel.innerHTML = "";
             let oldpassword = oldone.value;
-            console.log(oldpassword);
 
             const flag = await getVerificationResult();
                 if (!flag) {
@@ -89,14 +83,12 @@ if(document.querySelector("#oldpasswordid")) {
 //4.save changes:
 const saveBtn = document.getElementById('saveBtn');
 saveBtn.addEventListener('click', function(){
-    console.log("clicked");
     
     const allAvatar = document.getElementsByName('presetAvatar');
     let checkedAvatar = null;
     allAvatar.forEach((radio) => {
         if (radio.checked) {
             checkedAvatar = radio.value;
-            console.log(checkedAvatar);
         }
     });
 
@@ -105,7 +97,6 @@ saveBtn.addEventListener('click', function(){
     formData.append('avatarFileName', avatarFileName);
 
     let newName = document.getElementById('newnameid').value;
-    console.log(newName + ' here');//correct
     let newPassword = document.getElementById('newpasswordid').value;
     let newDb = document.getElementById('newBd').value;
     let newFname = document.getElementById('fnameid').value;
@@ -122,7 +113,6 @@ saveBtn.addEventListener('click', function(){
     formData.append('newLname', newLname);
     formData.append('newDes', newDes);
 
-    console.log('get changes');
     $.ajax({
         url: "/saveAll",
         method:"POST",
@@ -130,7 +120,7 @@ saveBtn.addEventListener('click', function(){
         processData: false,
         contentType: false,
         success: function() {
-                alert("Saved!");//dont know why this dosent work
+                alert("Saved!");
                 setTimeout(function(){
                     window.location.reload;
                 },10000);
@@ -167,10 +157,7 @@ confirmdelect.addEventListener('click' ,function(){
         method: "post",
         dataType: 'json',
         success:function() {
-            //alert("Delected! Hope to see you again!");       
             window.location.href = "/";
-            
-   
         },
         error: function() {
         alert("Error. Failed to delete. Please try again.");
@@ -186,11 +173,9 @@ confirmdelect.addEventListener('click' ,function(){
     //6.if there is a file, make all radios disabled:
     const file = document.getElementById('editAvatar');
     file.addEventListener('change', function(){
-        console.log('changed');
         const allRadio = document.getElementsByName('presetAvatar');
 
         if(file.files.length > 0){
-            console.log(file.files.length);
             for(let i = 0; i < allRadio.length; i ++){
                 allRadio[i].disabled = true;
             }
