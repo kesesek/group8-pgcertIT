@@ -197,7 +197,7 @@ window.addEventListener("load", async function(){
                     <p>${comment.username}</p>
                     <p>${comment.timestamp}</p>
                 </div>
-                <p class="comment-text">${comment.content}</p>
+                <p class="comment-text" id="${comment.id}">${comment.content}</p>
                 <div class="button-combo">
                     <div class="replyButton">
                         <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>

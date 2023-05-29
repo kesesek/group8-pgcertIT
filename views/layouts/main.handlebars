@@ -94,7 +94,12 @@
                     <p class="message">{{this.username}}</p>
                 </div>
                 <div class="flex-vertical-container">
-                    <p class="message">{{this.message}}</p>
+                    <p class="message">
+                        {{this.message}}
+                        {{#if this.articleTitle}}
+                        "{{this.articleTitle}}"
+                        {{/if}}
+                    </p>
                     <p class="message datastamp">{{this.datastamp}}</p>
                 </div>
             </div>

@@ -73,7 +73,7 @@ async function retrieveArticlesByOrder(userId, sortOption) {
                 WHERE users.id = likes.user_id
                 and users.id = ${userId}) as s
         on f.id = s.article_id
-        order by datestamp`);
+        order by datestamp DESC`);
     }
     
     return articles;

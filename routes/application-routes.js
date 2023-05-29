@@ -149,12 +149,18 @@ router.post("/readNotification", showNotifications, async function(req, res) {
     res.locals.title = "Full Article";
 
     // check if there has cookies notificationId? If yes, change notification table and clear the cookies
+    let notification = null;
     if (req.cookies.notificationId) {
         await notificationDao.changeReadStatusWithNotificationId(req.cookies.notificationId);
+        notification = await notificationDao.retrieveNotificationWithNotificationId(req.cookies.notificationId);
         res.clearCookie("notificationId");
     }
 
-    res.redirect("/article");
+    if (notification.comment_id) {
+        res.redirect("/article#comments");
+    } else{
+        res.redirect("/article");
+    }
 
 });
 
