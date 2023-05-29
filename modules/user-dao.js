@@ -547,6 +547,45 @@ async function updateArticleById(article_id, content, title, image_id) {
     `);
 }
 
+//retrieve target user's profile along with their articles count, likes count, following count and follower count
+async function retrieveTargetProfileById(targetId) {
+    const db = await dbPromise;
+
+    const targetProfile = await db.get(SQL`
+        SELECT 
+            u.username,
+            u.fname,
+            u.mname,
+            u.lname,
+            u.description,
+            u.date_of_birth,
+            ic.filename AS icon_filename,
+            COUNT(DISTINCT a.id) AS article_count,
+            SUM(DISTINCT l.user_id) AS likes_count,
+            COUNT(DISTINCT s1.subscribed_id) AS Follower_count,
+            COUNT(DISTINCT s2.blogger_id) AS Following_count
+        FROM 
+            users u
+            LEFT JOIN icons ic ON u.icon_id = ic.id
+            LEFT JOIN articles a ON u.id = a.author_id
+            LEFT JOIN likes l ON a.id = l.article_id
+            LEFT JOIN subscribles s1 ON u.id = s1.blogger_id
+            LEFT JOIN subscribles s2 ON u.id = s2.subscribed_id
+        WHERE 
+            u.id = ${targetId}
+        GROUP BY 
+            u.username,
+            u.fname,
+            u.mname,
+            u.lname,
+            u.description,
+            u.date_of_birth,
+            ic.filename;
+    `);
+
+    return targetProfile;
+}
+
 
 module.exports = {
     updateUser,
@@ -595,5 +634,6 @@ module.exports = {
     retrieveAuthorIdByArticleId,
     deleteArticleById,
     getArticleById,
-    updateArticleById
+    updateArticleById,
+    retrieveTargetProfileById
 }
