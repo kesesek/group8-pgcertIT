@@ -111,28 +111,19 @@ router.get("/editAccount", showNotifications, async function (req, res) {
 
 router.post("/verifyOldPassword", showNotifications, async function (req, res) {
     const oldPassword = req.body.oldPassword;
-
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const oldHashed = user.hashed_password;
     const salt = user.salt;
-
     const iterations = user.iterations;
-
     const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
 
-
     if(hashedInputOldPassword === oldHashed ) {
-
         res.json(true);
     } else {
-
         res.json(false);
     }
-
 });
-
-
 
 router.post("/saveAll", showNotifications, upload.single('avatarFileName'), async function (req, res) {
 
@@ -340,13 +331,16 @@ router.get("/nofollower", showNotifications, async function (req, res) {
 
 //when go to the other user's profile, the page will display the target user's articles
 router.get("/profile", showNotifications, async function (req, res) {
-    res.locals.title = "User Articles";
+    res.locals.title = "User profile";
     if (req.cookies.authToken) {
         const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
         let targetId = req.query.otherUserId;
         if (targetId == undefined || targetId == user_idObj.id) {
             res.locals.active_myArticle = true;
             targetId = user_idObj.id;
+        }else{
+            const targetProfile = await userDao.retrieveTargetProfileById(targetId);
+            res.locals.T = targetProfile;
         }
         const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
         const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);

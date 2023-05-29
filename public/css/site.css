@@ -1101,3 +1101,56 @@ a:-webkit-any-link {
 
 /* profile page butttons end */
 
+/* other user's profile starts */
+
+.otherUserProfile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9ebeb;
+  width: 50%;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px auto -30px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.otherUserProfile ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.otherUserProfile li {
+  margin-bottom: 10px;
+}
+
+.otherUserProfile img {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.otherUserProfile li:first-child {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.otherUserProfile li:not(:first-child) {
+  font-size: 16px;
+}
+
+.otherUserProfile li:nth-child(4) {
+  font-style: italic;
+  color: #999999;
+}
+
+.otherUserProfile li:nth-child(6),
+.otherUserProfile li:nth-child(7),
+.otherUserProfile li:nth-child(8),
+.otherUserProfile li:nth-child(9) {
+  font-weight: bold;
+  color: #db9292;
+}
+
+/* other user's profile ends */
