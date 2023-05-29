@@ -130,21 +130,23 @@
     {{!-- notification pop up window end --}}
 
     {{!-- sidebar⬇️ waiting for links--}}
-    <div id="sidebar">
-        <ul>
-            <li><a href="./profile" class="text {{#if active_myArticle}}active{{/if}}">My Articles</a></li>
-            <li><a href="./addarticle" class="text  {{#if active_AddArticles}}active{{/if}}">Add Articles</a></li>
-            <li><a href="./favorite" class="text  {{#if active_MyFavoriteArticles}}active{{/if}}">Favorite Articles</a>
-            </li>
-            <li><a href="./following" class="text {{#if active_Following}}active{{/if}}">Following</a></li>
-            <li><a href="./follower" class="text {{#if active_Follower}}active{{/if}}">Follower</a></li>
-            <li><a href="" class="text">Analytics</a></li>
-            <li><a href="./editAccount" class="text {{#if active_EditAccount}}active{{/if}}">Edit Account</a></li>
-        </ul>
-    </div>
+    <div class="sidebarSameHeight">
+        <div id="sidebar">
+            <ul>
+                <li><a href="./profile" class="text {{#if active_myArticle}}active{{/if}}">My Articles</a></li>
+                <li><a href="./addarticle" class="text  {{#if active_AddArticles}}active{{/if}}">Add Articles</a></li>
+                <li><a href="./favorite" class="text  {{#if active_MyFavoriteArticles}}active{{/if}}">Favorite Articles</a>
+                </li>
+                <li><a href="./following" class="text {{#if active_Following}}active{{/if}}">Following</a></li>
+                <li><a href="./follower" class="text {{#if active_Follower}}active{{/if}}">Follower</a></li>
+                <li><a href="" class="text">Analytics</a></li>
+                <li><a href="./editAccount" class="text {{#if active_EditAccount}}active{{/if}}">Edit Account</a></li>
+            </ul>
+        </div>
 
-    <div class="maincontent">
-        {{{body}}}
+        <div class="maincontent">
+            {{{body}}}
+        </div>
     </div>
 </body>
 

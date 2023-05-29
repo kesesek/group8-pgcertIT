@@ -547,6 +547,59 @@ async function updateArticleById(article_id, content, title, image_id) {
     `);
 }
 
+// for api requirements
+//check user is admin or not. If it is, return true, else return false.
+async function checkUserAdmin(authToken) {
+    const db = await dbPromise;
+
+    const adminStatus = await db.get(SQL`
+        SELECT isAdmin FROM users
+        WHERE authToken = ${authToken};
+    `);
+
+    let isAdmin = false;
+    if (adminStatus.isAdmin == 1) {
+        isAdmin = true;
+    }
+    return isAdmin;
+}
+
+//retrieve all users profiles and authored articles
+async function retrieveAllUserProfilesAndArticles() {
+    const db = await dbPromise;
+
+    const articleIds = await db.all(SQL`
+        select u.id, u.username, u.fname, u.mname, u.lname, u.description, u.date_of_birth, u.icon_id, count(a.id) as numberOfArticles
+        FROM users as u
+        left join articles as a
+        on u.id = a.author_id
+        group by u.id;`);
+
+    return articleIds;
+}
+
+//delect user by id
+async function delectUserById(userId) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        DELETE FROM users
+        WHERE id = ${userId}`);
+
+}
+
+//delect user by id
+async function delectUserAuthToken(authToken) {
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        update users
+        set authToken = NULL
+        where authToken = ${authToken}`);
+
+}
+// api requirements end
+
 //retrieve target user's profile along with their articles count, likes count, following count and follower count
 async function retrieveTargetProfileById(targetId) {
     const db = await dbPromise;
@@ -626,7 +679,7 @@ module.exports = {
     dailyCommentNumber,
     totalNumberofUserPosts,
     dailyAllArticleCommentsNumber,
-    getAllArticle
+    getAllArticle,
     retrieveFollowingByUserId,
     retrieveFollowerByUserId,
     retrieveUserArticlesByTargetId,
@@ -635,5 +688,9 @@ module.exports = {
     deleteArticleById,
     getArticleById,
     updateArticleById,
+    checkUserAdmin,
+    retrieveAllUserProfilesAndArticles,
+    delectUserById,
+    delectUserAuthToken,
     retrieveTargetProfileById
 }

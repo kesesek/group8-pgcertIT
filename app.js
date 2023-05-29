@@ -47,6 +47,8 @@ app.use(require("./routes/application-routes.js"));
 //add authentication routes by hly
 const appRouter = require("./routes/authenticate-routes.js");
 app.use(appRouter);
+// api routes
+app.use(require("./routes/api-routes.js"));
 
 // Start the server running.
 app.listen(port, function () {
