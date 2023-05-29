@@ -39,7 +39,7 @@ router.post("/login", showNotifications, async function (req, res) {
         res.redirect("/");
     } else {
         res.locals.user = null;
-        res.setToastMessage("The username or password is wrong, please try agin.");
+        res.setToastMessage("Login failed, please try agin.");
         res.redirect("./login");
     }
 });
