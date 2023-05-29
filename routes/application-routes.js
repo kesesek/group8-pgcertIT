@@ -195,6 +195,7 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         });
     }else{
         res.locals.deleteNoAccess = "Please Log in to comment!";
+        console.log(res.locals.deleteNoAccess);
     }
 
     res.render("fullArticle");
@@ -281,7 +282,7 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
         res.locals.deleteNoAccess = "Please Log in to comment!";
     }
 
-    res.redirect("/article");
+    res.render("fullArticle");
 
 });
 

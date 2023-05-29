@@ -199,9 +199,11 @@ window.addEventListener("load", async function(){
                 </div>
                 <p class="comment-text" id="${comment.id}">${comment.content}</p>
                 <div class="button-combo">
-                    <div class="replyButton">
-                        <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
-                    </div>
+                    <form action="./replyComment" method="get">
+                        <div class="replyButton">
+                            <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
+                        </div>
+                    </form>    
                     <form action="./deleteComment" method="get">
                         <div class="deleteButton">
                             <button type="submit" name="deleteComment" value=${comment.id}>Delete</button>
@@ -266,13 +268,13 @@ window.addEventListener("load", async function(){
                 const replyText = replyTextArray[index];
                 const replyComment = replyCommentArray[index];
                 if (!getCookie("authToken")){
-                    alert('Please Log in to reply!');
+                    // alert('Please Log in to reply!');
                 } else{
                     if (!replyDisplay) {
                         replyText.innerHTML = `
                         <div id="commentEditor" style="width: 82.5%;">
                             <form action="./replyComment" method="get">
-                                <textarea name="comment" class="commentContent" placeholder="Any comments?" required></textarea><br>
+                                <textarea name="comment" class="commentContent" placeholder="Any comments?" rows="4" cols="100" required></textarea><br>
                                 <button type="submit" id="commentButton" name="commentId" value=${replyComment.value}>Submit</button>
                             </form>
                         </div>`;
@@ -288,7 +290,7 @@ window.addEventListener("load", async function(){
         const commentButton = this.document.querySelector("#commentButton");
         commentButton.addEventListener("click", async function () {
             if (!getCookie("authToken")){
-                alert('Please Log in to comment!');
+                // alert('Please Log in to comment!');
             }
         });
 
