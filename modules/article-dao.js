@@ -73,7 +73,7 @@ async function retrieveArticlesByOrder(userId, sortOption) {
                 WHERE users.id = likes.user_id
                 and users.id = ${userId}) as s
         on f.id = s.article_id
-        order by datestamp`);
+        order by datestamp DESC`);
     }
     
     return articles;
@@ -102,7 +102,7 @@ async function retrieveArticleById(articleId) {
     const db = await dbPromise;
 
     const article = await db.get(SQL`
-        select a.id as articleId, a.title, a.date_time as timestamp, i.filename as path, a.content, a.author_id as authorId
+        select a.id as articleId, a.title, a.date_time as timestamp, i.filename as path, a.content, a.author_id as authorId, a.image_id as imageId
         from articles as a, users as u, icons as i
         where a.id = ${articleId}
         and a.author_id = u.id
@@ -111,6 +111,29 @@ async function retrieveArticleById(articleId) {
     return article;
 }
 
+// retrieve article by content, title and userId
+async function retrieveArticleByContentTitleUserId(content, title, user_id) {
+    const db = await dbPromise;
+
+    const articleId = await db.all(SQL`
+        select id from articles 
+        where content = ${content}
+        and title = ${title}
+        and author_id = ${user_id}`);
+
+    return articleId[articleId.length-1];
+}
+
+async function retrieveImageById(imageId) {
+    const db = await dbPromise;
+
+    const imagePath = await db.get(SQL`
+        select filename
+        from images
+        where id = ${imageId}`);
+    
+    return imagePath;
+}
 
 // Export functions.
 module.exports = {
@@ -119,5 +142,7 @@ module.exports = {
     retrieveArticlesByOrder,
     insertLikedArticles,
     removeLikedArticles,
-    retrieveArticleById
+    retrieveArticleById,
+    retrieveArticleByContentTitleUserId,
+    retrieveImageById
 };

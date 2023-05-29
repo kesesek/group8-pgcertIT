@@ -23,99 +23,128 @@
             menubar: false,
             toolbar: 'bold italic underline',
             {{!-- toolbar: false, --}}
-            {{!-- formats: {
-            h3: { block: 'h3' }
-        },
             init_instance_callback: function (editor) {
-                editor.setContent('<h3>Title here...</h3>');
-            } --}}
+                editor.on('focus', function () {
+                    if (editor.getContent() === '<p>Title here...</p>') {
+                        editor.setContent('');
+                    }
+                });
+                const titleValue = '{{{article.title}}}';
+                if (titleValue) {
+                    editor.setContent(titleValue);
+                } else {
+                    editor.setContent('<p>Title here...</p>');
+                }
+                editor.save();
+            }
         });
         tinymce.init({
             selector: '.content',
+            height: 350,
             menubar: false,
             plugins: 'lists advlist',
             toolbar: 'styleselect | bold italic underline | numlist bullist',
+            init_instance_callback: function (editor) {
+                editor.on('focus', function () {
+                    if (editor.getContent() === '<p>Content here...</p>') {
+                        editor.setContent('');
+                    }
+                });
+                const contentValue = '{{{article.content}}}';
+                if (contentValue) {
+                    editor.setContent(contentValue);
+                } else {
+                    editor.setContent('<p>Content here...</p>');
+                }
+                editor.save();
+            }
         });
     </script>
 </head>
+
 <body class="bodywithsidebar">
 
-<div class="header_nav">
-{{!-- header --}}
-<div class="header">
-    <header>
-        <h1>iBlogger</h1>
-    </header>
-</div>
-{{!-- header end --}}
 
-{{!-- nav bar --}}
-{{!-- To do: links to be added --}}
-<div class="nav">
-    <ul>
-        <li class="leftnav"><a href="./" class="text {{#if active_HomePage}}active{{/if}}">Home Page</a></li>
-        <li class="leftnav"><a href="./allArticles" class="text {{#if active_AllArticlesPage}}active{{/if}}">All
-                Articles</a></li>
-        <li class="rightnav loginStatus"><a href="./login" class="text">Log in</a></li>
-        <li class="rightnav navIcon"><a href="./editAccount" class="icon"><img
-                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></li>
-        <li class="rightnav">
-            <a class="notifications">
-                <span><img src="./images/notification.png"></span>
-                {{#if notificationCount}}
-                <span class="badge">{{notificationCount}}</span>
-                {{/if}}
-            </a>
-        </li>
-    </ul>
-</div>
-</div>
-{{!-- nav bar end --}}
-
-{{!-- notification pop up window --}}
-<div class="notification-container hide" id="notification-container">
-    {{#if logout}}
-    <div class="notification notification-info">
-        <p>Please <a href="./login" class="text">Log in</a> to check notifications.</p>
+    {{!-- nav bar --}}
+    {{!-- To do: links to be added --}}
+    <div class="nav">
+        <ul>
+            <li class="leftnav"><a href="./" class="text {{#if active_HomePage}}active{{/if}}">Home Page</a></li>
+            <li class="leftnav"><a href="./allArticles" class="text {{#if active_AllArticlesPage}}active{{/if}}">All
+                    Articles</a></li>
+            <li class="rightnav loginStatus"><a href="./login" class="text">Log in</a></li>
+            <li class="rightnav navIcon"><a href="./profile" class="icon"><img
+                        src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></li>
+            <li class="rightnav">
+                <a class="notifications">
+                    <span><img src="./images/notification.png"></span>
+                    {{#if notificationCount}}
+                    <span class="badge">{{notificationCount}}</span>
+                    {{/if}}
+                </a>
+            </li>
+        </ul>
     </div>
-    {{else if notificationMessages}}
-    {{#each notificationMessages}}
-    <div class="notification notification-info">
-        <div class="flex-container">
-            <div class="flex-vertical-container">
-                <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
-                <p class="message">{{this.username}}</p>
-            </div>
-            <div class="flex-vertical-container">
-                <p class="message"><a>{{this.message}}</a></p>
-                <p class="message datastamp">{{this.datastamp}}</p>
-            </div>
+    </div>
+    {{!-- nav bar end --}}
+
+    {{!-- notification pop up window --}}
+    <div class="notification-container hide" id="notification-container">
+        {{#if logout}}
+        <div class="notification notification-info">
+            <p>Please <a href="./login" class="text">Log in</a> to check notifications.</p>
         </div>
+        {{else if notificationMessages}}
+        {{#each notificationMessages}}
+        {{#if this.articleId}}
+        <form action="./readNotification" method="post">
+            {{else}}
+            <form action="./readFollower" method="post">
+                {{/if}}
+                <button type="submit" class="notificationId" value="{{this.id}}">
+                    {{#if this.isread}}
+                    <div class="notification notification-info read">
+                        {{else}}
+                        <div class="notification notification-info">
+                            {{/if}}
+                            <div class="flex-container">
+                                <div class="flex-vertical-container">
+                                    <p class="icon"><img src="./images/icons/{{this.icon}}" width="40px"></p>
+                                    <p class="message">{{this.username}}</p>
+                                </div>
+                                <div class="flex-vertical-container">
+                                    <p class="message">{{this.message}}</p>
+                                    <p class="message datastamp">{{this.datastamp}}</p>
+                                </div>
+                            </div>
+                        </div>
+                </button>
+            </form>
+            {{/each}}
+            {{else}}
+            <div class="notification notification-info">
+                <p>No new notifications.</p>
+            </div>
+            {{/if}}
     </div>
-    {{/each}}
-    {{else}}
-    <div class="notification notification-info">
-        <p>No new notifications.</p>
-    </div>
-    {{/if}}
-</div>
-{{!-- notification pop up window end --}}
+    {{!-- notification pop up window end --}}
 
-{{!-- sidebar⬇️ waiting for links--}}
-<div id="sidebar">
-    <ul>
-        <li><a href="" class="text">My Articles</a></li>
-        <li><a href="./addarticle" class="text  {{#if active_AddArticles}}active{{/if}}">Add Articles</a></li>
-        <li><a href="./favorite" class="text  {{#if active_MyFavoriteArticles}}active{{/if}}">My Favorite Articles</a></li>
-        <li><a href="" class="text">Following</a></li>
-        <li><a href="" class="text">Follower</a></li>
-        <li><a href="" class="text">Analytics</a></li>
-        <li><a href="./editAccount" class="text {{#if active_EditAccount}}active{{/if}}">Edit Account</a></li>
-    </ul>
-</div>
+    {{!-- sidebar⬇️ waiting for links--}}
+    <div id="sidebar">
+        <ul>
+            <li><a href="./profile" class="text {{#if active_myArticle}}active{{/if}}">My Articles</a></li>
+            <li><a href="./addarticle" class="text  {{#if active_AddArticles}}active{{/if}}">Add Articles</a></li>
+            <li><a href="./favorite" class="text  {{#if active_MyFavoriteArticles}}active{{/if}}">Favorite Articles</a>
+            </li>
+            <li><a href="./following" class="text {{#if active_Following}}active{{/if}}">Following</a></li>
+            <li><a href="./follower" class="text {{#if active_Follower}}active{{/if}}">Follower</a></li>
+            <li><a href="" class="text">Analytics</a></li>
+            <li><a href="./editAccount" class="text {{#if active_EditAccount}}active{{/if}}">Edit Account</a></li>
+        </ul>
+    </div>
 
     <div class="maincontent">
-     {{{body}}}
+        {{{body}}}
     </div>
 </body>
 

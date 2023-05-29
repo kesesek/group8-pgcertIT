@@ -31,6 +31,26 @@ window.addEventListener("load", async function(){
             })
         });
 
+        // turn to an article page from the notifications list
+        if (this.document.querySelector(".notificationId")) {
+            const notificationIdArray = this.document.querySelectorAll(".notificationId");
+            notificationIdArray.forEach(notificationId => {
+                notificationId.addEventListener("mouseover", async function(){
+                    const notification = await getNotificationJson(notificationId.value);
+                    setCookie("notificationId", notificationId.value, 1);
+                    if (notification.article_id) {
+                        setCookie("articleId", notification.article_id, 1);
+                    }
+                })
+            });
+        }
+
+        async function getNotificationJson(notificationId){
+            let notificationResponse = await fetch(`/notification/${notificationId}`);
+            let notificationJson = await notificationResponse.json();
+            return notificationJson;
+        };
+
         // change the login/logout label depends on the cookies
         const loginLabel = this.document.querySelector(".loginStatus");
         if (getCookie("authToken")) {
@@ -99,6 +119,16 @@ window.addEventListener("load", async function(){
         });
     }
 
+    // add articleId cookies when the read more button was clicked in the all articles page
+    if (this.document.querySelector(".readMore")) {
+        const readMoreButtons = this.document.querySelectorAll(".readMore");
+        readMoreButtons.forEach(readMore => {
+            readMore.addEventListener("click", function(){
+                setCookie("articleId", readMore.value, 1)
+            })
+        });
+    }
+
     // add/remove favorites in the all articles page
     if(this.document.querySelector(".favorite")){
         const favoritebuttons = this.document.querySelectorAll(".favorite");
@@ -128,8 +158,12 @@ window.addEventListener("load", async function(){
         const hideCommentButton = this.document.querySelector(".hideButton");
         const commentBlock = this.document.querySelector(".comments-block");
         const comments = await getNestedCommentsJson();
-        const result = commentRecursion(comments);
-        commentBlock.innerHTML = result;
+        if (comments.length == 0) {
+            commentBlock.innerHTML = `<p>No comments yet.</p>`
+        } else{
+            const result = commentRecursion(comments);
+            commentBlock.innerHTML = result;
+        }
         let commentHide = false;
         hideCommentButton.addEventListener("click", async function(){
             if (commentHide) {
@@ -137,8 +171,12 @@ window.addEventListener("load", async function(){
                 hideCommentButton.innerHTML = 'Hide Comments';
                 commentHide = false;
                 const comments = await getNestedCommentsJson();
-                const result = commentRecursion(comments);
-                commentBlock.innerHTML = result;
+                if (comments.length == 0) {
+                    commentBlock.innerHTML = `<p>No comments yet.</p>`
+                } else{
+                    const result = commentRecursion(comments);
+                    commentBlock.innerHTML = result;
+                }
             } else {
                 commentBlock.classList.add('hide');
                 hideCommentButton.innerHTML = 'Show Comments';
@@ -159,34 +197,34 @@ window.addEventListener("load", async function(){
                     <p>${comment.username}</p>
                     <p>${comment.timestamp}</p>
                 </div>
-                <p class="comment-text">${comment.content}</p>
+                <p class="comment-text" id="${comment.id}">${comment.content}</p>
                 <div class="button-combo">
-                    <form action="./replyComment" method="get">
-                        <div class="replyButton">
-                            <button type="submit" name="replyComment" value=${comment.id}>Reply</button>
-                        </div>
-                    </form>
+                    <div class="replyButton">
+                        <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
+                    </div>
                     <form action="./deleteComment" method="get">
                         <div class="deleteButton">
                             <button type="submit" name="deleteComment" value=${comment.id}>Delete</button>
                         </div>
                     </form>
+                </div>
+                <div class="replyText">
                 </div>`;
                 if (comment.children) {
                     const childrenArray = comment.children;
                     list += commentRecursion(childrenArray);
                 }
                 list += `
-                </li>
-                </ul>`;
+                </li>`;
             });
+            list += `</ul>`;
             // console.log(list);
             return list;
         }
 
         async function getNestedCommentsJson(){
             const articleId = getCookieValue("articleId");
-            let commentsResponse = await fetch(`http://localhost:3000/articleComments/${articleId}`);
+            let commentsResponse = await fetch(`/articleComments/${articleId}`);
             let commentsJson = await commentsResponse.json();
             return commentsJson;
         };
@@ -194,27 +232,64 @@ window.addEventListener("load", async function(){
 
     // delete/reply comments
     if (this.document.querySelector(".deleteButton")) {
-        const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
-        deleteButtonArray.forEach(deleteButton => {
-            deleteButton.addEventListener("click", async function () {
-                const comment = await getCommentJson();
-                const article = await getArticleJson();
-                const user = await getUserJson();
-                if (!getCookie("authToken")){
-                    alert('Please Log in to delete!');
-                } else if (user.id != article.authorId && user.id != comment.user_id) {
-                    alert('Sorry! You do not have access to delete this comment.');
-                }
+        if (this.document.querySelector("#login_fail_message")) {
+            const deleteFail = this.document.querySelector("#login_fail_message");
+            deleteFail.addEventListener("click", function(){
+                deleteFail.innerHTML = '';
             })
-        });
+        }
+        // const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
+        // deleteButtonArray.forEach(deleteButton => {
+        //     deleteButton.addEventListener("click", async function () {
+        //         const comment = await getCommentJson();
+        //         const article = await getArticleJson();
+        //         const user = await getUserJson();
+        //         console.log(comment.user_id);
+        //         console.log(article.authorId);
+        //         console.log(user.id);
+        //         console.log(getCookie("authToken"));
+        //         if (!getCookie("authToken")){
+        //             alert('Please Log in to delete!');
+        //         } else if (user.id != article.authorId && user.id != comment.user_id) {
+        //             alert('Sorry! You do not have access to delete this comment.');
+        //         }
+        //     })
+        // });
 
         const replyButtonArray = this.document.querySelectorAll(".replyButton");
-        replyButtonArray.forEach(replyButton => {
+        const replyTextArray = this.document.querySelectorAll(".replyText");
+        const replyCommentArray = this.document.querySelectorAll(".replyComment");
+        for (let index = 0; index < replyButtonArray.length; index++) {
+            const replyButton = replyButtonArray[index];
+            let replyDisplay = false;
             replyButton.addEventListener("click", function () {
+                const replyText = replyTextArray[index];
+                const replyComment = replyCommentArray[index];
                 if (!getCookie("authToken")){
                     alert('Please Log in to reply!');
+                } else{
+                    if (!replyDisplay) {
+                        replyText.innerHTML = `
+                        <div id="commentEditor" style="width: 82.5%;">
+                            <form action="./replyComment" method="get">
+                                <textarea name="comment" class="commentContent" placeholder="Any comments?" required></textarea><br>
+                                <button type="submit" id="commentButton" name="commentId" value=${replyComment.value}>Submit</button>
+                            </form>
+                        </div>`;
+                        replyDisplay = true;
+                    } else{
+                        replyText.innerHTML = '';
+                        replyDisplay = false;
+                    }
                 }
             })
+        };
+
+        const commentButton = this.document.querySelector("#commentButton");
+        commentButton.addEventListener("click", async function () {
+            if (!getCookie("authToken")){
+                alert('Please Log in to comment!');
+            }
         });
 
         // To check whether the user has the access to delete the comment
