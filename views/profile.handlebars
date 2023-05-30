@@ -1,5 +1,4 @@
 <div class="main-container">
-    <div class="main-content">
         {{#if T}}
         <div class="otherUserProfile">
             <ul>
@@ -20,11 +19,13 @@
             {{#each articles}}
             {{!-- <div class="grid-content"> --}}
                 <div class="card2">
-                    <p>{{{this.title}}}</p>
+                    <br>
+                    <h3>{{{this.title}}}</h3>
                     <p>{{this.authorname}}</p>
                     <p>{{this.date_time}}</p>
-                    <p>{{{this.content}}}</p>
-                    
+                    <div class="limit_container">
+                        <p class="limit_content">{{{this.content}}}</p>
+                    </div>
                     <div class="actions">
 
                         <form action="./article" method="get">
@@ -58,5 +59,4 @@
         {{else}}
         <p class="noneWritten">Oops, user hasn't written articles😂</p>
         {{/if}}
-    </div>
 </div>

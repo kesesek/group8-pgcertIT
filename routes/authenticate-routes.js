@@ -344,7 +344,8 @@ router.get("/profile", showNotifications, async function (req, res) {
         const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
         const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
         for (let i = 0; i < articles.length; i++) {
-            articles[i].content = articles[i].content.substring(0, 100) + "...";
+            articles[i].content = (articles[i].content.substring(0, 100) + "...").replace('<p>', '').replace('</p>', '');
+            articles[i].title = articles[i].title.replace('<p>', '').replace('</p>', '');
             for (let j = 0; j < likedArticleIds.length; j++) {
                 if (articles[i].id === likedArticleIds[j].article_id) {
                     articles[i].isLiked = true;

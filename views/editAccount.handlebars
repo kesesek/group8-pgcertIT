@@ -60,7 +60,7 @@ if(document.querySelector("#oldpasswordid")) {
     }
 
     const testLabel = document.querySelector("#oldPasswordTest");
-        const oldone = document.querySelector("#oldpasswordid");
+    const oldone = document.querySelector("#oldpasswordid");
 
         oldone.addEventListener("input", async function () {
             testLabel.innerHTML = "";
@@ -76,6 +76,8 @@ if(document.querySelector("#oldpasswordid")) {
                     const confirmNewPssword = document.querySelector("#confirmnewid");
                     confirmNewPssword.disabled = false;
 
+                    const hint = doument.querySelector("#editpassword_hint");
+                    hint.style.display = 'block';
                 }  
         });
 }
@@ -249,7 +251,8 @@ dontdelect.onclick = function(){
 
         <div class="editcard">
             <label for="newpasswordid">New password: </label>
-            <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8"><br><br>
+            <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8">
+            <br><p id="editpassword_hint">(Please enter a password of 8-20 digits)</p>
         </div>
 
         <div class="editcard">

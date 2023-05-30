@@ -51,6 +51,7 @@ font-family: 'Courier New', Courier, monospace;
 
 .nav .icon img{
   border-radius: 50%;
+  margin-top: 50%;
 }
 
 .nav .leftnav {
@@ -64,6 +65,12 @@ font-family: 'Courier New', Courier, monospace;
 
 .nav a.active {
   background-color: rgb(225, 185, 185);
+}
+
+.nav li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* nav bar style end */
@@ -316,7 +323,9 @@ a:-webkit-any-link {
 
 /* all article page, articles layout */
 .main-container {
-  margin: 0 30px;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .grid-articles {
@@ -327,7 +336,9 @@ a:-webkit-any-link {
   justify-content: center;
 }
 
-.card {
+.card, .card2 {
+  display: flex;
+  flex-direction: column;
   background-color: #db9292;
   margin: 30px 20px;
   border-radius: 10px;
@@ -338,10 +349,18 @@ a:-webkit-any-link {
   justify-content: space-between;
   flex-grow: 0;
   flex-shrink: 0;
+  column-gap: 2%;
 }
 
-.card h3 {
-  height: 25%;
+.card h3 , .card2 h3{
+  height: 20%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.card * , .card2 *{
+  margin: 0;
+  padding:0;
 }
 
 .actions {
@@ -587,7 +606,7 @@ a:-webkit-any-link {
   margin-top: 10px;
 }
 
-#newNameTest, #oldPasswordTest, #passwordMatch {
+#newNameTest, #oldPasswordTest, #passwordMatch, #test, #pass {
   position: absolute;
   width: 60%;
   top:20%;
@@ -655,9 +674,22 @@ a:-webkit-any-link {
   z-index: 1;
 }
 
+#editpassword_hint {
+  color:#816a92;
+  font-size:14px;
+  font-weight: bold;
+  display: none;
+}
+
 /* editAccount ends */
 
 /* signup ⬇️*/
+#password_hint {
+  color:#816a92;
+  font-size:14px;
+  font-weight: bold;
+}
+
 #signuppage {
   margin: 0;
   padding: 0;
@@ -666,7 +698,6 @@ a:-webkit-any-link {
   align-items: center;
   background-color: #f9ebeb;
   color: rgb(158, 108, 108);
-  font-size: 20px;
 }
 
 #signuppage img {
@@ -777,7 +808,7 @@ a:-webkit-any-link {
 .grid-favArticles {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: 30px;
+  margin: 3%;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -817,6 +848,36 @@ a:-webkit-any-link {
 
 .homePage {
   margin: 10px;
+}
+
+.limit_container {
+  width: 94%;
+  height: 25%;
+  overflow:hidden;
+  margin:3%;
+  display: flex;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.limit_content {
+  min-width: min-content;
+  margin: 0;
+  display:-webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  top:0;
+}
+
+.limit_container p{
+  max-width: 100%;
+  margin: 0;
+  display:-webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  top:0;
 }
 
 /* Home Page end */
@@ -931,11 +992,11 @@ a:-webkit-any-link {
 .parts {
   display:flex;
   flex-wrap:nowrap;
-  
 }
 
 .parts div {
   background-color:#db9292;
+  display: flex;
 }
 
 .analyticscard {
@@ -943,7 +1004,6 @@ a:-webkit-any-link {
   height: 150px;
   margin:10px;
   display: flex;
-  
   color:#f9ebeb;
 }
 
@@ -1244,11 +1304,3 @@ a:-webkit-any-link {
 
 /* other user's profile ends */
 
-.card2 {
-  background-color: #db9292;
-  width: 500px;
-  margin: 30px 20px;
-  border-radius: 10px;
-  color: #f9ebeb;
-  text-align: center;
-}

@@ -11,10 +11,13 @@
             {{#each article}}
             <div class="grid-content">
                 <div class="card">
+                    <br>
                     <h3>{{{this.title}}}</h3>
-                    <p>{{this.author}}</p>
+                    <p>{{{this.author}}}</p>
                     <p>{{this.datestamp}}</p>
-                    <p>{{{this.content}}}</p>
+                    <div class="limit_container">
+                        <p class="limit_content">{{{this.content}}}</p>
+                    </div>
                     <form action="./article" method="get">
                         <button type="submit" class="readMore homePage" name="fullArticle" value="{{this.id}}">Read more</button>
                     </form>
