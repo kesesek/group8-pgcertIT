@@ -1,6 +1,7 @@
 const SQL = require("sql-template-strings");
 const dbPromise = require("./database.js");
 
+// retrieve partial articles and the like status by the current user
 async function retrievePartialArticles(number,userId) {
     const db = await dbPromise;
 
@@ -135,6 +136,18 @@ async function retrieveImageById(imageId) {
     return imagePath;
 }
 
+async function retrieveLikeByArticleIdandUserId(userId, articleId) {
+    const db = await dbPromise;
+
+    const likeStatus = await db.get(SQL`
+        select article_id
+        from likes
+        where user_id = ${userId}
+        and article_id = ${articleId}`);
+    
+    return likeStatus;
+}
+
 // Export functions.
 module.exports = {
     retrievePartialArticles,
@@ -144,5 +157,6 @@ module.exports = {
     removeLikedArticles,
     retrieveArticleById,
     retrieveArticleByContentTitleUserId,
-    retrieveImageById
+    retrieveImageById,
+    retrieveLikeByArticleIdandUserId
 };

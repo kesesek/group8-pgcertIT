@@ -7,7 +7,7 @@
 <div class="article-container">
     <h1>{{{article.title}}}</h1>
     <h3>{{article.timestamp}}</h3>
-    <p><a href="" class="icon"><img src="./images/icons/{{article.path}}" width="40px"></a>
+    <p><p class="icon"><img src="./images/icons/{{article.path}}" width="40px"></p>
     <div href="" class="subscribeStatus">
         {{#if subscribe}}
         <form action="./unsubscribe" method="get">
@@ -27,6 +27,17 @@
         {{#if imagePath}}
         <p class="article-image"><img src="./images/uploadedFiles/{{imagePath}}" width="500px"></p>
         {{/if}}
+        <div class="favorite">
+            {{#if like}}
+            <form action="./dislikeFullArticle" method="get">
+                <button type="submit" class="likes" name="likeAction"><img src="./images/black favorite.png" width="40px"></button>
+            </form>
+            {{else}}
+            <form action="./likeFullArticle" method="get">
+                <button type="submit" class="likes" name="likeAction"><img src="./images/outline favorite.png" width="40px"></button>
+            </form>
+            {{/if}}
+        </div>
     </div>
 </div>
 
@@ -37,8 +48,8 @@
     <div class="comments-block" id="comments">
     </div>
     <div class="comment-content">
-        <p class="user-comment"><a href="" class="icon"><img
-                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></a></p>
+        <p class="user-comment"><p class="icon"><img
+                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></p></p>
         <div id="commentEditor" style="width: 82.5%;">
             <form action="./commentArticle" method="get">
                 <textarea name="comment" class="commentContent" placeholder="Any comments?" rows="4" cols="100" required></textarea><br>
