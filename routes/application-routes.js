@@ -118,6 +118,10 @@ router.get("/article", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        if (likeStatus) {
+            res.locals.like = true;
+        }
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
@@ -127,6 +131,33 @@ router.get("/article", showNotifications, async function(req, res) {
     }
 
     res.render("fullArticle");
+
+});
+
+// like/dislike articles at the full article page
+router.get("/dislikeFullArticle", showNotifications, async function(req, res) {
+    
+    let userId = 0;
+    if (req.cookies.authToken) {
+        const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
+        userId = user.id;
+        await articleDao.removeLikedArticles(userId, req.cookies.articleId);
+    }
+
+    res.redirect("/article");
+
+});
+
+router.get("/likeFullArticle", showNotifications, async function(req, res) {
+
+    let userId = 0;
+    if (req.cookies.authToken) {
+        const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
+        userId = user.id;
+        await articleDao.insertLikedArticles(userId, req.cookies.articleId);
+    }
+
+    res.redirect("/article");
 
 });
 
@@ -179,6 +210,10 @@ router.get("/replyComment", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        if (likeStatus) {
+            res.locals.like = true;
+        }
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
@@ -210,6 +245,10 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        if (likeStatus) {
+            res.locals.like = true;
+        }
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
@@ -262,6 +301,10 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        if (likeStatus) {
+            res.locals.like = true;
+        }
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
@@ -294,6 +337,10 @@ router.get("/unsubscribe", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        if (likeStatus) {
+            res.locals.like = true;
+        }
         await userDao.unsubscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
         await notificationDao.deleteNotificationWithNewSubscribe(userId, res.locals.article.authorId);
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
@@ -318,6 +365,10 @@ router.get("/subscribe", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        if (likeStatus) {
+            res.locals.like = true;
+        }
         await userDao.subscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
         await notificationDao.addNotificationWithNewSubscribe(userId, res.locals.article.authorId);
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
