@@ -42,7 +42,7 @@ function makeNestedComments(commentArray, nestedCommentArray){
         for (let i = 0; i < commentArray.length; i++) {
             let comment = commentArray[i];
             let findParent = false;
-            // // console.log(nestedCommentArray);
+            // console.log(nestedCommentArray);
             nestedCommentArray.forEach(parent => {
                 if (parent.id == comment.parent_id) {
                     if (!parent.children) {
