@@ -370,7 +370,11 @@ a:-webkit-any-link {
   padding:0;
 }
 
-.actions {
+.card > p {
+  word-break: break-all;
+}
+
+.favorite {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -771,10 +775,18 @@ a:-webkit-any-link {
 }
 
 .bTn {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: stretch;
+}
+
+#success {
+  position: absolute;
+  left: 75%; 
+  color: rgb(158, 108, 108);
+  margin-top: 0.8%;
 }
 
 #mylabel {
@@ -904,6 +916,7 @@ a:-webkit-any-link {
 
 .article-container h1 {
   padding: 20px;
+  word-break: break-all;
 }
 
 .article-container h3 {
@@ -913,6 +926,10 @@ a:-webkit-any-link {
 .article-content {
   background-color: rgb(158, 108, 108);
   padding: 30px;
+}
+
+.article-content p {
+  word-break: break-all;
 }
 
 .comments-container {
@@ -970,6 +987,7 @@ a:-webkit-any-link {
 .comment-text {
   background-color: rgb(158, 108, 108);
   padding: 10px;
+  word-break: break-all;
 }
 
 .button-combo {
@@ -1324,3 +1342,16 @@ a:-webkit-any-link {
 
 /* other user's profile ends */
 
+
+.card2 {
+  background-color: #db9292;
+  width: 500px;
+  margin: 30px 20px;
+  border-radius: 10px;
+  color: #f9ebeb;
+  text-align: center;
+}
+
+.card2 p {
+  word-break: break-all;
+}

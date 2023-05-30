@@ -22,14 +22,13 @@
             height: 110,
             menubar: false,
             toolbar: 'bold italic underline',
-            {{!-- toolbar: false, --}}
             init_instance_callback: function (editor) {
                 editor.on('focus', function () {
                     if (editor.getContent() === '<p>Title here...</p>') {
                         editor.setContent('');
                     }
                 });
-                const titleValue = '{{{article.title}}}';
+                const titleValue = `{{{article.title}}}`;
                 if (titleValue) {
                     editor.setContent(titleValue);
                 } else {
@@ -50,7 +49,7 @@
                         editor.setContent('');
                     }
                 });
-                const contentValue = '{{{article.content}}}';
+                const contentValue = `{{{article.content}}}`;
                 if (contentValue) {
                     editor.setContent(contentValue);
                 } else {
@@ -138,7 +137,8 @@
             <ul>
                 <li><a href="./profile" class="text {{#if active_myArticle}}active{{/if}}">My Articles</a></li>
                 <li><a href="./addarticle" class="text  {{#if active_AddArticles}}active{{/if}}">Add Articles</a></li>
-                <li><a href="./favorite" class="text  {{#if active_MyFavoriteArticles}}active{{/if}}">Favorite Articles</a>
+                <li><a href="./favorite" class="text  {{#if active_MyFavoriteArticles}}active{{/if}}">Favorite
+                        Articles</a>
                 </li>
                 <li><a href="./following" class="text {{#if active_Following}}active{{/if}}">Following</a></li>
                 <li><a href="./follower" class="text {{#if active_Follower}}active{{/if}}">Follower</a></li>
