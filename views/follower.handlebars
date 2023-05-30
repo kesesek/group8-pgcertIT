@@ -3,11 +3,10 @@
     <ul>
         {{#each follower}}
         <li>
-            <form action="./profile" method="get">
+            <form action="./profile" method="get" class="btnwithimg">
                 <button type="submit" class="bTn2" name="otherUserId" value="{{this.id}}"><img src="./images/icons/{{this.filename}}" width="40"><span>{{this.username}}</span></button>
             </form>
-            <form action="./nofollower" method="get">
-                <br>
+            <form action="./nofollower" method="get" class="onlybtn">
                 <button type="submit" class="bTn" name="bTn" value="{{this.id}}">Remove</button>
             </form>
         </li><br>

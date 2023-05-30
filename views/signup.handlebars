@@ -2,8 +2,10 @@
     {{!-- Using form get the data from sign-up page --}}
     <form action="./signup" method="POST" enctype="multipart/form-data">
         <br>
-        <label for="avatar">Avatar: </label>
-        <input id="avatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        <div class="editcard">
+            <label for="avatar">Avatar: </label>
+            <input id="avatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        </div>
         <p>Or you can choose a predefined avatar: </p>
         <div>
             <input type="radio" id="icon1" name="presetAvatar" value="panda.png" checked>
@@ -40,27 +42,41 @@
         </div>
         <br><br>
 
+        <div class="editcard">
+            <label for="username">* Username: </label>
+            <input class="signText" id="username" name="username" type="text"  maxlength="32" required><label id="test" for="username"></label><br><br>
+        </div>
 
-        <label for="username">* Username: </label>
-        <input class="signText" id="username" name="username" type="text"  maxlength="32" required><label id="test" for="username"></label><br><br>
+        <div class="editcard">
+            <label for="password">* Password: </label>
+            <input class="signText" id="password" name="password" type="password" minlength="8" maxlength="20" required>
+            <br><p id="password_hint">(Please enter a password of 8-20 digits)</p>
+        </div>
 
-        <label for="password">* Password: </label>
-        <input class="signText" id="password" name="password" type="password" minlength="8" maxlength="20" required><br><br>
+        <div class="editcard">
+            <label for="comPassword">* Comfirm password: </label>
+            <input class="signText" id="comPassword" name="comPassword" type="password" required><label id="pass" for="comPassword"></label><br><br>
+        </div>
 
-        <label for="comPassword">* Comfirm password: </label>
-        <input class="signText" id="comPassword" name="comPassword" type="password" required><label id="pass" for="comPassword"></label><br><br>
+        <div class="editcard">
+            <label for="dateOfBirth">* Date of birth: </label>
+            <input class="signText" id="dateOfBirth" name="dateOfBirth" type="date" min="1900-01-01" max="2023-06-01" required><br><br>
+        </div>
 
-        <label for="dateOfBirth">* Date of birth: </label>
-        <input class="signText" id="dateOfBirth" name="dateOfBirth" type="date" min="1900-01-01" max="2023-06-01" required><br><br>
+        <div class="editcard">
+            <label for="fname">* First name: </label>
+            <input class="signText" id="fname" name="fname" type="text" maxlength="32" required><br><br>
+        </div>
 
-        <label for="fname">* First name: </label>
-        <input class="signText" id="fname" name="fname" type="text" maxlength="32" required><br><br>
+        <div class="editcard">
+            <label for="mname">Middle name: </label>
+            <input class="signText" id="mname" name="mname" type="text" maxlength="32"><br><br>
+        </div>
 
-        <label for="mname">Middle name: </label>
-        <input class="signText" id="mname" name="mname" type="text" maxlength="32"><br><br>
-
-        <label for="lname">* Last name: </label>
-        <input class="signText" id="lname" name="lname" type="text" maxlength="32" required><br><br>
+        <div class="editcard">
+            <label for="lname">* Last name: </label>
+            <input class="signText" id="lname" name="lname" type="text" maxlength="32" required><br><br>
+        </div>
 
         <div id="textareaBox">
             <label for="des">Description: </label>

@@ -1,5 +1,4 @@
 <div class="main-container">
-    <div class="main-content">
         {{#if T}}
         <div class="otherUserProfile">
             <ul>
@@ -20,20 +19,19 @@
             {{#each articles}}
             {{!-- <div class="grid-content"> --}}
                 <div class="card2">
-                    <p>{{{this.title}}}</p>
+                    <br>
+                    <h3>{{{this.title}}}</h3>
                     <p>{{this.authorname}}</p>
                     <p>{{this.date_time}}</p>
-                    <p>{{{this.content}}}</p>
-                    <form action="./article" method="get">
-                        <button type="submit" class="readMore" name="fullArticle" value="{{this.id}}">Read more</button>
-                    </form>
-                    <div class="favorite">
-                        {{#if this.canModify}}
-                        <form action="./addarticle" method="get"><button id="editProfile" name="edit"
-                                value="{{this.id}}">Edit</button></form>
-                        <form action="./deleteArticle" method="get"><button id="deleteProfile" name="delete"
-                                value="{{this.id}}">Delete</button></form>
-                        {{/if}}
+                    <div class="limit_container">
+                        <p class="limit_content">{{{this.content}}}</p>
+                    </div>
+                    <div class="actions">
+
+                        <form action="./article" method="get">
+                            <button type="submit" class="readMore" name="fullArticle" value="{{this.id}}">Read more</button>
+                        </form>
+
                         {{#if this.isLiked}}
                         <form action="./removeCollect" method="get">
                             <button type="submit" class="likes" name="likeAction" value="{{this.id}}"><img
@@ -45,6 +43,13 @@
                                     src="./images/outline favorite.png" width="40px"></button>
                         </form>
                         {{/if}}
+
+                    </div>
+                    <div class="actions">
+                        {{#if this.canModify}}
+                        <form action="./addarticle" method="get"><button id="editProfile" name="edit" value="{{this.id}}">Edit</button></form>
+                        <form action="./deleteArticle" method="get"><button id="deleteProfile" name="delete" value="{{this.id}}">Delete</button></form>
+                        {{/if}}
                     </div>
                 </div>
                 {{!--
@@ -54,5 +59,4 @@
         {{else}}
         <p class="noneWritten">Oops, user hasn't written articles😂</p>
         {{/if}}
-    </div>
 </div>
