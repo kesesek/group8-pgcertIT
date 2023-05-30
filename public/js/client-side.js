@@ -53,8 +53,12 @@ window.addEventListener("load", async function(){
 
         // change the login/logout label depends on the cookies
         const loginLabel = this.document.querySelector(".loginStatus");
+        const or = this.document.querySelector(".or");
+        const signupLabel = this.document.querySelector(".signupLabel");
         if (getCookie("authToken")) {
             loginLabel.innerHTML = `<a href="./" class="text logout">Log out</a>`;
+            or.innerHTML = ``;
+            signupLabel.innerHTML = ``;
             const logoutLabel = this.document.querySelector(".logout");
             logoutLabel.addEventListener("click", function(){
                 deleteCookie("authToken");
@@ -62,6 +66,8 @@ window.addEventListener("load", async function(){
             })
         } else {
             loginLabel.innerHTML = `<a href="./login" class="text">Log in</a>`;
+            or.innerHTML = `or`;
+            signupLabel.innerHTML = `<a href="./signup" class="text">Sign up</a>`;
         }
 
         // check whether the user can go to their personal profile page(login or not)
@@ -199,11 +205,9 @@ window.addEventListener("load", async function(){
                 </div>
                 <p class="comment-text" id="${comment.id}">${comment.content}</p>
                 <div class="button-combo">
-                    <form action="./replyComment" method="get">
-                        <div class="replyButton">
-                            <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
-                        </div>
-                    </form>    
+                    <div class="replyButton">
+                        <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
+                    </div>  
                     <form action="./deleteComment" method="get">
                         <div class="deleteButton">
                             <button type="submit" name="deleteComment" value=${comment.id}>Delete</button>
@@ -234,8 +238,8 @@ window.addEventListener("load", async function(){
 
     // delete/reply comments
     if (this.document.querySelector(".deleteButton")) {
-        if (this.document.querySelector("#login_fail_message")) {
-            const deleteFail = this.document.querySelector("#login_fail_message");
+        if (this.document.querySelector(".hint-message")) {
+            const deleteFail = this.document.querySelector(".hint-message");
             deleteFail.addEventListener("click", function(){
                 deleteFail.innerHTML = '';
             })
@@ -261,6 +265,7 @@ window.addEventListener("load", async function(){
         const replyButtonArray = this.document.querySelectorAll(".replyButton");
         const replyTextArray = this.document.querySelectorAll(".replyText");
         const replyCommentArray = this.document.querySelectorAll(".replyComment");
+        const replyCommentHint = this.document.querySelector(".hint-message");
         for (let index = 0; index < replyButtonArray.length; index++) {
             const replyButton = replyButtonArray[index];
             let replyDisplay = false;
@@ -269,6 +274,8 @@ window.addEventListener("load", async function(){
                 const replyComment = replyCommentArray[index];
                 if (!getCookie("authToken")){
                     // alert('Please Log in to reply!');
+                    replyCommentHint.innerHTML = "Please Log in to reply a comment!";
+                    window. scrollTo(0, 0);
                 } else{
                     if (!replyDisplay) {
                         replyText.innerHTML = `

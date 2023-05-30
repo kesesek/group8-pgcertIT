@@ -190,12 +190,10 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         // insert new 'reply a comment' notifications to the notification table
         const followerArray = await userDao.retrieveFollowerByUserId(userId);
         const commentId = await commentDao.retrieveCommentIdByCommentArticleAndUser(req.query.comment, res.locals.article.articleId, userId);
+        // console.log(commentId);
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithReplyComment(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
-    }else{
-        res.locals.deleteNoAccess = "Please Log in to comment!";
-        console.log(res.locals.deleteNoAccess);
     }
 
     res.render("fullArticle");

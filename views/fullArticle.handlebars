@@ -1,7 +1,10 @@
-<div class="article-container">
+<div>
     {{#if deleteNoAccess}}
-    <p id="login_fail_message">{{deleteNoAccess}}</p>
+    <p class="hint-message">{{deleteNoAccess}}</p>
     {{/if}}
+    <p class="hint-message"></p>
+</div>
+<div class="article-container">
     <h1>{{{article.title}}}</h1>
     <h3>{{article.timestamp}}</h3>
     <p><a href="" class="icon"><img src="./images/icons/{{article.path}}" width="40px"></a>
