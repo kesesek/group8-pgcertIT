@@ -272,7 +272,12 @@ router.get("/favorite", showNotifications, async function (req, res) {
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
     articles.forEach(article => {
-        article.content = article.content.substring(0, 100) + "...";
+        if(article.title.length > 50){
+            article.title = article.title.substring(0, 50) + "...";
+        }
+        if(article.content.length > 100){
+            article.content = article.content.substring(0,100) + "...";
+        }
     });
     res.locals.user_id = user_idObj.id;
     res.locals.articles = articles;
@@ -345,7 +350,12 @@ router.get("/profile", showNotifications, async function (req, res) {
         const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
         const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
         for (let i = 0; i < articles.length; i++) {
-            articles[i].content = articles[i].content.substring(0, 100) + "...";
+            if(articles[i].title.length > 50){
+                articles[i].title = articles[i].title.substring(0, 50) + "...";
+            }
+            if(articles[i].content.length > 100){
+                articles[i].content = articles[i].content.substring(0, 100) + "...";
+            }
             for (let j = 0; j < likedArticleIds.length; j++) {
                 if (articles[i].id === likedArticleIds[j].article_id) {
                     articles[i].isLiked = true;

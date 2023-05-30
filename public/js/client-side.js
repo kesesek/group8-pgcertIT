@@ -318,5 +318,12 @@ window.addEventListener("load", async function(){
         };
         // check alert end
     }
+
+    //when upload image in the addarticle page, the message will display since the image uploaded successfully
+    const inputBtn = document.querySelector("#inpFile");
+    const successSpan = document.querySelector("#success");
+    inputBtn.addEventListener("change", function(){
+        successSpan.innerHTML = `Upload successfully!`;
+    });
 });
 
