@@ -36,12 +36,12 @@ font-family: 'Courier New', Courier, monospace;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-#or{
+.or{
   display: block;
   color: white;
   text-align: center;
   justify-content: center;
-  padding:3%;
+  margin-top:5%;
   text-decoration: none;
 }
 
@@ -877,6 +877,7 @@ a:-webkit-any-link {
   overflow: hidden;
   text-overflow: ellipsis;
   top:0;
+  word-break: break-all;
 }
 
 .limit_container p{
@@ -887,6 +888,8 @@ a:-webkit-any-link {
   overflow: hidden;
   text-overflow: ellipsis;
   top:0;
+  word-break: break-all;
+  text-align: center;
 }
 
 /* Home Page end */
