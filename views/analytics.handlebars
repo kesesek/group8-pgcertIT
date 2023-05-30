@@ -121,7 +121,9 @@
             <p>comments: {{{this.[4]}}}</p>
             <p>likes: {{{this.[5]}}}</p>
             <p>popularity: {{{this.[6]}}}</p>
-            <p id="thumbnail">{{{this.[1]}}}</p>
+            <div class="limit_container">
+                <p class="limit_content">{{{this.[1]}}}</p>
+            </div>
             
             <form action="./article" method="get">
                 <button type="submit" class="readMore" name="fullArticle" value="{{this.[0]}}">Full Article</button>
@@ -129,9 +131,9 @@
         </div>
         {{/each}}
         {{else}}
-        <div>
+        <div id="noarticle" class="analyticsarticle">
             <p>There is no articles yet..</p>
-            <a href="./addarticle.handlebars">Click to create one now!</a>
+            <a href="./addarticle">Click to create one now!</a>
         </div>
         {{/if}}
     </div>

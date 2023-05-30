@@ -76,8 +76,6 @@ if(document.querySelector("#oldpasswordid")) {
                     const confirmNewPssword = document.querySelector("#confirmnewid");
                     confirmNewPssword.disabled = false;
 
-                    const hint = doument.querySelector("#editpassword_hint");
-                    hint.style.display = 'block';
                 }  
         });
 }
@@ -151,28 +149,6 @@ dontdelect.onclick = function(){
     mask.style.display = "none";
 }
 
-{{!-- confirmdelect.addEventListener('click' ,function(){
-    $.ajax({
-        url: "/delectAccount",
-        method: "post",
-        dataType: 'json',
-        success:function() {
-            alert("Account delete!");
-            setTimeout(function() {
-                window.location.href = "/";
-            }, 10000);
-        },
-        error: function() {
-            alert("Error. Failed to delete. Please try again.");
-            setTimeout(function() {
-                location.href = "/";
-            }, 10000);
-        }
-    });
-
-        
-}); --}}
-
     //6.if there is a file, make all radios disabled:
     const file = document.getElementById('editAvatar');
     file.addEventListener('change', function(){
@@ -194,7 +170,7 @@ dontdelect.onclick = function(){
 <div id="edit_account_container">
     <div id="mask"></div>
     {{#if user}}
-    {{!-- <form id="edtForm"> --}}
+    <div id="edtForm">
         <br>
         <div class="editcard">
             <label for="editAvatar">Avatar: </label>
@@ -305,7 +281,6 @@ dontdelect.onclick = function(){
         <button class="btn" type="button" id="delectBtn">Delect this account</button><br><br>
 
         
-        
-    {{!-- </form> --}}
+    </div>   
     {{/if}}
 </div>
