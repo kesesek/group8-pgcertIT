@@ -69,8 +69,8 @@ router.post("/signup", showNotifications, upload.single("avatar"), async functio
     }
     const lName = req.body.lname;
     let description = req.body.des;
-    if (description == "Write something about you...") {
-        description = null;
+    if (description == "") {
+        description = "This user is too secret...";
     }
     const birth = req.body.dateOfBirth;
     const salt = (Math.floor(Math.random() * 10) + 1).toString();
@@ -200,13 +200,12 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
     res.send({ success: true });
 })
 
-router.post("/delectAccount", showNotifications, async function (req, res) {
+router.post("/delectAccount", async function (req, res) {
     const authToken = req.cookies.authToken;
     await userDao.delectAccount(authToken);
 
     res.clearCookie('authToken');
-    res.json({success: true});
-
+    res.redirect("/");
 })
 //editAccount page ends
 

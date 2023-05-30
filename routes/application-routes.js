@@ -190,11 +190,10 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         // insert new 'reply a comment' notifications to the notification table
         const followerArray = await userDao.retrieveFollowerByUserId(userId);
         const commentId = await commentDao.retrieveCommentIdByCommentArticleAndUser(req.query.comment, res.locals.article.articleId, userId);
+        // console.log(commentId);
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithReplyComment(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
-    }else{
-        res.locals.deleteNoAccess = "Please Log in to comment!";
     }
 
     res.render("fullArticle");
@@ -281,7 +280,7 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
         res.locals.deleteNoAccess = "Please Log in to comment!";
     }
 
-    res.redirect("/article");
+    res.render("fullArticle");
 
 });
 

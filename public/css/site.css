@@ -35,8 +35,22 @@ font-family: 'Courier New', Courier, monospace;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.nav .text:hover{
-  transform: scale(1.1);
+.or{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 15px 0px;
+  text-decoration: none;
+}
+
+.nav .icon {
+  display: block;
+  text-align: center;
+  padding: 3px 16px;
+}
+
+.nav .icon img{
+  border-radius: 50%;
 }
 
 .nav .leftnav {
@@ -290,7 +304,7 @@ a:-webkit-any-link {
   top: 20px;
 }
 
-#login_fail_message {
+.login_fail_message {
   color: #f9ebeb;
   text-align: center;
   font-size: 20px;
@@ -580,8 +594,8 @@ a:-webkit-any-link {
 }
 
 #edtForm textarea {
-  width: 300px;
-  height: 60px;
+  width: 400px;
+  height: 80px;
   border-color: rgb(158, 108, 108);
   overflow: scroll;
   border: 1px solid rgb(158, 108, 108);
@@ -894,6 +908,12 @@ a:-webkit-any-link {
   margin: 10px;
 }
 
+.hint-message{
+  color: rgb(158, 108, 108);
+  text-align: center;
+  font-style: italic;
+  font-size: 20px;
+}
 /* Full Article Page end */
 
 
@@ -1223,3 +1243,12 @@ a:-webkit-any-link {
 }
 
 /* other user's profile ends */
+
+.card2 {
+  background-color: #db9292;
+  width: 500px;
+  margin: 30px 20px;
+  border-radius: 10px;
+  color: #f9ebeb;
+  text-align: center;
+}
