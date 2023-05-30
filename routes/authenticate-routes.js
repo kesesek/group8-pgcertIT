@@ -418,15 +418,39 @@ router.get('/analytics', showNotifications, async function(req, res){
     const followernumber = await userDao.countFollower(user_id);
     const commentsnumber = await userDao.totalNumberofUserPosts(user_id);
     const likes = await userDao.countlikes(user_id);
-    const topThree = await userDao.getTopThree(user_id);
+    const allArticle = await userDao.getAllArticle(user_id);
+
 
     res.locals.user = user;
     res.locals.followernumber = followernumber;
     res.locals.commentsnumber = commentsnumber;
     res.locals.likes = likes;
 
-    if(topThree) {
-        res.locals.topThree = topThree;
+    if(allArticle) {
+        console.log(allArticle);
+
+        let toparticleInfoArray = [];
+        for(let i = 0; i < allArticle.length; i++) {
+            let title = allArticle[i].title;
+            let commentsNum = await userDao.countArticleComment(allArticle[i].id);
+            let likesNum = await userDao.countArticlelike(allArticle[i].id);
+            let popularity = userDao.getArticlePopularity(commentsNum, likesNum);
+            let time = allArticle[i].date_time;
+            let index = null;
+            let content = allArticle[i].content.substring(0,100) + "...";
+
+            let thisArticleInfo = [index, content, title, time, commentsNum, likesNum, popularity];
+            console.log(thisArticleInfo);
+            toparticleInfoArray.push(thisArticleInfo);
+        }
+        const sortedArray = toparticleInfoArray.sort((a, b) => b[6] - a[6]);
+        const topThree = sortedArray.slice(0, 3);
+
+        const topThreeWithIndex = topThree.map((articleInfo, index) => {
+            articleInfo[0] = index + 1;
+            return articleInfo;
+        });
+        res.locals.topThreeWithIndex = topThreeWithIndex;
     }
 
     res.render("analytics", {layout: 'sidebar&nav'});

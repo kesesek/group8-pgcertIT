@@ -362,31 +362,6 @@ function getArticlePopularity(commentsNum, likesNum){
 }
 
 
-
-//7.get top  popular articles of a user:
-async function getTopThree(user_id) {
-    const articleArray = await getAllArticle(user_id);
-    let allarticleInfoArray = [];
-    if(articleArray) {
-        for(let i = 0; i < articleArray.length; i++) {
-            let title = articleArray[i].title;
-            let commentsNum = await countArticleComment(articleArray[i].id);
-            let likesNum = await countArticlelike(articleArray[i].id);
-            let popularity = getArticlePopularity(commentsNum, likesNum);
-            let time = articleArray[i].date_time;
-            let thisArticleInfo = [articleArray[i].id, title, time, commentsNum, likesNum, popularity];
-            allarticleInfoArray.push(thisArticleInfo);
-        }
-        const sortedArray = allarticleInfoArray.sort((a, b) => b[5] - a[5]);
-        const topThree = sortedArray.slice(0, 3);
-        return topThree;
-
-    } else {
-        return allarticleInfoArray;
-    }
-}
-
-
 //8.get the number of daily comments of an article:
 async function dailyCommentNumber(date, article_id) {
     const db = await dbPromise;
@@ -722,7 +697,6 @@ module.exports = {
     countArticlelike,
     countArticleComment,
     getArticlePopularity,
-    getTopThree,
     dailyCommentNumber,
     totalNumberofUserPosts,
     dailyAllArticleCommentsNumber,

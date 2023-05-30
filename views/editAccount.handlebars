@@ -193,8 +193,10 @@ confirmdelect.addEventListener('click' ,function(){
     {{#if user}}
     <form id="edtForm">
         <br>
-        <label for="editAvatar">Avatar: </label>
-        <input id="editAvatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        <div class="editcard">
+            <label for="editAvatar">Avatar: </label>
+            <input id="editAvatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
+        </div>
         <p>Or you can choose a predefined avatar: </p>
         <div>
             <input type="radio" id="iconOne" name="presetAvatar" value="panda.png">
@@ -230,37 +232,55 @@ confirmdelect.addEventListener('click' ,function(){
         </div>
 
         <br><br>
-        <label for="newnameid">Username: </label>
-        <input placeholder="{{user.username}}" class="editipt" id="newnameid" name="newname" type="text" maxlength="32"><label id="newNameTest" for="newnameid"></label><br><br>
+        
+        <div class="editcard">
+            <label for="newnameid">Username: </label>
+            <input placeholder="{{user.username}}" class="editipt" id="newnameid" name="newname" type="text" maxlength="32">
+            <label id="newNameTest" for="newnameid"></label><br><br>
+        </div>
+
+        <div class="editcard">
+            <label for="oldpasswordid">Old password: </label>
+            <input placeholder="enter for verification" type="password" name="oldpassword" class="editipt" id="oldpasswordid">
+            <label id="oldPasswordTest" for="oldpasswordid"></label><br><br>
+        </div>
 
 
-        <label for="oldpasswordid">Old password: </label>
-        <input placeholder="enter for verification" type="password" name="oldpassword" class="editipt" id="oldpasswordid">
-        <label id="oldPasswordTest" for="oldpasswordid"></label>
-        <br><br>
+        <div class="editcard">
+            <label for="newpasswordid">New password: </label>
+            <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8"><br><br>
+        </div>
 
-        <label for="newpasswordid">New password: </label>
-        <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8"><br><br>
+        <div class="editcard">
+            <label for="confirmnewid">Confirm new password: </label>
+            <input type="password" disabled name="confirmnew" class="editipt" id="confirmnewid">
+            <label id="passwordMatch" for="confirmnewid"></label><br><br>
+        </div>
 
-        <label for="confirmnewid">Confirm new password: </label>
-        <input type="password" disabled name="confirmnew" class="editipt" id="confirmnewid">
-        <label id="passwordMatch" for="confirmnewid"></label><br><br>
+        <div class="editcard">
+            <label for="newBd">Date of birth: </label>
+            <input type="date" class="editipt" id="newBd" min="1900-01-01" max="2023-06-01" name="newbirth" value="{{user.date_of_birth}}"><br><br>
+        </div>
 
-        <label for="newBd">Date of birth: </label>
-        <input type="date" class="editipt" id="newBd" min="1900-01-01" max="2023-06-01" name="newbirth" value="{{user.date_of_birth}}"><br><br>
+        <div class="editcard">
+            <label for="fnameid">First name: </label>
+            <input class="editipt" id="fnameid" name="fname" type="text" placeholder="{{user.fname}}" maxlength="32"><br><br>
+        </div>
+        
+        <div class="editcard">
+            <label for="mnameid">Middle name: </label>
+            <input class="editipt" id="mnameid" name="mname" type="text" placeholder="{{user.mname}}" maxlength="32"><br><br>
+        </div>
 
-        <label for="fnameid">First name: </label>
-        <input class="editipt" id="fnameid" name="fname" type="text" placeholder="{{user.fname}}" maxlength="32"><br><br>
+        <div class="editcard">
+            <label for="lnameid">Last name: </label>
+            <input class="editipt" id="lnameid" name="lname" type="text" placeholder="{{user.lname}}" maxlength="32"><br><br>
+        </div>
 
-        <label for="mnameid">Middle name: </label>
-        <input class="editipt" id="mnameid" name="mname" type="text" placeholder="{{user.mname}}" maxlength="32"><br><br>
 
-        <label for="lnameid">Last name: </label>
-        <input class="editipt" id="lnameid" name="lname" type="text" placeholder="{{user.lname}}" maxlength="32"><br><br>
-
-        <div id="textnew">
+        <div class="editcard" id="textnew">
             <label for="desid">Description: </label>
-            <textarea id="desid" name="des" type="text" maxlength="500" placeholder="{{user.description}}"></textarea><br><br>
+            <textarea id="desid" name="des" type="text" maxlength="500">{{{user.description}}}</textarea><br><br>
         </div>
 
         <div id="thinkTwice">

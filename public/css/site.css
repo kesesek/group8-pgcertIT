@@ -460,6 +460,7 @@ a:-webkit-any-link {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  outline: none;
 }
 
 #sidebar a.active {
@@ -513,10 +514,6 @@ a:-webkit-any-link {
   align-items: stretch;
 }
 
-/* .sidebarSameHeight{
-  display: flex;
-} */
-
 /* sidebar style ends */
 
 /* editAccount page style⬇️ */
@@ -565,6 +562,21 @@ a:-webkit-any-link {
   width: 50px;
   height: 50px;
   margin: 10px;
+}
+
+#textnew {
+  display: flex;
+}
+
+.editcard {
+  position: relative;
+  margin-top: 10px;
+}
+
+#newNameTest, #oldPasswordTest, #passwordMatch {
+  position: absolute;
+  width: 60%;
+  top:20%;
 }
 
 #edtForm textarea {
@@ -926,6 +938,9 @@ a:-webkit-any-link {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  outline: none;
+  text-align: center;
+  font-size: larger;
 }
 
 
@@ -952,7 +967,7 @@ a:-webkit-any-link {
 
 .analyticsarticle {
   flex:1;
-  height:150px;
+  height:450px;
   margin: 10px;
   display: flex;
   align-items: center;
@@ -960,6 +975,7 @@ a:-webkit-any-link {
   color:#f9ebeb;
   flex-direction: column;
   flex-wrap: wrap;
+  position: relative;
 }
 
 #articleTitle {
@@ -970,7 +986,7 @@ a:-webkit-any-link {
 }
 
 .analyticsarticle * {
-  margin:0;
+  margin:5px;
 }
 
 #showTitle {
@@ -984,92 +1000,6 @@ a:-webkit-any-link {
   
   color:#f9ebeb;
 }
-
-
-
-/* follow page css start */
-.follow-container {
-  background-color: #db9292;
-  box-shadow: 10px 10px 10px #a48294;
-  border-radius: 10px;
-  margin: 65px auto;
-  width: 80%;
-  padding: 40px;
-}
-
-.follow-container ul {
-  list-style: none;
-  margin: auto;
-  padding: 0;
-}
-
-.follow-container li {
-  margin-left: 25%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.follow-container a {
-  color: #333;
-  text-decoration: none;
-}
-
-.follow-container img {
-  border-radius: 50%;
-}
-
-.follow-container span {
-  font-weight: bold;
-  font-size: x-large;
-  margin: 30px;
-}
-
-.follow-container .bTn {
-  background-color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bolder;
-  color: #db9292;
-  cursor: pointer;
-  margin-right: auto;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
-}
-
-.follow-container .bTn2 {
-  border: none;
-  padding: 0;
-  background: none;
-  cursor: pointer;
-}
-
-.follow-container .bTn:hover {
-  transform: scale(1.1);
-}
-
-.noneFollow {
-  color: #f9ebeb;
-  text-align: center;
-  font-style: italic;
-  font-size: 20px;
-}
-
-.nonefav {
-  color: #db9292;
-  text-align: center;
-  font-style: italic;
-  font-size: 25px;
-  margin-top: 85%;
-}
-
-.noneWritten {
-  color: #db9292;
-  text-align: center;
-  font-style: italic;
-  font-size: 25px;
-  margin-top: 65%;
-}
-/* follow page css end */
 
 /* profile page butttons start */
 
@@ -1161,16 +1091,21 @@ a:-webkit-any-link {
   list-style: none;
   margin: auto;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 10px; 
+  display: flex;
+  flex-direction: column;
 }
 
 .follow-container li {
   margin-left: 25%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 10px; 
+}
 
+
+.follow-container form * {
+  display: flex;
+  justify-content: center;
 }
 
 .follow-container a {
@@ -1180,12 +1115,14 @@ a:-webkit-any-link {
 
 .follow-container img {
   border-radius: 50%;
+  align-self: center;
 }
 
 .follow-container span {
   font-weight: bold;
   font-size: x-large;
   margin: 30px;
+  align-self: center;
 }
 
 .follow-container .bTn {
@@ -1198,6 +1135,7 @@ a:-webkit-any-link {
   cursor: pointer;
   margin-right: auto;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  align-items: center;
 }
 
 .follow-container .bTn2 {
@@ -1205,6 +1143,13 @@ a:-webkit-any-link {
   padding: 0;
   background: none;
   cursor: pointer;
+  align-items: center;
+}
+
+.follow-container .onlybtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .follow-container .bTn:hover {
