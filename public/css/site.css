@@ -15,10 +15,22 @@
   text-decoration: none;
 }
 
+.or{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 15px 0px;
+  text-decoration: none;
+}
+
 .nav .icon {
   display: block;
   text-align: center;
   padding: 3px 16px;
+}
+
+.nav .icon img{
+  border-radius: 50%;
 }
 
 .nav .leftnav {
@@ -259,7 +271,7 @@ a:-webkit-any-link {
   z-index: 1;
 }
 
-#login_fail_message {
+.login_fail_message {
   color: #f9ebeb;
   text-align: center;
   font-style: italic;
@@ -409,7 +421,7 @@ a:-webkit-any-link {
   z-index: 1;
 }
 
-#login_fail_message {
+.login_fail_message {
   color: #f9ebeb;
   text-align: center;
   font-style: italic;
@@ -876,6 +888,12 @@ a:-webkit-any-link {
   margin: 10px;
 }
 
+.hint-message{
+  color: rgb(158, 108, 108);
+  text-align: center;
+  font-style: italic;
+  font-size: 20px;
+}
 /* Full Article Page end */
 
 

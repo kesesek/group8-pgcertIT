@@ -13,6 +13,7 @@ async function showNotifications(req, res, next) {
         const notifications = await notificationDao.retrieveNotificationByStatus(req.cookies.authToken);
         const icon = await userDao.retrieveUserIconPathWithAuthToken(req.cookies.authToken);
         res.locals.iconpath = icon.filepath;
+        
         if (notifications.length > 0) {
             res.locals.notificationCount = notifications.length;
         }

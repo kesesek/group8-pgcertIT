@@ -120,16 +120,14 @@ saveBtn.addEventListener('click', function(){
         processData: false,
         contentType: false,
         success: function() {
-                alert("Saved!");
-                setTimeout(function(){
-                    window.location.reload;
-                },10000);
+            alert("Saved!");
+            window. scrollTo(0, 0);
+            location.reload();
         },
         error: function() {
             alert("Error. Failed to save. Please try again.");
-            setTimeout(function(){
-                window.location.reload;
-            },10000);
+            window. scrollTo(0, 0);
+            location.reload();
         }
     });
 });
@@ -151,24 +149,27 @@ dontdelect.onclick = function(){
     mask.style.display = "none";
 }
 
-confirmdelect.addEventListener('click' ,function(){
+{{!-- confirmdelect.addEventListener('click' ,function(){
     $.ajax({
         url: "/delectAccount",
         method: "post",
         dataType: 'json',
         success:function() {
-            window.location.href = "/";
-        },
-        error: function() {
-        alert("Error. Failed to delete. Please try again.");
-        setTimeout(function() {
+            alert("Account delete!");
+            setTimeout(function() {
                 window.location.href = "/";
             }, 10000);
+        },
+        error: function() {
+            alert("Error. Failed to delete. Please try again.");
+            setTimeout(function() {
+                location.href = "/";
+            }, 10000);
         }
-    })
+    });
 
         
-});
+}); --}}
 
     //6.if there is a file, make all radios disabled:
     const file = document.getElementById('editAvatar');
@@ -191,7 +192,7 @@ confirmdelect.addEventListener('click' ,function(){
 <div id="edit_account_container">
     <div id="mask"></div>
     {{#if user}}
-    <form id="edtForm">
+    {{!-- <form id="edtForm"> --}}
         <br>
         <label for="editAvatar">Avatar: </label>
         <input id="editAvatar" name="avatar" type="file" accept=".png,.jpg,.jpeg,.bmp">
@@ -263,20 +264,25 @@ confirmdelect.addEventListener('click' ,function(){
             <textarea id="desid" name="des" type="text" maxlength="500">{{user.description}}</textarea><br><br>
         </div>
 
+        <form action="./delectAccount" method="post">
         <div id="thinkTwice">
-            <div id="modalcontent" >
-                <p>Are you sure you want to delect this account?😭</p>
-                <p>🥺Please think twice🥺</p>
-            </div>
-            <button id="confirmdelect" type="submit">yes</button>
-            <button id="dontdelect" type="button">NOT NOW</button>
+            
+                <div id="modalcontent" >
+                    <p>Are you sure you want to delect this account?😭</p>
+                    <p>🥺Please think twice🥺</p>
+                </div>
+            
+                <button id="confirmdelect" type="submit">yes</button>
+            
+                <button id="dontdelect" type="button">NOT NOW</button>
         </div>
+        </form>
         
         <button class="btn" type="submit" id="saveBtn">Save all changes</button>
         <button class="btn" type="button" id="delectBtn">Delect this account</button><br><br>
 
         
         
-    </form>
+    {{!-- </form> --}}
     {{/if}}
 </div>
