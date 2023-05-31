@@ -210,7 +210,7 @@ window.addEventListener("load", async function(){
                     </div>  
                     <form action="./deleteComment" method="get">
                         <div class="deleteButton">
-                            <button type="submit" name="deleteComment" value=${comment.id}>Delete</button>
+                            <button type="submit" name="deleteComment" class="deleteComment" value=${comment.id}>Delete</button>
                         </div>
                     </form>
                 </div>
@@ -238,34 +238,43 @@ window.addEventListener("load", async function(){
 
     // delete/reply comments
     if (this.document.querySelector(".deleteButton")) {
-        if (this.document.querySelector(".hint-message")) {
-            const deleteFail = this.document.querySelector(".hint-message");
-            deleteFail.addEventListener("click", function(){
-                deleteFail.innerHTML = '';
-            })
-        }
-        // const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
-        // deleteButtonArray.forEach(deleteButton => {
-        //     deleteButton.addEventListener("click", async function () {
-        //         const comment = await getCommentJson();
-        //         const article = await getArticleJson();
-        //         const user = await getUserJson();
-        //         console.log(comment.user_id);
-        //         console.log(article.authorId);
-        //         console.log(user.id);
-        //         console.log(getCookie("authToken"));
-        //         if (!getCookie("authToken")){
-        //             alert('Please Log in to delete!');
-        //         } else if (user.id != article.authorId && user.id != comment.user_id) {
-        //             alert('Sorry! You do not have access to delete this comment.');
-        //         }
+        // if (this.document.querySelector(".hint-message")) {
+        //     const deleteFail = this.document.querySelector(".hint-message");
+        //     deleteFail.addEventListener("click", function(){
+        //         deleteFail.innerHTML = '';
         //     })
-        // });
+        // }
+        const deleteButtonArray = this.document.querySelectorAll(".deleteButton");
+        const submitDeleteButtonArray = this.document.querySelectorAll(".deleteComment");
+        for (let index = 0; index < deleteButtonArray.length; index++) {
+            const deleteButton = deleteButtonArray[index];
+            deleteButton.addEventListener("mouseover", async function(){
+                // console.log(submitDeleteButtonArray[index].value);
+                setCookie("commentId", submitDeleteButtonArray[index].value, 1);
+            })
+            deleteButton.addEventListener("click", async function () {
+                if (!getCookie("authToken")){
+                    alert('Please Log in to delete!');
+                } else {
+                    const comment = await getCommentJson();
+                    const article = await getArticleJson();
+                    const user = await getUserJson();
+                    console.log(getCookie("authToken"));
+                    console.log(getCookie("authToken"));
+                    console.log(comment.user_id);
+                    console.log(article.authorId);
+                    console.log(user.id);
+                    if (user.id != article.authorId && user.id != comment.user_id) {
+                        alert('Sorry! You do not have access to delete this comment.');
+                    }
+                }
+            })
+        };
 
         const replyButtonArray = this.document.querySelectorAll(".replyButton");
         const replyTextArray = this.document.querySelectorAll(".replyText");
         const replyCommentArray = this.document.querySelectorAll(".replyComment");
-        const replyCommentHint = this.document.querySelector(".hint-message");
+        // const replyCommentHint = this.document.querySelector(".hint-message");
         for (let index = 0; index < replyButtonArray.length; index++) {
             const replyButton = replyButtonArray[index];
             let replyDisplay = false;
@@ -273,9 +282,9 @@ window.addEventListener("load", async function(){
                 const replyText = replyTextArray[index];
                 const replyComment = replyCommentArray[index];
                 if (!getCookie("authToken")){
-                    // alert('Please Log in to reply!');
-                    replyCommentHint.innerHTML = "Please Log in to reply a comment!";
-                    window. scrollTo(0, 0);
+                    alert('Please Log in to reply!');
+                    // replyCommentHint.innerHTML = "Please Log in to reply a comment!";
+                    // window. scrollTo(0, 0);
                 } else{
                     if (!replyDisplay) {
                         replyText.innerHTML = `
@@ -295,9 +304,12 @@ window.addEventListener("load", async function(){
         };
 
         const commentButton = this.document.querySelector("#commentButton");
+        // const replyArticleHint = this.document.querySelector(".hint-message");
         commentButton.addEventListener("click", async function () {
             if (!getCookie("authToken")){
-                // alert('Please Log in to comment!');
+                alert('Please Log in to comment!');
+                // replyArticleHint.innerHTML = "Please Log in to reply the article!";
+                // window. scrollTo(0, 0);
             }
         });
 
@@ -319,7 +331,7 @@ window.addEventListener("load", async function(){
 
         async function getArticleJson(){
             const articleId = getCookieValue("articleId");
-            let articleResponse = await fetch(`http://localhost:3000/comment/${articleId}`);
+            let articleResponse = await fetch(`http://localhost:3000/article/${articleId}`);
             let articleJson = await articleResponse.json();
             return articleJson;
         };
@@ -327,10 +339,12 @@ window.addEventListener("load", async function(){
     }
 
     //when upload image in the addarticle page, the message will display since the image uploaded successfully
-    const inputBtn = document.querySelector("#inpFile");
-    const successSpan = document.querySelector("#success");
-    inputBtn.addEventListener("change", function(){
-        successSpan.innerHTML = `Upload successfully!`;
-    });
+    if (this.document.querySelector("#inpFile")) {
+        const inputBtn = document.querySelector("#inpFile");
+        const successSpan = document.querySelector("#success");
+        inputBtn.addEventListener("change", function(){
+            successSpan.innerHTML = `Upload successfully!`;
+        });
+    }
 });
 
