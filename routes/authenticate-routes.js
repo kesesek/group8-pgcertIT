@@ -118,7 +118,7 @@ router.post("/verifyOldPassword", showNotifications, async function (req, res) {
     const iterations = user.iterations;
     const hashedInputOldPassword = userDao.hashPassword(oldPassword, salt, iterations);
 
-    if(hashedInputOldPassword === oldHashed ) {
+    if (hashedInputOldPassword === oldHashed) {
         res.json(true);
     } else {
         res.json(false);
@@ -140,14 +140,14 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
     const newDes = req.body.newDes;
 
 
-    if(preAvatar) {
+    if (preAvatar) {
         const avatarID = await userDao.getPreIconId(preAvatar);
-        if(avatarID) {
+        if (avatarID) {
             await userDao.updateUserAvatar(authToken, avatarID.id);
-        }   
-    } 
-    
-    
+        }
+    }
+
+
 
     if (avatarFile) {
         const oldFileName = avatarFile.path;
@@ -169,28 +169,28 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
         await userDao.updatePassword(authToken, salt, iteration, newPassword);
     }
 
-    
-    if(newDb) {
+
+    if (newDb) {
         await userDao.updateDateBrith(authToken, newDb);
     }
 
 
-    if(newFname) {
+    if (newFname) {
         await userDao.updateFname(authToken, newFname);
     }
 
-    if(newMname) {
+    if (newMname) {
         await userDao.updateMname(authToken, newMname);
     }
 
 
-    if(newLname) {
+    if (newLname) {
 
         await userDao.updateLname(authToken, newLname);
     }
 
 
-    if(newDes) {
+    if (newDes) {
         await userDao.updateDescription(authToken, newDes);
     }
 
@@ -270,14 +270,16 @@ router.get("/favorite", showNotifications, async function (req, res) {
     res.locals.title = "Favorite Articles";
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const articles = await userDao.retrieveLikedArticlesByUserId(user_idObj.id);
-    // articles.forEach(article => {
-    //     if(article.title.length > 50){
-    //         article.title = article.title.substring(0, 50) + "...";
-    //     }
-    //     if(article.content.length > 100){
-    //         article.content = article.content.substring(0,100) + "...";
-    //     }
-    // });
+    articles.forEach(article => {
+        article.title = removeTags(article.title);
+        article.content = removeTags(article.content);
+        //     if(article.title.length > 50){
+        //         article.title = article.title.substring(0, 50) + "...";
+        //     }
+        //     if(article.content.length > 100){
+        //         article.content = article.content.substring(0,100) + "...";
+        //     }
+    });
     res.locals.user_id = user_idObj.id;
     res.locals.articles = articles;
 
@@ -302,6 +304,7 @@ router.get("/following", showNotifications, async function (req, res) {
 
     res.locals.following = following;
     res.locals.active_Following = true;
+    res.locals.title = "Following";
     res.render("following", { layout: 'sidebar&nav' });
 });
 
@@ -321,6 +324,7 @@ router.get("/follower", showNotifications, async function (req, res) {
 
     res.locals.follower = follower;
     res.locals.active_Follower = true;
+    res.locals.title = "Follower";
     res.render("follower", { layout: 'sidebar&nav' });
 });
 
@@ -342,13 +346,15 @@ router.get("/profile", showNotifications, async function (req, res) {
         if (targetId == undefined || targetId == user_idObj.id) {
             res.locals.active_myArticle = true;
             targetId = user_idObj.id;
-        }else{
+        } else {
             const targetProfile = await userDao.retrieveTargetProfileById(targetId);
             res.locals.T = targetProfile;
         }
         const articles = await userDao.retrieveUserArticlesByTargetId(targetId);
         const likedArticleIds = await userDao.retrieveLikedArticleIdsByUserId(user_idObj.id);
         for (let i = 0; i < articles.length; i++) {
+            articles[i].title = removeTags(articles[i].title);
+            articles[i].content = removeTags(articles[i].content);
             // if(articles[i].title.length > 50){
             //     articles[i].title = articles[i].title.substring(0, 50) + "...";
             // }
@@ -375,7 +381,7 @@ router.get("/profile", showNotifications, async function (req, res) {
     } else {
         res.redirect("/");
     }
-    
+
 });
 
 //user remove liked articles in the profile page
@@ -416,7 +422,7 @@ router.get("/deleteArticle", showNotifications, async function (req, res) {
 
 
 // analytics page⬇️
-router.get('/analytics', showNotifications, async function(req, res){
+router.get('/analytics', showNotifications, async function (req, res) {
     res.locals.title = "Analytics";
     res.locals.active_Analytics = true;
 
@@ -435,19 +441,32 @@ router.get('/analytics', showNotifications, async function(req, res){
     res.locals.commentsnumber = commentsnumber;
     res.locals.likes = likes;
 
-    if(allArticle) {
+    if (allArticle) {
 
         let toparticleInfoArray = [];
-        for(let i = 0; i < allArticle.length; i++) {
-            let title = allArticle[i].title;
+        for (let i = 0; i < allArticle.length; i++) {
+            // let title = allArticle[i].title;
+            let title = removeTags(allArticle[i].title);
+            if (title.length > 50) {
+                title = title.substring(0, 30) + "...";
+            }
+
             let commentsNum = await userDao.countArticleComment(allArticle[i].id);
             let likesNum = await userDao.countArticlelike(allArticle[i].id);
             let popularity = userDao.getArticlePopularity(commentsNum, likesNum);
             let time = allArticle[i].date_time;
             let index = null;
-            let content = allArticle[i].content.substring(0,100) + "...";
 
-            let thisArticleInfo = [index, content, title, time, commentsNum, likesNum, popularity];
+            //get the article id from the "allArticle" object
+            const article_id = allArticle[i].id;
+
+            // let content = allArticle[i].content.substring(0, 100) + "...";
+            let content = removeTags(allArticle[i].content);
+            // if (content.length > 100) {
+            //     content = content.substring(0, 100) + "...";
+            // }
+
+            let thisArticleInfo = [index, content, title, time, commentsNum, likesNum, popularity, article_id];
             toparticleInfoArray.push(thisArticleInfo);
         }
         const sortedArray = toparticleInfoArray.sort((a, b) => b[6] - a[6]);
@@ -460,28 +479,28 @@ router.get('/analytics', showNotifications, async function(req, res){
         res.locals.topThreeWithIndex = topThreeWithIndex;
     }
 
-    res.render("analytics", {layout: 'sidebar&nav'});
+    res.render("analytics", { layout: 'sidebar&nav' });
 })
 
-router.get('/commentdata', async function(req,res){
+router.get('/commentdata', async function (req, res) {
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const user_id = user.id;
 
     let tenDaysData = [];
     let currentDate = new Date();
-    for(let i = 0; i < 10; i++){
+    for (let i = 0; i < 10; i++) {
         let date = new Date(currentDate);
         date.setDate(date.getDate() - i);
         let year = date.getFullYear();
 
-        let month = date.getMonth() + 1; 
-        if(month < 10) {
+        let month = date.getMonth() + 1;
+        if (month < 10) {
             month = '0' + month;
         }
 
         let day = date.getDate();
-        if(day < 10) {
+        if (day < 10) {
             day = '0' + day;
         }
 
@@ -491,8 +510,8 @@ router.get('/commentdata', async function(req,res){
         let thisdate = `${month}-${day}`;
         let thiscomments = commentNum;
         let obj = {
-            date:thisdate,
-            commentNum:thiscomments
+            date: thisdate,
+            commentNum: thiscomments
         };
 
         tenDaysData.unshift(obj);
@@ -500,31 +519,35 @@ router.get('/commentdata', async function(req,res){
     res.send(tenDaysData);
 });
 
-router.get('/popularitydata', async function(req, res){
+router.get('/popularitydata', async function (req, res) {
     const authToken = req.cookies.authToken;
     const user = await userDao.getUserInfo(authToken);
     const user_id = user.id;
 
     let popularitydata = [];
     const articleArray = await userDao.getAllArticle(user_id);
-    if(articleArray) {
-        for(let i = 0; i < articleArray.length; i ++) {
+    if (articleArray) {
+        for (let i = 0; i < articleArray.length; i++) {
             let thisID = articleArray[i].id;
             let thisLikes = await userDao.countArticlelike(thisID);
             let thisComments = await userDao.countArticleComment(thisID);
             let thisPopularity = userDao.getArticlePopularity(thisComments, thisLikes);
-            let thisArticle = {id:thisID, popularity:thisPopularity};
+            let thisArticle = { id: thisID, popularity: thisPopularity };
             popularitydata.push(thisArticle);
         }
         popularitydata.sort((a, b) => a.id - b.id);
         popularitydata = popularitydata.map((obj, index) => ({
             ...obj,
             index: index + 1
-          }));
+        }));
     }
     res.send(popularitydata);
 
 });
+
+function removeTags(str) {
+    return str.replace(/<[^>]*>/g, '');
+}
 
 
 module.exports = router;

@@ -1,32 +1,32 @@
-window.addEventListener("load", async function(){
+window.addEventListener("load", async function () {
     if (document.querySelector(".notifications")) {
         const notificationBell = document.querySelector(".notifications");
         const notificationContainer = document.getElementById('notification-container');
 
         let notificationShowed = false;
 
-        notificationBell.addEventListener("click", function(){
-            if(notificationShowed){
+        notificationBell.addEventListener("click", function () {
+            if (notificationShowed) {
                 hideNotification();
                 notificationShowed = false;
-            } else{
+            } else {
                 showNotification();
                 notificationShowed = true;
             }
         });
 
-        function showNotification(){
+        function showNotification() {
             notificationContainer.classList.remove('hide');
         };
 
-        function hideNotification(){
+        function hideNotification() {
             notificationContainer.classList.add('hide');
         };
 
         // change notifications status when it is clicked
         const notification = this.document.querySelectorAll(".notification-info");
         notification.forEach(message => {
-            message.addEventListener("click", function(){
+            message.addEventListener("click", function () {
                 message.classList.add('read');
             })
         });
@@ -35,7 +35,7 @@ window.addEventListener("load", async function(){
         if (this.document.querySelector(".notificationId")) {
             const notificationIdArray = this.document.querySelectorAll(".notificationId");
             notificationIdArray.forEach(notificationId => {
-                notificationId.addEventListener("mouseover", async function(){
+                notificationId.addEventListener("mouseover", async function () {
                     const notification = await getNotificationJson(notificationId.value);
                     setCookie("notificationId", notificationId.value, 1);
                     if (notification.article_id) {
@@ -45,7 +45,7 @@ window.addEventListener("load", async function(){
             });
         }
 
-        async function getNotificationJson(notificationId){
+        async function getNotificationJson(notificationId) {
             let notificationResponse = await fetch(`/notification/${notificationId}`);
             let notificationJson = await notificationResponse.json();
             return notificationJson;
@@ -60,7 +60,7 @@ window.addEventListener("load", async function(){
             or.innerHTML = ``;
             signupLabel.innerHTML = ``;
             const logoutLabel = this.document.querySelector(".logout");
-            logoutLabel.addEventListener("click", function(){
+            logoutLabel.addEventListener("click", function () {
                 deleteCookie("authToken");
                 deleteCookie("toastMessage");
             })
@@ -72,15 +72,15 @@ window.addEventListener("load", async function(){
 
         // check whether the user can go to their personal profile page(login or not)
         const navIcon = this.document.querySelector(".navIcon");
-        navIcon.addEventListener("click", function(){
-            if (!getCookie("authToken")){
+        navIcon.addEventListener("click", function () {
+            if (!getCookie("authToken")) {
                 alert('Please Log in to go to your personal page!');
             }
         })
     }
 
     if (document.querySelector("#username")) {
-            //get all user names from the page we created, return the Json
+        //get all user names from the page we created, return the Json
         async function getAllUserNames() {
             let userNamesResponse = await fetch("http://localhost:3000/allusernames");
             let userNamesJson = await userNamesResponse.json();
@@ -113,13 +113,23 @@ window.addEventListener("load", async function(){
         const passWordInput1 = document.querySelector("#password");
         const passWordInput2 = document.querySelector("#comPassword");
 
+
+        //function that re-check if the first password is different from the second password
+        passWordInput1.addEventListener("input", function () {
+            passLabel.innerHTML = "";
+            let passWordValue1 = passWordInput1.value;
+            let passWordValue2 = passWordInput2.value;
+            if ((passWordValue1 != passWordValue2) && (passWordValue2 != "")) {
+                passLabel.innerHTML = `Different password input!`;
+            }
+        });
+
         //function that check if the re-enter password is different from the first password
         passWordInput2.addEventListener("input", function () {
             passLabel.innerHTML = "";
             let passWordValue1 = passWordInput1.value;
             let passWordValue2 = passWordInput2.value;
-
-            if(passWordValue1 != passWordValue2){
+            if (passWordValue1 != passWordValue2) {
                 passLabel.innerHTML = `Different password input!`;
             }
         });
@@ -129,31 +139,31 @@ window.addEventListener("load", async function(){
     if (this.document.querySelector(".readMore")) {
         const readMoreButtons = this.document.querySelectorAll(".readMore");
         readMoreButtons.forEach(readMore => {
-            readMore.addEventListener("click", function(){
+            readMore.addEventListener("click", function () {
                 setCookie("articleId", readMore.value, 1)
             })
         });
     }
 
     // add/remove favorites in the all articles page
-    if(this.document.querySelector(".favorite")){
+    if (this.document.querySelector(".favorite")) {
         const favoritebuttons = this.document.querySelectorAll(".favorite");
         for (let index = 0; index < favoritebuttons.length; index++) {
             const button = favoritebuttons[index];
-            button.addEventListener("click", function(){
-                if (!getCookie("authToken")){
+            button.addEventListener("click", function () {
+                if (!getCookie("authToken")) {
                     alert('Please Log in to add Favorites!');
                 }
             })
         }
     }
-    
+
 
     // subscribe/unsubscribe in the full articles page
-    if(this.document.querySelector(".subscribeStatus")){
+    if (this.document.querySelector(".subscribeStatus")) {
         const subscribebuttons = this.document.querySelector(".subscribeStatus");
-        subscribebuttons.addEventListener("click", function(){
-            if (!getCookie("authToken")){
+        subscribebuttons.addEventListener("click", function () {
+            if (!getCookie("authToken")) {
                 alert('Please Log in to subscribe!');
             }
         })
@@ -166,12 +176,12 @@ window.addEventListener("load", async function(){
         const comments = await getNestedCommentsJson();
         if (comments.length == 0) {
             commentBlock.innerHTML = `<p>No comments yet.</p>`
-        } else{
+        } else {
             const result = commentRecursion(comments);
             commentBlock.innerHTML = result;
         }
         let commentHide = false;
-        hideCommentButton.addEventListener("click", async function(){
+        hideCommentButton.addEventListener("click", async function () {
             if (commentHide) {
                 commentBlock.classList.remove('hide');
                 hideCommentButton.innerHTML = 'Hide Comments';
@@ -179,7 +189,7 @@ window.addEventListener("load", async function(){
                 const comments = await getNestedCommentsJson();
                 if (comments.length == 0) {
                     commentBlock.innerHTML = `<p>No comments yet.</p>`
-                } else{
+                } else {
                     const result = commentRecursion(comments);
                     commentBlock.innerHTML = result;
                 }
@@ -191,8 +201,8 @@ window.addEventListener("load", async function(){
             }
         });
 
-        
-        function commentRecursion(commentArray){
+
+        function commentRecursion(commentArray) {
             let list = ``;
             list += `<ul>`;
             commentArray.forEach(comment => {
@@ -228,7 +238,7 @@ window.addEventListener("load", async function(){
             return list;
         }
 
-        async function getNestedCommentsJson(){
+        async function getNestedCommentsJson() {
             const articleId = getCookieValue("articleId");
             let commentsResponse = await fetch(`/articleComments/${articleId}`);
             let commentsJson = await commentsResponse.json();
@@ -248,12 +258,12 @@ window.addEventListener("load", async function(){
         const submitDeleteButtonArray = this.document.querySelectorAll(".deleteComment");
         for (let index = 0; index < deleteButtonArray.length; index++) {
             const deleteButton = deleteButtonArray[index];
-            deleteButton.addEventListener("mouseover", async function(){
+            deleteButton.addEventListener("mouseover", async function () {
                 // console.log(submitDeleteButtonArray[index].value);
                 setCookie("commentId", submitDeleteButtonArray[index].value, 1);
             })
             deleteButton.addEventListener("click", async function () {
-                if (!getCookie("authToken")){
+                if (!getCookie("authToken")) {
                     alert('Please Log in to delete!');
                 } else {
                     const comment = await getCommentJson();
@@ -281,11 +291,11 @@ window.addEventListener("load", async function(){
             replyButton.addEventListener("click", function () {
                 const replyText = replyTextArray[index];
                 const replyComment = replyCommentArray[index];
-                if (!getCookie("authToken")){
+                if (!getCookie("authToken")) {
                     alert('Please Log in to reply!');
                     // replyCommentHint.innerHTML = "Please Log in to reply a comment!";
                     // window. scrollTo(0, 0);
-                } else{
+                } else {
                     if (!replyDisplay) {
                         replyText.innerHTML = `
                         <div id="commentEditor" style="width: 82.5%;">
@@ -295,7 +305,7 @@ window.addEventListener("load", async function(){
                             </form>
                         </div>`;
                         replyDisplay = true;
-                    } else{
+                    } else {
                         replyText.innerHTML = '';
                         replyDisplay = false;
                     }
@@ -306,7 +316,7 @@ window.addEventListener("load", async function(){
         const commentButton = this.document.querySelector("#commentButton");
         // const replyArticleHint = this.document.querySelector(".hint-message");
         commentButton.addEventListener("click", async function () {
-            if (!getCookie("authToken")){
+            if (!getCookie("authToken")) {
                 alert('Please Log in to comment!');
                 // const hint = document.querySelector("#noAccessCommentHint");
                 // hint.style.display = "block";
@@ -317,21 +327,21 @@ window.addEventListener("load", async function(){
 
         // To check whether the user has the access to delete the comment
         // So that we can alert the user or not 
-        async function getUserJson(){
+        async function getUserJson() {
             const authToken = getCookieValue("authToken");
             let userResponse = await fetch(`http://localhost:3000/user/${authToken}`);
             let userJson = await userResponse.json();
             return userJson;
         };
 
-        async function getCommentJson(){
+        async function getCommentJson() {
             const commentId = getCookieValue("commentId");
             let commentResponse = await fetch(`http://localhost:3000/comment/${commentId}`);
             let commentJson = await commentResponse.json();
             return commentJson;
         };
 
-        async function getArticleJson(){
+        async function getArticleJson() {
             const articleId = getCookieValue("articleId");
             let articleResponse = await fetch(`http://localhost:3000/article/${articleId}`);
             let articleJson = await articleResponse.json();
@@ -344,7 +354,7 @@ window.addEventListener("load", async function(){
     if (this.document.querySelector("#inpFile")) {
         const inputBtn = document.querySelector("#inpFile");
         const successSpan = document.querySelector("#success");
-        inputBtn.addEventListener("change", function(){
+        inputBtn.addEventListener("change", function () {
             successSpan.innerHTML = `Upload successfully!`;
         });
     }

@@ -935,6 +935,12 @@ a:-webkit-any-link {
 }
 
 .article-content p {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.article-content li {
+  white-space: pre-wrap;
   word-break: break-all;
 }
 
@@ -1367,7 +1373,7 @@ a:-webkit-any-link {
   text-align: center;
   font-style: italic;
   font-size: 25px;
-  margin-top: 7.5%;
+  margin-top: 22.5%;
 }
 
 .actions {
@@ -1428,7 +1434,7 @@ a:-webkit-any-link {
 
 .card2 {
   background-color: #db9292;
-  width: 500px;
+  width:auto;
   margin: 30px 20px;
   padding: 10px;
   border-radius: 10px;
@@ -1437,7 +1443,7 @@ a:-webkit-any-link {
 }
 
 .card2 p {
-  max-height: 45px;
+  max-height: 80px;
   /* white-space: nowrap; */
   word-break: break-all;
   overflow: hidden;
@@ -1453,7 +1459,7 @@ a:-webkit-any-link {
 }
 
 .card p {
-  max-height: 45px;
+  max-height: 100px;
   /* white-space: nowrap; */
   word-break: break-all;
   overflow: hidden;
