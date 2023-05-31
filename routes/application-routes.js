@@ -129,10 +129,12 @@ router.get("/article", showNotifications, async function(req, res) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
         res.locals.username = user.username;
-        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
-        if (likeStatus) {
-            res.locals.like = true;
-        }
+        const likeArticles = await articleDao.retrieveLikeByArticleIdandUserId(userId);
+        likeArticles.forEach(like => {
+            if (req.cookies.articleId == like.article_id) {
+                res.locals.like = true;
+            }
+        });
         const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         subscribers.forEach(subscriber => {
             if (subscriber.subscribed_id == userId) {
@@ -147,7 +149,6 @@ router.get("/article", showNotifications, async function(req, res) {
 
 // like/dislike articles at the full article page
 router.get("/dislikeFullArticle", showNotifications, async function(req, res) {
-    
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
@@ -240,9 +241,11 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithReplyComment(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
+        
     }
 
     res.redirect("/article");
+
     // res.render("fullArticle");
 
 });
@@ -346,7 +349,7 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
 
 router.get("/unsubscribe", showNotifications, async function(req, res) {
   
-    res.locals.title = "Full Article";
+    // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.query.subscribeOrNot);
     
@@ -354,27 +357,28 @@ router.get("/unsubscribe", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
-        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
-        if (likeStatus) {
-            res.locals.like = true;
-        }
+        // const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        // if (likeStatus) {
+        //     res.locals.like = true;
+        // }
         await userDao.unsubscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
         await notificationDao.deleteNotificationWithNewSubscribe(userId, res.locals.article.authorId);
-        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
-        subscribers.forEach(subscriber => {
-            if (subscriber.subscribed_id == userId) {
-                res.locals.subscribe = true;
-            }
-        });
+        // const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        // subscribers.forEach(subscriber => {
+        //     if (subscriber.subscribed_id == userId) {
+        //         res.locals.subscribe = true;
+        //     }
+        // });
     }
 
-    res.render("fullArticle");
+    res.redirect("/article");
+    // res.render("fullArticle");
 
 });
 
 router.get("/subscribe", showNotifications, async function(req, res) {
   
-    res.locals.title = "Full Article";
+    // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.query.subscribeOrNot);
     
@@ -382,21 +386,22 @@ router.get("/subscribe", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
-        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
-        if (likeStatus) {
-            res.locals.like = true;
-        }
+        // const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        // if (likeStatus) {
+        //     res.locals.like = true;
+        // }
         await userDao.subscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
         await notificationDao.addNotificationWithNewSubscribe(userId, res.locals.article.authorId);
-        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
-        subscribers.forEach(subscriber => {
-            if (subscriber.subscribed_id == userId) {
-                res.locals.subscribe = true;
-            }
-        });
+        // const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        // subscribers.forEach(subscriber => {
+        //     if (subscriber.subscribed_id == userId) {
+        //         res.locals.subscribe = true;
+        //     }
+        // });
     }
 
-    res.render("fullArticle");
+    res.redirect("/article");
+    // res.render("fullArticle");
 
 });
 

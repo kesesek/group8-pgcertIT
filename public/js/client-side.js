@@ -308,6 +308,8 @@ window.addEventListener("load", async function(){
         commentButton.addEventListener("click", async function () {
             if (!getCookie("authToken")){
                 alert('Please Log in to comment!');
+                // const hint = document.querySelector("#noAccessCommentHint");
+                // hint.style.display = "block";
                 // replyArticleHint.innerHTML = "Please Log in to reply the article!";
                 // window. scrollTo(0, 0);
             }

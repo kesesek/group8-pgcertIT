@@ -136,16 +136,15 @@ async function retrieveImageById(imageId) {
     return imagePath;
 }
 
-async function retrieveLikeByArticleIdandUserId(userId, articleId) {
+async function retrieveLikeByArticleIdandUserId(userId) {
     const db = await dbPromise;
 
-    const likeStatus = await db.get(SQL`
+    const likeArtciles = await db.all(SQL`
         select article_id
         from likes
-        where user_id = ${userId}
-        and article_id = ${articleId}`);
+        where user_id = ${userId}`);
     
-    return likeStatus;
+    return likeArtciles;
 }
 
 // Export functions.

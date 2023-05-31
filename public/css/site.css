@@ -1051,6 +1051,23 @@ a:-webkit-any-link {
 .commentSubmitButton, .commentContent{
   margin: 10px;
 }
+
+#noAccessCommentHint, #noAccessReplyHint, #noAccessDeleteHint {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  left: 27%;
+  top: 30%;
+
+  width: 60%;
+  height: 40%;
+  overflow: auto;
+  border: rgb(158, 108, 108) solid 2px;
+  border-radius: 10px;
+  background-color: #f9ebeb;
+  text-align: center;
+
+}
 /* Full Article Page end */
 
 

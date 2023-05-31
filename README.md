@@ -6,7 +6,7 @@ Your team should update this README to include the information required, as pres
 
 To whom it may consern,
 
-For login, the user name are:
+For login, the username are:
 bandalls(who is the admin)
 wattlexp
 sweetiele
@@ -18,4 +18,5 @@ heroanhart
 liveltekah
 linguss
 
-the password are "pa55word"
+the password is "pa55word"
+
