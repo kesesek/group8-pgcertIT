@@ -24,10 +24,13 @@ router.get("/", showNotifications, async function(req, res) {
         res.locals.T = targetProfile;
     }
 
-    const articles = await articleDao.retrievePartialArticles(8, userId);
+    const articles = await articleDao.retrievePartialArticles(6, userId);
     // articles.forEach(article => {
     //     article.content = article.content.substring(0,100) + "...";
     // });
+    if (req.cookies.profileNoAccess == "true") {
+        res.locals.profileNoAccess = true;
+    }
 
     res.locals.article = articles;
 
@@ -55,6 +58,10 @@ router.get("/allArticles", showNotifications, async function(req, res) {
         // }
     });
     res.locals.article = articles;
+
+    if (req.cookies.likeNoAccess == "true") {
+        res.locals.likeNoAccess = true;
+    }
 
     res.render("allArticles");
 
@@ -88,6 +95,8 @@ router.get("/addLikedArticles", showNotifications, async function(req, res) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
         await articleDao.insertLikedArticles(userId, req.query.likeAction);
+    } else{
+        res.cookie("likeNoAccess", true);
     }
     const articleNumbers = await articleDao.retrieveArticleNumbers();
     res.locals.article = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
@@ -122,6 +131,25 @@ router.get("/article", showNotifications, async function(req, res) {
     if (res.locals.article.imageId) {
         const imagePath = await articleDao.retrieveImageById(res.locals.article.imageId);
         res.locals.imagePath = imagePath.filename;
+    }
+
+    if (req.cookies.commentNoAccess == "true") {
+        res.locals.commentNoAccess = true;
+    }
+    if (req.cookies.deleteNoLogin == "true") {
+        res.locals.deleteNoLogin = true;
+    }
+    if (req.cookies.deleteNoAccess == "true") {
+        res.locals.deleteNoAccess = true;
+    }
+    if (req.cookies.subscribeNoAccess == "true") {
+        res.locals.subscribeNoAccess = true;
+    }
+    if (req.cookies.likeNoAccess == "true") {
+        res.locals.likeNoAccess = true;
+    }
+    if (req.cookies.subscribeYourself == "true") {
+        res.locals.subscribeYourself = true;
     }
     
     let userId = 0;
@@ -167,6 +195,8 @@ router.get("/likeFullArticle", showNotifications, async function(req, res) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
         await articleDao.insertLikedArticles(userId, req.cookies.articleId);
+    } else{
+        res.cookie("likeNoAccess", true);
     }
 
     res.redirect("/article");
@@ -276,13 +306,15 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
         if (userId == comment.user_id || userId == res.locals.article.authorId) {
             await commentDao.deleteCommentById(comment.id);
         } 
-        // else{
-        //     res.locals.deleteNoAccess = "Sorry! You do not have access to delete this comment.";
-        // }
+        else{
+            res.cookie("deleteNoAccess", true);
+            res.locals.deleteNoAccess = "Sorry! You do not have access to delete this comment.";
+        }
     } 
-    // else {
-    //     res.locals.deleteNoAccess = "Please Log in to delete!";
-    // }
+    else {
+        res.cookie("deleteNoLogin", true);
+        // res.locals.deleteNoAccess = "Please Log in to delete!";
+    }
 
     res.redirect("/article");
     // res.render("fullArticle");
@@ -317,6 +349,7 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
     
     let userId = 0;
     if (req.cookies.authToken) {
+        res.cookie("commentNoAccess", false);
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
         // const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
@@ -337,10 +370,10 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithCommentToArticle(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
-    } 
-    // else{
-    //     res.locals.deleteNoAccess = "Please Log in to comment!";
-    // }
+    } else {
+        res.cookie("commentNoAccess", true);
+        // res.locals.deleteNoAccess = "Please Log in to comment!";
+    }
 
     res.redirect("/article");
     // res.render("fullArticle");
@@ -390,14 +423,20 @@ router.get("/subscribe", showNotifications, async function(req, res) {
         // if (likeStatus) {
         //     res.locals.like = true;
         // }
-        await userDao.subscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
-        await notificationDao.addNotificationWithNewSubscribe(userId, res.locals.article.authorId);
+        if (userId != res.locals.article.authorId) {
+            await userDao.subscribeWithUserIdAndArticleId(userId, res.locals.article.authorId);
+            await notificationDao.addNotificationWithNewSubscribe(userId, res.locals.article.authorId);
+        } else{
+            res.cookie("subscribeYourself", true);
+        }
         // const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
         // subscribers.forEach(subscriber => {
         //     if (subscriber.subscribed_id == userId) {
         //         res.locals.subscribe = true;
         //     }
         // });
+    } else{
+        res.cookie("subscribeNoAccess", true);
     }
 
     res.redirect("/article");

@@ -74,9 +74,18 @@ window.addEventListener("load", async function(){
         const navIcon = this.document.querySelector(".navIcon");
         navIcon.addEventListener("click", function(){
             if (!getCookie("authToken")){
-                alert('Please Log in to go to your personal page!');
+                // alert('Please Log in to go to your personal page!');
             }
         })
+        if (document.querySelector(".closeProfileHint")) {
+            const closeHint = document.querySelector(".closeProfileHint");
+            closeHint.addEventListener("click", function(){
+                const hint = document.querySelector("#noAccessProfileHint");
+                hint.style.display = "none";
+                deleteCookie("profileNoAccess");
+                // setCookie("profileNoAccess", false, 1);
+            });
+        }
     }
 
     if (document.querySelector("#username")) {
@@ -142,10 +151,19 @@ window.addEventListener("load", async function(){
             const button = favoritebuttons[index];
             button.addEventListener("click", function(){
                 if (!getCookie("authToken")){
-                    alert('Please Log in to add Favorites!');
+                    // alert('Please Log in to add Favorites!');
                 }
             })
         }
+    }
+    if (document.querySelector(".closeLikeHint")) {
+        const closeHint = document.querySelector(".closeLikeHint");
+        closeHint.addEventListener("click", function(){
+            const hint = document.querySelector("#noAccessLikeHint");
+            hint.style.display = "none";
+            // setCookie("likeNoAccess", false, 1);
+            deleteCookie("likeNoAccess");
+        });
     }
     
 
@@ -154,10 +172,28 @@ window.addEventListener("load", async function(){
         const subscribebuttons = this.document.querySelector(".subscribeStatus");
         subscribebuttons.addEventListener("click", function(){
             if (!getCookie("authToken")){
-                alert('Please Log in to subscribe!');
+                // alert('Please Log in to subscribe!');
             }
         })
     };
+    if (document.querySelector(".closeSubscribeHint")) {
+        const closeHint = document.querySelector(".closeSubscribeHint");
+        closeHint.addEventListener("click", function(){
+            const hint = document.querySelector("#noAccessSubscribeHint");
+            hint.style.display = "none";
+            // setCookie("subscribeNoAccess", false, 1);
+            deleteCookie("subscribeNoAccess");
+        });
+    }
+    if (document.querySelector(".closesubscribeYourselfHint")) {
+        const closeHint = document.querySelector(".closesubscribeYourselfHint");
+        closeHint.addEventListener("click", function(){
+            const hint = document.querySelector("#subscribeYourselfHint");
+            hint.style.display = "none";
+            // setCookie("subscribeNoAccess", false, 1);
+            deleteCookie("subscribeYourself");
+        });
+    }
 
     //hide or show comments of an article
     if (this.document.querySelector(".hide-or-show")) {
@@ -207,7 +243,7 @@ window.addEventListener("load", async function(){
                 <div class="button-combo">
                     <div class="replyButton">
                         <button name="replyComment" class="replyComment" value=${comment.id}>Reply</button>
-                    </div>  
+                    </div>
                     <form action="./deleteComment" method="get">
                         <div class="deleteButton">
                             <button type="submit" name="deleteComment" class="deleteComment" value=${comment.id}>Delete</button>
@@ -224,7 +260,6 @@ window.addEventListener("load", async function(){
                 </li>`;
             });
             list += `</ul>`;
-            // console.log(list);
             return list;
         }
 
@@ -254,7 +289,9 @@ window.addEventListener("load", async function(){
             })
             deleteButton.addEventListener("click", async function () {
                 if (!getCookie("authToken")){
-                    alert('Please Log in to delete!');
+                    // alert('Please Log in to delete!');
+                    // const hint = document.querySelector("#noAccessDeleteHint");
+                    // hint.style.display = "block";
                 } else {
                     const comment = await getCommentJson();
                     const article = await getArticleJson();
@@ -265,11 +302,29 @@ window.addEventListener("load", async function(){
                     console.log(article.authorId);
                     console.log(user.id);
                     if (user.id != article.authorId && user.id != comment.user_id) {
-                        alert('Sorry! You do not have access to delete this comment.');
+                        // alert('Sorry! You do not have access to delete this comment.');
                     }
                 }
             })
         };
+        if (document.querySelector(".closeNoLoginDeleteHint")) {
+            const closeHint = document.querySelector(".closeNoLoginDeleteHint");
+            closeHint.addEventListener("click", function(){
+                const hint = document.querySelector("#noLoginDeleteHint");
+                hint.style.display = "none";
+                // setCookie("deleteNoLogin", false, 1);
+                deleteCookie("deleteNoLogin");
+            });
+        }
+        if (document.querySelector(".closeNoAccessDeleteHint")) {
+            const closeHint = document.querySelector(".closeNoAccessDeleteHint");
+            closeHint.addEventListener("click", function(){
+                const hint = document.querySelector("#noAccessDeleteHint");
+                hint.style.display = "none";
+                // setCookie("deleteNoAccess", false, 1);
+                deleteCookie("deleteNoAccess");
+            });
+        }
 
         const replyButtonArray = this.document.querySelectorAll(".replyButton");
         const replyTextArray = this.document.querySelectorAll(".replyText");
@@ -282,7 +337,9 @@ window.addEventListener("load", async function(){
                 const replyText = replyTextArray[index];
                 const replyComment = replyCommentArray[index];
                 if (!getCookie("authToken")){
-                    alert('Please Log in to reply!');
+                    // alert('Please Log in to reply!');
+                    const hint = document.querySelector("#noAccessReplyHint");
+                    hint.style.display = "block";
                     // replyCommentHint.innerHTML = "Please Log in to reply a comment!";
                     // window. scrollTo(0, 0);
                 } else{
@@ -307,13 +364,22 @@ window.addEventListener("load", async function(){
         // const replyArticleHint = this.document.querySelector(".hint-message");
         commentButton.addEventListener("click", async function () {
             if (!getCookie("authToken")){
-                alert('Please Log in to comment!');
+                // alert('Please Log in to comment!');
                 // const hint = document.querySelector("#noAccessCommentHint");
                 // hint.style.display = "block";
                 // replyArticleHint.innerHTML = "Please Log in to reply the article!";
                 // window. scrollTo(0, 0);
             }
         });
+        if (document.querySelector(".closeCommentHint")) {
+            const closeHint = document.querySelector(".closeCommentHint");
+            closeHint.addEventListener("click", function(){
+                const hint = document.querySelector("#noAccessCommentHint");
+                hint.style.display = "none";
+                // setCookie("commentNoAccess", false, 1);
+                deleteCookie("commentNoAccess");
+            });
+        }
 
         // To check whether the user has the access to delete the comment
         // So that we can alert the user or not 
@@ -346,6 +412,17 @@ window.addEventListener("load", async function(){
         const successSpan = document.querySelector("#success");
         inputBtn.addEventListener("change", function(){
             successSpan.innerHTML = `Upload successfully!`;
+        });
+    }
+
+    // edit Account page
+    if (document.querySelector(".closeSaveHint")) {
+        const closeHint = document.querySelector(".closeSaveHint");
+        closeHint.addEventListener("click", function(){
+            const hint = document.querySelector("#saveSuccess");
+            hint.style.display = "none";
+            // setCookie("saveSuccess", false, 1);
+            deleteCookie("saveSuccess");
         });
     }
 });

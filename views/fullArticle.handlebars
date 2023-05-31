@@ -37,22 +37,60 @@
     </div>
 </div>
 
+{{#if commentNoAccess}}
 <div id="noAccessCommentHint">
-    <div id="modalcontent" class="commentHint">
+    <div class="commentHint">
         <p>Please Log in or Sign up to comment the article.</p>
-        <button><a href="./article">OK</a></button>
+        <button class="closeCommentHint">OK</button>
     </div>
 </div>
+{{/if}}
 <div id="noAccessReplyHint">
-    <div id="modalcontent" class="commentHint">
+    <div class="commentHint">
         <p>Please Log in or Sign up to reply the comment.</p>
+        <a href="./article"><button>OK</button></a>
     </div>
 </div>
-<div id="noAccessDeleteHint">
-    <div id="modalcontent" class="commentHint">
+{{#if deleteNoLogin}}
+<div id="noLoginDeleteHint">
+    <div class="commentHint">
         <p>Please Log in to delete the comment.</p>
+        <button class="closeNoLoginDeleteHint">OK</button>
     </div>
 </div>
+{{/if}}
+{{#if deleteNoAccess}}
+<div id="noAccessDeleteHint">
+    <div class="commentHint">
+        <p>Sorry! You do not have access to delete this comment.</p>
+        <button class="closeNoAccessDeleteHint">OK</button>
+    </div>
+</div>
+{{/if}}
+{{#if subscribeNoAccess}}
+<div id="noAccessSubscribeHint">
+    <div class="commentHint">
+        <p>Please Log in or Sign up to subscribe!</p>
+        <button class="closeSubscribeHint">OK</button>
+    </div>
+</div>
+{{/if}}
+{{#if likeNoAccess}}
+<div id="noAccessLikeHint">
+    <div class="commentHint">
+        <p>Please Log in or Sign up to add Favorites!</p>
+        <button class="closeLikeHint">OK</button>
+    </div>
+</div>
+{{/if}}
+{{#if subscribeYourself}}
+<div id="subscribeYourselfHint">
+    <div class="commentHint">
+        <p>You cannot subscribe yourself!</p>
+        <button class="closesubscribeYourselfHint">OK</button>
+    </div>
+</div>
+{{/if}}
 
 <div class="comments-container">
     <div class="others-comments">
