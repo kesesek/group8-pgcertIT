@@ -106,6 +106,11 @@ router.get("/editAccount", showNotifications, async function (req, res) {
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
     res.locals.active_EditAccount = true;
+
+    if (req.cookies.saveSuccess == "true") {
+        res.locals.saveSuccess = true;
+    }
+
     res.render("editAccount", { layout: 'sidebar&nav' });
 });
 
@@ -194,6 +199,7 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
         await userDao.updateDescription(authToken, newDes);
     }
 
+    res.cookie("saveSuccess", true);
 
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
@@ -373,6 +379,7 @@ router.get("/profile", showNotifications, async function (req, res) {
 
         res.render("profile", { layout: 'sidebar&nav' });
     } else {
+        res.cookie("profileNoAccess", true);
         res.redirect("/");
     }
     

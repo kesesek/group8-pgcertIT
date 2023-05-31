@@ -99,7 +99,7 @@
                     <p class="message">
                         {{this.message}}
                         {{#if this.articleTitle}}
-                        "{{this.articleTitle}}"
+                        "{{{this.articleTitle}}}"
                         {{/if}}
                     </p>
                     <p class="message datastamp">{{this.datastamp}}</p>
@@ -116,6 +116,15 @@
     {{/if}}
 </div>
 {{!-- notification pop up window end --}}
+
+{{#if profileNoAccess}}
+<div id="noAccessProfileHint">
+    <div class="commentHint">
+        <p>Please Log in or Sign up to go to your personal page!</p>
+        <button class="closeProfileHint">OK</button>
+    </div>
+</div>
+{{/if}}
 
 <body class="bodywithnav">
     {{{body}}}

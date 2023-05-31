@@ -9,6 +9,7 @@ router.post("/api/login", async function(req, res){
     const user = await userDao.retrieveUserWithCredentials(req.body.username, req.body.password);
     if (user) {
         const authToken = uuid();
+        user.authToken = authToken;
         await userDao.updateUser(user);
         res.cookie("authToken", authToken);
         res.status(204).json(authToken);

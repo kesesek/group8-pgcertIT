@@ -113,6 +113,8 @@ saveBtn.addEventListener('click', function(){
     formData.append('newLname', newLname);
     formData.append('newDes', newDes);
 
+    const saveSuccess = document.querySelector("#saveSuccess");
+
     $.ajax({
         url: "/saveAll",
         method:"POST",
@@ -120,9 +122,10 @@ saveBtn.addEventListener('click', function(){
         processData: false,
         contentType: false,
         success: function() {
-            alert("Saved!");
+            {{!-- alert("Saved!"); --}}
             window. scrollTo(0, 0);
             location.reload();
+            saveSuccess.style.display = "block";
         },
         error: function() {
             alert("Error. Failed to save. Please try again.");
@@ -278,9 +281,18 @@ dontdelect.onclick = function(){
         </form>
         
         <button class="btn" type="submit" id="saveBtn">Save all changes</button>
-        <button class="btn" type="button" id="delectBtn">Delect this account</button><br><br>
+        <button class="btn" type="button" id="delectBtn">Delete this account</button><br><br>
 
         
     </div>   
     {{/if}}
 </div>
+
+{{#if saveSuccess}}
+<div id="saveSuccess">
+    <div class="commentHint">
+        <p>Save success!</p>
+        <button class="closeSaveHint">OK</button>
+    </div>
+</div>
+{{/if}}
