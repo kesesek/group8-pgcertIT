@@ -290,7 +290,7 @@ window.addEventListener("load", async function(){
                         replyText.innerHTML = `
                         <div id="commentEditor" style="width: 82.5%;">
                             <form action="./replyComment" method="get">
-                                <textarea name="comment" class="commentContent" placeholder="Any comments?" rows="4" cols="100" required></textarea><br>
+                                <textarea name="comment" class="commentContent" placeholder="Any comments?" rows="4" style="width: 100%; max-width: 100%;" required></textarea><br>
                                 <button type="submit" id="commentButton" name="commentId" value=${replyComment.value}>Submit</button>
                             </form>
                         </div>`;

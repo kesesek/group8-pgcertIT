@@ -103,7 +103,7 @@ async function retrieveArticleById(articleId) {
     const db = await dbPromise;
 
     const article = await db.get(SQL`
-        select a.id as articleId, a.title, a.date_time as timestamp, i.filename as path, a.content, a.author_id as authorId, a.image_id as imageId
+        select a.id as articleId, a.title, a.date_time as timestamp, i.filename as path, a.content, a.author_id as authorId, a.image_id as imageId, u.username
         from articles as a, users as u, icons as i
         where a.id = ${articleId}
         and a.author_id = u.id

@@ -19,11 +19,16 @@ router.get("/", showNotifications, async function(req, res) {
         userId = user.id;
         res.locals.username = user.username;
         res.setToastMessage("Welcome to iBlogger! Start blogging here!");
+        // get the user's profile and display it on the right side
+        const targetProfile = await userDao.retrieveTargetProfileById(userId);
+        res.locals.T = targetProfile;
     }
+
     const articles = await articleDao.retrievePartialArticles(8, userId);
     // articles.forEach(article => {
     //     article.content = article.content.substring(0,100) + "...";
     // });
+
     res.locals.article = articles;
 
     res.render("home");
@@ -123,6 +128,7 @@ router.get("/article", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
+        res.locals.username = user.username;
         const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
         if (likeStatus) {
             res.locals.like = true;
