@@ -106,6 +106,11 @@ router.get("/editAccount", showNotifications, async function (req, res) {
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
     res.locals.active_EditAccount = true;
+
+    if (req.cookies.saveSuccess == "true") {
+        res.locals.saveSuccess = true;
+    }
+
     res.render("editAccount", { layout: 'sidebar&nav' });
 });
 
@@ -194,6 +199,7 @@ router.post("/saveAll", showNotifications, upload.single('avatarFileName'), asyn
         await userDao.updateDescription(authToken, newDes);
     }
 
+    res.cookie("saveSuccess", true);
 
     const user = await userDao.getUserInfo(authToken);
     res.locals.user = user;
@@ -379,6 +385,7 @@ router.get("/profile", showNotifications, async function (req, res) {
 
         res.render("profile", { layout: 'sidebar&nav' });
     } else {
+        res.cookie("profileNoAccess", true);
         res.redirect("/");
     }
 
@@ -443,40 +450,28 @@ router.get('/analytics', showNotifications, async function (req, res) {
 
     if (allArticle) {
 
-        let toparticleInfoArray = [];
-        for (let i = 0; i < allArticle.length; i++) {
-            // let title = allArticle[i].title;
-            let title = removeTags(allArticle[i].title);
-            if (title.length > 50) {
-                title = title.substring(0, 30) + "...";
-            }
 
+        for(let i = 0; i < allArticle.length; i++) {
             let commentsNum = await userDao.countArticleComment(allArticle[i].id);
             let likesNum = await userDao.countArticlelike(allArticle[i].id);
             let popularity = userDao.getArticlePopularity(commentsNum, likesNum);
-            let time = allArticle[i].date_time;
-            let index = null;
 
-            //get the article id from the "allArticle" object
-            const article_id = allArticle[i].id;
-
-            // let content = allArticle[i].content.substring(0, 100) + "...";
-            let content = removeTags(allArticle[i].content);
-            // if (content.length > 100) {
-            //     content = content.substring(0, 100) + "...";
-            // }
-
-            let thisArticleInfo = [index, content, title, time, commentsNum, likesNum, popularity, article_id];
-            toparticleInfoArray.push(thisArticleInfo);
+            allArticle[i].title = removeTags(allArticle[i].title);
+            allArticle[i].content = removeTags(allArticle[i].content);
+            allArticle[i].popularity = popularity;
+            allArticle[i].comments = commentsNum;
+            allArticle[i].likes = likesNum;
         }
-        const sortedArray = toparticleInfoArray.sort((a, b) => b[6] - a[6]);
-        const topThree = sortedArray.slice(0, 3);
+        
+        let topThree = allArticle.sort((a, b) => b[6] - a[6]);
+        topThree = topThree.slice(0, 3);
 
-        const topThreeWithIndex = topThree.map((articleInfo, index) => {
-            articleInfo[0] = index + 1;
+        topThree.forEach((articleInfo, index) => {
+            articleInfo.index = index + 1;
             return articleInfo;
         });
-        res.locals.topThreeWithIndex = topThreeWithIndex;
+        console.log(topThree);
+        res.locals.topThreeWithIndex = topThree;
     }
 
     res.render("analytics", { layout: 'sidebar&nav' });
