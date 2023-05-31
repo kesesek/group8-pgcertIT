@@ -764,11 +764,6 @@ a:-webkit-any-link {
 
 /* signup end */
 
-
-
-
-
-
 /* addarticles css start */
 #inpFile {
   display: none;
@@ -784,7 +779,7 @@ a:-webkit-any-link {
 
 #success {
   position: absolute;
-  left: 75%; 
+  left: 57.5%; 
   color: rgb(158, 108, 108);
   margin-top: 0.8%;
 }
@@ -1199,10 +1194,12 @@ a:-webkit-any-link {
   background-color: #db9292;
   box-shadow: 10px 10px 10px #a48294;
   border-radius: 10px;
-  margin: 65px auto;
   width: 80%;
   height: auto;
-  padding: 40px;
+  max-height: 450px;
+  overflow: auto;
+  padding: 20px;
+  margin-top: -10%;
 }
 
 .follow-container ul {
@@ -1286,7 +1283,7 @@ a:-webkit-any-link {
   text-align: center;
   font-style: italic;
   font-size: 25px;
-  margin-top: 85%;
+  margin-top: 22.5%;
 }
 
 .noneWritten {
@@ -1294,7 +1291,7 @@ a:-webkit-any-link {
   text-align: center;
   font-style: italic;
   font-size: 25px;
-  margin-top: 65%;
+  margin-top: 7.5%;
 }
 /* follow page css end */
 
