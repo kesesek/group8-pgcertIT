@@ -207,7 +207,7 @@ router.get("/notification/:notificationId", async function(req, res){
 
 router.get("/replyComment", showNotifications, async function(req, res) {
   
-    res.locals.title = "Full Article";
+    // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
     
@@ -215,16 +215,16 @@ router.get("/replyComment", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
-        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
-        if (likeStatus) {
-            res.locals.like = true;
-        }
-        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
-        subscribers.forEach(subscriber => {
-            if (subscriber.subscribed_id == userId) {
-                res.locals.subscribe = true;
-            }
-        });
+        // const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        // if (likeStatus) {
+        //     res.locals.like = true;
+        // }
+        // const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        // subscribers.forEach(subscriber => {
+        //     if (subscriber.subscribed_id == userId) {
+        //         res.locals.subscribe = true;
+        //     }
+        // });
         // reply comment to a comment
         await commentDao.addCommentToComment(req.query.comment, req.query.commentId, res.locals.article.articleId, userId);
         // insert new 'reply a comment' notifications to the notification table
@@ -236,13 +236,14 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         });
     }
 
-    res.render("fullArticle");
+    res.redirect("/article");
+    // res.render("fullArticle");
 
 });
 
 router.get("/deleteComment", showNotifications, async function(req, res) {
   
-    res.locals.title = "Full Article";
+    // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
     
@@ -250,29 +251,32 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
-        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
-        if (likeStatus) {
-            res.locals.like = true;
-        }
-        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
-        subscribers.forEach(subscriber => {
-            if (subscriber.subscribed_id == userId) {
-                res.locals.subscribe = true;
-            }
-        });
+        // const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        // if (likeStatus) {
+        //     res.locals.like = true;
+        // }
+        // const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        // subscribers.forEach(subscriber => {
+        //     if (subscriber.subscribed_id == userId) {
+        //         res.locals.subscribe = true;
+        //     }
+        // });
         const comment = await commentDao.retrieveCommentById(req.query.deleteComment);
         // delete comment and its children if have to the comments table
         res.cookie("commentId", comment.id);
         if (userId == comment.user_id || userId == res.locals.article.authorId) {
             await commentDao.deleteCommentById(comment.id);
-        } else{
-            res.locals.deleteNoAccess = "Sorry! You do not have access to delete this comment.";
-        }
-    } else {
-        res.locals.deleteNoAccess = "Please Log in to delete!";
-    }
+        } 
+        // else{
+        //     res.locals.deleteNoAccess = "Sorry! You do not have access to delete this comment.";
+        // }
+    } 
+    // else {
+    //     res.locals.deleteNoAccess = "Please Log in to delete!";
+    // }
 
-    res.render("fullArticle");
+    res.redirect("/article");
+    // res.render("fullArticle");
 
 });
 
@@ -298,7 +302,7 @@ router.get("/articleComments/:articleId", async function(req, res){
 
 router.get("/commentArticle", showNotifications, async function(req, res) {
   
-    res.locals.title = "Full Article";
+    // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
     
@@ -306,16 +310,16 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
         userId = user.id;
-        const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
-        if (likeStatus) {
-            res.locals.like = true;
-        }
-        const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
-        subscribers.forEach(subscriber => {
-            if (subscriber.subscribed_id == userId) {
-                res.locals.subscribe = true;
-            }
-        });
+        // const likeStatus = await articleDao.retrieveLikeByArticleIdandUserId(req.cookies.articleId, userId);
+        // if (likeStatus) {
+        //     res.locals.like = true;
+        // }
+        // const subscribers = await userDao.retrieveSubscribeWithAuthorId(res.locals.article.authorId);
+        // subscribers.forEach(subscriber => {
+        //     if (subscriber.subscribed_id == userId) {
+        //         res.locals.subscribe = true;
+        //     }
+        // });
         // add comment to the comments table
         await commentDao.addCommentToArticle(req.query.comment, res.locals.article.articleId, userId);
         // insert new 'make a comment' notifications to the notification table
@@ -324,11 +328,13 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithCommentToArticle(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
-    } else{
-        res.locals.deleteNoAccess = "Please Log in to comment!";
-    }
+    } 
+    // else{
+    //     res.locals.deleteNoAccess = "Please Log in to comment!";
+    // }
 
-    res.render("fullArticle");
+    res.redirect("/article");
+    // res.render("fullArticle");
 
 });
 
