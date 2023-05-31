@@ -493,6 +493,7 @@ a:-webkit-any-link {
   display: flex;
   flex:1;
   min-width: fit-content;
+  min-height: 100vh;
   overflow: hidden;
   background-color: #db9292;
   float: left;
@@ -657,7 +658,7 @@ a:-webkit-any-link {
 
 #modalcontent {
   color: rgb(158, 108, 108);
-  font-size: 30px;
+  font-size:x-large;
   font-weight: bold;
   text-align: center;
 
@@ -689,7 +690,7 @@ a:-webkit-any-link {
   z-index: 1;
 }
 
-#editpassword_hint {
+.edit_hint {
   color:#816a92;
   font-size:14px;
   font-weight: bold;
@@ -1152,7 +1153,7 @@ a:-webkit-any-link {
 
 .analyticschart {
   flex:1;
-  height:250px;
+  height:350px;
   margin: 10px;
   display: flex;
   align-items: center;
@@ -1179,6 +1180,12 @@ a:-webkit-any-link {
   position: relative;
 }
 
+.analyticsarticle h2, .analyticsarticle p {
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #noarticle {
   height: 100%;
 }
@@ -1188,6 +1195,10 @@ a:-webkit-any-link {
   justify-content: center;
   align-items: center;
   text-align: center;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 15%;
 }
 
 .analyticsarticle * {

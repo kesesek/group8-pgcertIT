@@ -12,26 +12,52 @@
 
     const tenDaysData = await getCommentsNuminTenDays();
 
-    const minDate = tenDaysData[0].date;
-    const maxDate = tenDaysData[tenDaysData.length - 1].date;
+    
 
     const container = document.querySelector("#commentcolunm");
-        const chart = Plot.plot({
+        {{!-- const chart = Plot.plot({
             marks: [
+            Plot.ruleY([0]),
             Plot.barY(tenDaysData, {
                  x: "date",
                   y:"commentNum", 
                   fill:"#B9C9E5", 
                   
             }),
-            Plot.axisX({anchor: "bottom", label: null,tickRotate: -30})],
+            Plot.axisX({anchor: "bottom", label: null,tickRotate: -30})
+            ],
             width: container.offsetWidth,
             height: container.offsetHeight,
             
             y: {
-            label: "The total number of comments",
-            axis: "left"
+                grid:true,
+                label: "The total number of comments",
+                axis: "left"
             }
+        }); --}}
+
+        const chart =  Plot.plot({
+            marginBottom: 60,
+            x: {
+                lable:null,
+                tickRotate: -30,
+            },
+            y: {
+                label: "The total number of comments",
+                grid: true,
+                domain:[0,30]
+            },
+            marks: [
+                Plot.ruleY([0]),
+                
+                Plot.barY(tenDaysData, {
+                x: "date",
+                y: "commentNum",
+                fill: "#B9C9E5"
+                }),
+            ],
+            width: container.offsetWidth,
+            height: container.offsetHeight
         });
   
     container.appendChild(chart);
@@ -47,15 +73,17 @@
     const lineContainer = document.querySelector('#popularityline');
     const linePlot = Plot.plot({
         marks: [
-            Plot.line(popularityData, { x: "index", y: "popularity", fill:"#B9C9E5" })
+            Plot.line(popularityData, { x: "index", y: "popularity", marker: true})
         ],
         width: lineContainer.offsetWidth,
         height: lineContainer.offsetHeight,
         x: {
-            label: "Your nth article"
+            label: "Your nth article",
         },
         y: {
-            label: "Popularity"
+            grid:true,
+            label: "Popularity",
+            domain:[0,500]
         }
     });
 
@@ -101,10 +129,10 @@
     
     <div id="charts" class="parts">
         <div id="commentcolunm" class="analyticschart">
-            <h3 id="chartTitle">Number of comments received per day</h3>
+            <h4 id="chartTitle">The number of comments received in the past ten days</h4>
         </div>
         <div id="popularityline" class="analyticschart">
-            <h3 id="chartTitle">Popular variations for each of your articles</h3>
+            <h4 id="chartTitle">The variations of popularity for each of your articles</h4>
         </div>
     </div>
     <br>
@@ -115,14 +143,14 @@
         {{#if topThreeWithIndex}}
         {{#each topThreeWithIndex}}
         <div class="analyticsarticle">
-            <h2>NO.{{{this.[0]}}}</h2>
-            <h4 id="articleTitle">{{{this.[2]}}}</h4>
-            <p>{{{this.[3]}}}</p>
-            <p>comments: {{{this.[4]}}}</p>
-            <p>likes: {{{this.[5]}}}</p>
-            <p>popularity: {{{this.[6]}}}</p>
+            <h2>NO.{{{this.index}}}</h2>
+            <h4 id="articleTitle">{{{this.title}}}</h4>
+            <p>{{{this.date_time}}}</p>
+            <p>comments: {{{this.comments}}}</p>
+            <p>likes: {{{this.likes}}}</p>
+            <p>popularity: {{{this.popularity}}}</p>
             <div class="limit_container">
-                <p class="limit_content">{{{this.[1]}}}</p>
+                <p class="limit_content">{{{this.content}}}</p>
             </div>
             
             <form action="./article" method="get">
