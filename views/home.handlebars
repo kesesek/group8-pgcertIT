@@ -5,7 +5,7 @@
     {{/if}}
 </div>
 {{!-- <div><a href="./editAccount">edit account</a></div> --}}
-<div class="main-container">
+<div class="main-container homePageLayout">
     <div class="main-content">
         <div class="grid-articles">
             {{#each article}}
@@ -30,5 +30,22 @@
                 <button type="submit" id="showMoreArticles">Show More</button>
             </form>
         </div>   
+    </div>
+    <div>
+        {{#if T}}
+        <div class="otherUserProfile currentUser">
+            <ul>
+                <li><img src="images/icons/{{T.icon_filename}}" width="40px" ></li>
+                <li>Username: {{T.username}}</li>
+                <li>Name: {{T.fname}} {{T.mname}} {{T.lname}}</li>
+                <li>Description: {{T.description}}</li>
+                <li>Birthday: {{T.date_of_birth}}</li>
+                <li>Articles number: {{T.article_count}}</li>
+                <li>Likes number: {{T.likes_count}}</li>
+                <li>Follower number: {{T.Follower_count}}</li>
+                <li>Following number: {{T.Following_count}}</li>
+            </ul>
+        </div>
+        {{/if}}
     </div>
 </div>

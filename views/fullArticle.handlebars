@@ -7,20 +7,22 @@
 <div class="article-container">
     <h1>{{{article.title}}}</h1>
     <h3>{{article.timestamp}}</h3>
-    <p><p class="icon"><img src="./images/icons/{{article.path}}" width="40px"></p>
-    <div href="" class="subscribeStatus">
-        {{#if subscribe}}
-        <form action="./unsubscribe" method="get">
-            <button type="submit" class="subscribe" name="subscribeOrNot"
-                value="{{article.articleId}}">unsubscribe</button>
-        </form>
-        {{else}}
-        <form action="./subscribe" method="get">
-            <button type="submit" class="subscribe" name="subscribeOrNot"
-                value="{{article.articleId}}">subscribe</button>
-        </form>
-        {{/if}}
-    </div>
+    <p>
+        <p class="icon"><img src="./images/icons/{{article.path}}" width="50px" height="50px" class="icon"></p>
+        <p>{{article.username}}</p>
+        <div href="" class="subscribeStatus">
+            {{#if subscribe}}
+            <form action="./unsubscribe" method="get">
+                <button type="submit" class="subscribe" name="subscribeOrNot"
+                    value="{{article.articleId}}">unsubscribe</button>
+            </form>
+            {{else}}
+            <form action="./subscribe" method="get">
+                <button type="submit" class="subscribe" name="subscribeOrNot"
+                    value="{{article.articleId}}">subscribe</button>
+            </form>
+            {{/if}}
+        </div>
     </p>
     <div class="article-content">
         <p>{{{article.content}}}</p>
@@ -30,11 +32,11 @@
         <div class="favorite">
             {{#if like}}
             <form action="./dislikeFullArticle" method="get">
-                <button type="submit" class="likes" name="likeAction"><img src="./images/black favorite.png" width="40px"></button>
+                <button type="submit" class="likes fullArticleLike" name="likeAction"><img src="./images/black favorite.png" width="40px"></button>
             </form>
             {{else}}
             <form action="./likeFullArticle" method="get">
-                <button type="submit" class="likes" name="likeAction"><img src="./images/outline favorite.png" width="40px"></button>
+                <button type="submit" class="likes fullArticleLike" name="likeAction"><img src="./images/outline favorite.png" width="40px"></button>
             </form>
             {{/if}}
         </div>
@@ -48,12 +50,17 @@
     <div class="comments-block" id="comments">
     </div>
     <div class="comment-content">
-        <p class="user-comment"><p class="icon"><img
-                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px"></p></p>
+        <div class="user-comment">
+            <p class="icon">
+                <img
+                    src="./images/icons/{{#if iconpath}}{{iconpath}}{{else}}panda.png{{/if}}" width="40px" height="40px" class="icon">
+            </p>
+            <p>{{username}}</p>
+        </div>
         <div id="commentEditor" style="width: 82.5%;">
             <form action="./commentArticle" method="get">
-                <textarea name="comment" class="commentContent" placeholder="Any comments?" rows="4" cols="100" required></textarea><br>
-                <button type="submit" id="commentButton" name="articleId" value="{{article.articleId}}">Submit</button>
+                <textarea name="comment" class="commentContent" placeholder="Any comments?" rows="4" style="width: 90%; max-width: 90%;" required></textarea><br>
+                <button type="submit" id="commentButton" name="articleId" class="commentSubmitButton" value="{{article.articleId}}">Submit</button>
             </form>
         </div>
     </div>

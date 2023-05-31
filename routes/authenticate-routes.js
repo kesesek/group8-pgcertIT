@@ -436,7 +436,7 @@ router.get('/analytics', showNotifications, async function(req, res){
     res.locals.likes = likes;
 
     if(allArticle) {
-        console.log(allArticle);
+        // console.log(allArticle);
 
         let toparticleInfoArray = [];
         for(let i = 0; i < allArticle.length; i++) {
