@@ -493,6 +493,7 @@ a:-webkit-any-link {
   display: flex;
   flex:1;
   min-width: fit-content;
+  min-height: 100vh;
   overflow: hidden;
   background-color: #db9292;
   float: left;
@@ -689,7 +690,7 @@ a:-webkit-any-link {
   z-index: 1;
 }
 
-#editpassword_hint {
+.edit_hint {
   color:#816a92;
   font-size:14px;
   font-weight: bold;
