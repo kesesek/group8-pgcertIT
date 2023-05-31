@@ -23,10 +23,12 @@ router.get("/", showNotifications, async function(req, res) {
         const targetProfile = await userDao.retrieveTargetProfileById(userId);
         res.locals.T = targetProfile;
     }
-    const articles = await articleDao.retrievePartialArticles(6, userId);
-    articles.forEach(article => {
-        article.content = article.content.substring(0,100) + "...";
-    });
+
+    const articles = await articleDao.retrievePartialArticles(8, userId);
+    // articles.forEach(article => {
+    //     article.content = article.content.substring(0,100) + "...";
+    // });
+
     res.locals.article = articles;
 
     res.render("home");
@@ -45,12 +47,12 @@ router.get("/allArticles", showNotifications, async function(req, res) {
     const articleNumbers = await articleDao.retrieveArticleNumbers();
     const articles = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
     articles.forEach(article => {
-        if(article.title.length > 50){
-            article.title = article.title.substring(0, 50) + "...";
-        }
-        if(article.content.length > 100){
-            article.content = article.content.substring(0,100) + "...";
-        }
+        // if(article.title.length > 50){
+        //     article.title = article.title.substring(0, 50) + "...";
+        // }
+        // if(article.content.length > 100){
+        //     article.content = article.content.substring(0,100) + "...";
+        // }
     });
     res.locals.article = articles;
 
@@ -68,9 +70,9 @@ router.get("/sortArticles", showNotifications, async function(req, res) {
         userId = user.id;
     }
     const articles = await articleDao.retrieveArticlesByOrder(userId, req.query.sort);
-    articles.forEach(article => {
-        article.content = article.content.substring(0,100) + "...";
-    });
+    // articles.forEach(article => {
+    //     article.content = article.content.substring(0,100) + "...";
+    // });
     res.locals.article = articles;
 
     res.render("allArticles");
