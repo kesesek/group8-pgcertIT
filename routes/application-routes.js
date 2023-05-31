@@ -20,7 +20,7 @@ router.get("/", showNotifications, async function(req, res) {
         res.locals.username = user.username;
         res.setToastMessage("Welcome to iBlogger! Start blogging here!");
     }
-    const articles = await articleDao.retrievePartialArticles(6, userId);
+    const articles = await articleDao.retrievePartialArticles(8, userId);
     articles.forEach(article => {
         article.content = article.content.substring(0,100) + "...";
     });

@@ -1294,7 +1294,17 @@ a:-webkit-any-link {
   text-align: center;
   font-style: italic;
   font-size: 25px;
-  margin-top: 65%;
+  margin-top: 30%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions * {
+  padding:2%;
 }
 /* follow page css end */
 
