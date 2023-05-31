@@ -778,13 +778,6 @@ a:-webkit-any-link {
   align-items: stretch;
 }
 
-#success {
-  position: absolute;
-  left: 57.5%; 
-  color: rgb(158, 108, 108);
-  margin-top: 0.8%;
-}
-
 #mylabel {
   display: inline-block;
   padding: 10px 10px;
@@ -801,6 +794,18 @@ a:-webkit-any-link {
   background-color: #db9292;
 }
 
+#budong {
+  position: relative;
+  /* width: 50px; */
+}
+
+#success {
+  position: absolute;
+  right: 10px;
+  color: rgb(158, 108, 108);
+  margin-top: 0.8%;
+  width: fit-content;
+}
 
 #mybutton {
   display: inline-block;
