@@ -34,7 +34,7 @@ if(document.querySelector("#confirmnewid")) {
     const newPassword = document.querySelector("#newpasswordid");
     const confirmNew = document.querySelector("#confirmnewid");
 
-    confirmNew.addEventListener("input", async function () {
+    {{!-- confirmNew.addEventListener("input", async function () {
         isMatch.innerHTML = "";
         let passWordValue1 = newPassword.value;
         let passWordValue2 = confirmNew.value;
@@ -42,7 +42,22 @@ if(document.querySelector("#confirmnewid")) {
         if(passWordValue1 != passWordValue2){
             isMatch.innerHTML = `Different password input!`;
         }
-    });
+    }); --}}
+    async function checkPassword(){
+        isMatch.innerHTML = "";
+        let passWordValue1 = newPassword.value;
+        let passWordValue2 = confirmNew.value;
+
+        if(passWordValue1 || passWordValue2) {
+            if(passWordValue1 != passWordValue2){
+            isMatch.innerHTML = `Different password input!`;
+            }
+        }
+        
+    }
+
+    newPassword.addEventListener('input', checkPassword);
+    confirmNew.addEventListener('input', checkPassword);
 }
 
 //3.verify old password:
@@ -217,8 +232,8 @@ dontdelect.onclick = function(){
         
         <div class="editcard">
             <label for="newnameid">Username: </label>
-            <input placeholder="{{user.username}}" class="editipt" id="newnameid" name="newname" type="text" maxlength="32">
-            <label id="newNameTest" for="newnameid"></label><br><br>
+            <input placeholder="{{user.username}}" class="editipt" id="newnameid" name="newname" type="text" maxlength="8">
+            <label id="newNameTest" for="newnameid"></label><br><p class="edit_hint">(The maximum length of username is 8 digits)</p>
         </div>
 
         <div class="editcard">
@@ -231,7 +246,7 @@ dontdelect.onclick = function(){
         <div class="editcard">
             <label for="newpasswordid">New password: </label>
             <input type="password" disabled name="newpassword" class="editipt" id="newpasswordid" maxlength="20" minlength="8">
-            <br><p id="editpassword_hint">(Please enter a password of 8-20 digits)</p>
+            <br><p class="edit_hint">(Please enter a password of 8-20 digits)</p>
         </div>
 
         <div class="editcard">

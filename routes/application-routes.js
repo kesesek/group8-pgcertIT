@@ -8,8 +8,8 @@ const userDao = require("../modules/user-dao.js");
 const commentDao = require("../modules/comment-dao.js");
 const notificationDao = require("../modules/notification-dao.js");
 
-router.get("/", showNotifications, async function(req, res) {
-  
+router.get("/", showNotifications, async function (req, res) {
+
     res.locals.title = "Home Page";
     res.locals.active_HomePage = true;
 
@@ -25,12 +25,16 @@ router.get("/", showNotifications, async function(req, res) {
     }
 
     const articles = await articleDao.retrievePartialArticles(6, userId);
-    // articles.forEach(article => {
-    //     article.content = article.content.substring(0,100) + "...";
-    // });
+
+    articles.forEach(article => {
+        article.title = removeTags(article.title);
+        article.content = removeTags(article.content);
+        //     article.content = article.content.substring(0,100) + "...";
+    });
     if (req.cookies.profileNoAccess == "true") {
         res.locals.profileNoAccess = true;
     }
+
 
     res.locals.article = articles;
 
@@ -38,8 +42,8 @@ router.get("/", showNotifications, async function(req, res) {
 
 });
 
-router.get("/allArticles", showNotifications, async function(req, res) {
-  
+router.get("/allArticles", showNotifications, async function (req, res) {
+
     res.locals.title = "All Articles";
     res.locals.active_AllArticlesPage = true;
     let userId = 0;
@@ -50,6 +54,8 @@ router.get("/allArticles", showNotifications, async function(req, res) {
     const articleNumbers = await articleDao.retrieveArticleNumbers();
     let articles = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
     articles.forEach(async article => {
+        article.title = removeTags(article.title);
+        article.content = removeTags(article.content);
         // if(article.title.length > 50){
         //     article.title = article.title.substring(0, 50) + "...";
         // }
@@ -70,8 +76,8 @@ router.get("/allArticles", showNotifications, async function(req, res) {
 
 });
 
-router.get("/sortArticles", showNotifications, async function(req, res) {
-  
+router.get("/sortArticles", showNotifications, async function (req, res) {
+
     res.locals.title = "Sorted Articles";
     res.locals.active_AllArticlesPage = true;
     let userId = 0;
@@ -80,17 +86,19 @@ router.get("/sortArticles", showNotifications, async function(req, res) {
         userId = user.id;
     }
     const articles = await articleDao.retrieveArticlesByOrder(userId, req.query.sort);
-    // articles.forEach(article => {
-    //     article.content = article.content.substring(0,100) + "...";
-    // });
+    articles.forEach(article => {
+        article.title = removeTags(article.title);
+        article.content = removeTags(article.content);
+        //     article.content = article.content.substring(0,100) + "...";
+    });
     res.locals.article = articles;
 
     res.render("allArticles");
 
 });
 
-router.get("/addLikedArticles", showNotifications, async function(req, res) {
-  
+router.get("/addLikedArticles", showNotifications, async function (req, res) {
+
     res.locals.title = "All Articles";
     res.locals.active_AllArticlesPage = true;
     let userId = 0;
@@ -102,14 +110,14 @@ router.get("/addLikedArticles", showNotifications, async function(req, res) {
         res.cookie("likeNoAccess", true);
     }
     const articleNumbers = await articleDao.retrieveArticleNumbers();
-    res.locals.article = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
+    res.locals.article = await articleDao.retrievePartialArticles(articleNumbers.count, userId);
 
     res.redirect("allArticles");
 
 });
 
-router.get("/removeLikedArticles", showNotifications, async function(req, res) {
-  
+router.get("/removeLikedArticles", showNotifications, async function (req, res) {
+
     res.locals.title = "All Articles";
     res.locals.active_AllArticlesPage = true;
     let userId = 0;
@@ -119,14 +127,14 @@ router.get("/removeLikedArticles", showNotifications, async function(req, res) {
         await articleDao.removeLikedArticles(userId, req.query.likeAction);
     }
     const articleNumbers = await articleDao.retrieveArticleNumbers();
-    res.locals.article = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
+    res.locals.article = await articleDao.retrievePartialArticles(articleNumbers.count, userId);
 
     res.redirect("allArticles");
 
 });
 
-router.get("/article", showNotifications, async function(req, res) {
-  
+router.get("/article", showNotifications, async function (req, res) {
+
     res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
@@ -135,6 +143,7 @@ router.get("/article", showNotifications, async function(req, res) {
         const imagePath = await articleDao.retrieveImageById(res.locals.article.imageId);
         res.locals.imagePath = imagePath.filename;
     }
+
 
     if (req.cookies.commentNoAccess == "true") {
         res.locals.commentNoAccess = true;
@@ -181,7 +190,7 @@ router.get("/article", showNotifications, async function(req, res) {
 });
 
 // like/dislike articles at the full article page
-router.get("/dislikeFullArticle", showNotifications, async function(req, res) {
+router.get("/dislikeFullArticle", showNotifications, async function (req, res) {
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
@@ -193,7 +202,7 @@ router.get("/dislikeFullArticle", showNotifications, async function(req, res) {
 
 });
 
-router.get("/likeFullArticle", showNotifications, async function(req, res) {
+router.get("/likeFullArticle", showNotifications, async function (req, res) {
 
     let userId = 0;
     if (req.cookies.authToken) {
@@ -208,8 +217,8 @@ router.get("/likeFullArticle", showNotifications, async function(req, res) {
 
 });
 
-router.post("/readFollower", showNotifications, async function(req, res) {
-  
+router.post("/readFollower", showNotifications, async function (req, res) {
+
     res.locals.title = "Follower";
 
     // check if there has cookies notificationId? If yes, change notification table and clear the cookies
@@ -222,8 +231,8 @@ router.post("/readFollower", showNotifications, async function(req, res) {
 
 });
 
-router.post("/readNotification", showNotifications, async function(req, res) {
-  
+router.post("/readNotification", showNotifications, async function (req, res) {
+
     res.locals.title = "Full Article";
 
     // check if there has cookies notificationId? If yes, change notification table and clear the cookies
@@ -236,23 +245,23 @@ router.post("/readNotification", showNotifications, async function(req, res) {
 
     if (notification.comment_id) {
         res.redirect("/article#comments");
-    } else{
+    } else {
         res.redirect("/article");
     }
 
 });
 
-router.get("/notification/:notificationId", async function(req, res){
+router.get("/notification/:notificationId", async function (req, res) {
     const notifications = await notificationDao.retrieveNotificationWithNotificationId(req.params.notificationId);
     res.send(notifications);
 });
 
-router.get("/replyComment", showNotifications, async function(req, res) {
-  
+router.get("/replyComment", showNotifications, async function (req, res) {
+
     // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
-    
+
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
@@ -276,7 +285,7 @@ router.get("/replyComment", showNotifications, async function(req, res) {
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithReplyComment(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
-        
+
     }
 
     res.redirect("/article");
@@ -285,12 +294,12 @@ router.get("/replyComment", showNotifications, async function(req, res) {
 
 });
 
-router.get("/deleteComment", showNotifications, async function(req, res) {
-  
+router.get("/deleteComment", showNotifications, async function (req, res) {
+
     // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
-    
+
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
@@ -310,6 +319,7 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
         res.cookie("commentId", comment.id);
         if (userId == comment.user_id || userId == res.locals.article.authorId) {
             await commentDao.deleteCommentById(comment.id);
+
         } 
         else{
             res.cookie("deleteNoAccess", true);
@@ -326,32 +336,32 @@ router.get("/deleteComment", showNotifications, async function(req, res) {
 
 });
 
-router.get("/user/:authToken", async function(req, res){
+router.get("/user/:authToken", async function (req, res) {
     const user = await userDao.retrieveUserWithAuthToken(req.params.authToken);
     res.send(user);
 });
 
-router.get("/article/:articleId", async function(req, res){
+router.get("/article/:articleId", async function (req, res) {
     const article = await articleDao.retrieveArticleById(req.params.articleId);
     res.send(article);
 });
 
-router.get("/comment/:commentId", async function(req, res){
+router.get("/comment/:commentId", async function (req, res) {
     const comment = await commentDao.retrieveCommentById(req.params.commentId);
     res.send(comment);
 });
 
-router.get("/articleComments/:articleId", async function(req, res){
+router.get("/articleComments/:articleId", async function (req, res) {
     const comments = await commentDao.retrieveCommentsByArticleId(req.params.articleId);
     res.send(comments);
 });
 
-router.get("/commentArticle", showNotifications, async function(req, res) {
-  
+router.get("/commentArticle", showNotifications, async function (req, res) {
+
     // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.cookies.articleId);
-    
+
     let userId = 0;
     if (req.cookies.authToken) {
         res.cookie("commentNoAccess", false);
@@ -375,6 +385,7 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
         followerArray.forEach(async follower => {
             await notificationDao.addNotificationWithCommentToArticle(commentId.id, res.locals.article.articleId, userId, follower.id);
         });
+
     } else {
         res.cookie("commentNoAccess", true);
         // res.locals.deleteNoAccess = "Please Log in to comment!";
@@ -385,12 +396,12 @@ router.get("/commentArticle", showNotifications, async function(req, res) {
 
 });
 
-router.get("/unsubscribe", showNotifications, async function(req, res) {
-  
+router.get("/unsubscribe", showNotifications, async function (req, res) {
+
     // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.query.subscribeOrNot);
-    
+
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
@@ -414,12 +425,12 @@ router.get("/unsubscribe", showNotifications, async function(req, res) {
 
 });
 
-router.get("/subscribe", showNotifications, async function(req, res) {
-  
+router.get("/subscribe", showNotifications, async function (req, res) {
+
     // res.locals.title = "Full Article";
 
     res.locals.article = await articleDao.retrieveArticleById(req.query.subscribeOrNot);
-    
+
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
@@ -448,6 +459,10 @@ router.get("/subscribe", showNotifications, async function(req, res) {
     // res.render("fullArticle");
 
 });
+
+function removeTags(str) {
+    return str.replace(/<[^>]*>/g, '');
+}
 
 
 module.exports = router;

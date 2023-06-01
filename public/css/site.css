@@ -493,6 +493,7 @@ a:-webkit-any-link {
   display: flex;
   flex:1;
   min-width: fit-content;
+  min-height: 100vh;
   overflow: hidden;
   background-color: #db9292;
   float: left;
@@ -657,7 +658,7 @@ a:-webkit-any-link {
 
 #modalcontent {
   color: rgb(158, 108, 108);
-  font-size: 30px;
+  font-size:x-large;
   font-weight: bold;
   text-align: center;
 
@@ -689,7 +690,7 @@ a:-webkit-any-link {
   z-index: 1;
 }
 
-#editpassword_hint {
+.edit_hint {
   color:#816a92;
   font-size:14px;
   font-weight: bold;
@@ -935,6 +936,12 @@ a:-webkit-any-link {
 }
 
 .article-content p {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.article-content li {
+  white-space: pre-wrap;
   word-break: break-all;
 }
 
@@ -1160,7 +1167,7 @@ a:-webkit-any-link {
 
 .analyticschart {
   flex:1;
-  height:250px;
+  height:350px;
   margin: 10px;
   display: flex;
   align-items: center;
@@ -1187,6 +1194,12 @@ a:-webkit-any-link {
   position: relative;
 }
 
+.analyticsarticle h2, .analyticsarticle p {
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #noarticle {
   height: 100%;
 }
@@ -1196,6 +1209,10 @@ a:-webkit-any-link {
   justify-content: center;
   align-items: center;
   text-align: center;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 15%;
 }
 
 .analyticsarticle * {
@@ -1399,7 +1416,7 @@ a:-webkit-any-link {
   text-align: center;
   font-style: italic;
   font-size: 25px;
-  margin-top: 7.5%;
+  margin-top: 22.5%;
 }
 
 .actions {
@@ -1460,7 +1477,7 @@ a:-webkit-any-link {
 
 .card2 {
   background-color: #db9292;
-  width: 500px;
+  width:auto;
   margin: 30px 20px;
   padding: 10px;
   border-radius: 10px;
@@ -1469,7 +1486,7 @@ a:-webkit-any-link {
 }
 
 .card2 p {
-  max-height: 45px;
+  max-height: 80px;
   /* white-space: nowrap; */
   word-break: break-all;
   overflow: hidden;
@@ -1485,7 +1502,7 @@ a:-webkit-any-link {
 }
 
 .card p {
-  max-height: 45px;
+  max-height: 100px;
   /* white-space: nowrap; */
   word-break: break-all;
   overflow: hidden;

@@ -1,4 +1,5 @@
 <div class="main-container">
+    <div class="main-content">
         {{#if T}}
         <div class="otherUserProfile">
             <ul>
@@ -17,7 +18,7 @@
         {{#if articles}}
         <div class="grid-favArticles">
             {{#each articles}}
-            {{!-- <div class="grid-content"> --}}
+            <div class="grid-content">
                 <div class="card2">
                     <br>
                     <h3>{{{this.title}}}</h3>
@@ -27,7 +28,8 @@
                     <div class="actions">
 
                         <form action="./article" method="get">
-                            <button type="submit" class="readMore" name="fullArticle" value="{{this.id}}">Read more</button>
+                            <button type="submit" class="readMore" name="fullArticle" value="{{this.id}}">Read
+                                more</button>
                         </form>
 
                         {{#if this.isLiked}}
@@ -45,16 +47,18 @@
                     </div>
                     <div class="actions">
                         {{#if this.canModify}}
-                        <form action="./addarticle" method="get"><button id="editProfile" name="edit" value="{{this.id}}">Edit</button></form>
-                        <form action="./deleteArticle" method="get"><button id="deleteProfile" name="delete" value="{{this.id}}">Delete</button></form>
+                        <form action="./addarticle" method="get"><button id="editProfile" name="edit"
+                                value="{{this.id}}">Edit</button></form>
+                        <form action="./deleteArticle" method="get"><button id="deleteProfile" name="delete"
+                                value="{{this.id}}">Delete</button></form>
                         {{/if}}
                     </div>
                 </div>
-                {{!--
-            </div> --}}
+            </div>
             {{/each}}
         </div>
         {{else}}
         <p class="noneWritten">Oops, user hasn't written articles😂</p>
         {{/if}}
+    </div>
 </div>
