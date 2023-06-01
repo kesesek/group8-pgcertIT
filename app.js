@@ -7,6 +7,7 @@
 // Setup Express
 const express = require("express");
 const multer = require('multer');
+const jimp = require("jimp");
 const app = express();
 const port = 3000;
 

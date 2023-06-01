@@ -1,6 +1,8 @@
 // user authentication 
 const { v4: uuid } = require("uuid");
 const express = require("express");
+const jimp = require("jimp");
+
 const router = express.Router();
 
 //upload the Avatar
@@ -260,6 +262,9 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
         const oldFileName = fileInfo.path;
         const newFileName = `./public/images/uploadedFiles/${fileInfo.originalname}`;
         fs.renameSync(oldFileName, newFileName);
+        const image = await jimp.read(newFileName);
+        image.resize(40, jimp.AUTO);
+        await image.write(`./public/images/thumbnails/${fileInfo.originalname}`);
         image_id = await userDao.saveImageAndGetId(fileInfo.originalname);
     }else if(oldImageId){
         image_id = oldImageId;
@@ -475,11 +480,17 @@ router.get('/analytics', showNotifications, async function (req, res) {
             let likesNum = await userDao.countArticlelike(allArticle[i].id);
             let popularity = userDao.getArticlePopularity(commentsNum, likesNum);
 
+            let imagePath = await articleDao.retrieveImageById(allArticle[i].image_id);
+            
+
             allArticle[i].title = removeTags(allArticle[i].title);
             allArticle[i].content = removeTags(allArticle[i].content);
             allArticle[i].popularity = popularity;
             allArticle[i].comments = commentsNum;
             allArticle[i].likes = likesNum;
+            if(imagePath) {
+                allArticle[i].imagePath = imagePath.filename;
+            }
         }
         
         let topThree = allArticle.sort((a, b) => b[6] - a[6]);
