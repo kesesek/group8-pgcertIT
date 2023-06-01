@@ -121,6 +121,10 @@ body {
   z-index: 100;
 }
 
+.noDisplay{
+  display: none;
+}
+
 .notification {
   background-color: #fff;
   border-radius: 5px;

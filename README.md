@@ -7,16 +7,16 @@ Your team should update this README to include the information required, as pres
 To whom it may consern,
 
 For login, the username are:
-bandalls(who is the admin)
-wattlexp
-sweetiele
-hyperyaufarer
-editussion
-experthead
-flamesbria
-heroanhart
-liveltekah
-linguss
+-bandalls(who is the admin)
+-wattlexp
+-sweetiel
+-hyperyau
+-editussi
+-experthe
+-flamesbr
+-heroanha
+-liveltek
+-linguss
 
 the password is "pa55word"
 
