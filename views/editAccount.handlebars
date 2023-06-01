@@ -34,15 +34,6 @@ if(document.querySelector("#confirmnewid")) {
     const newPassword = document.querySelector("#newpasswordid");
     const confirmNew = document.querySelector("#confirmnewid");
 
-    {{!-- confirmNew.addEventListener("input", async function () {
-        isMatch.innerHTML = "";
-        let passWordValue1 = newPassword.value;
-        let passWordValue2 = confirmNew.value;
-
-        if(passWordValue1 != passWordValue2){
-            isMatch.innerHTML = `Different password input!`;
-        }
-    }); --}}
     async function checkPassword(){
         isMatch.innerHTML = "";
         let passWordValue1 = newPassword.value;
@@ -238,7 +229,7 @@ dontdelect.onclick = function(){
 
         <div class="editcard">
             <label for="oldpasswordid">Old password: </label>
-            <input placeholder="enter for verification" type="password" name="oldpassword" class="editipt" id="oldpasswordid">
+            <input placeholder="verify before change it" type="password" name="oldpassword" class="editipt" id="oldpasswordid">
             <label id="oldPasswordTest" for="oldpasswordid"></label><br><br>
         </div>
 
