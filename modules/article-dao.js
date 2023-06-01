@@ -147,6 +147,17 @@ async function retrieveLikeByArticleIdandUserId(userId) {
     return likeArtciles;
 }
 
+//delete article image by cookie
+async function deleteImageByArticleId(articleId){
+    const db = await dbPromise;
+
+    await db.run(SQL`
+        UPDATE articles
+        SET image_id = NULL
+        WHERE id = ${articleId};
+    `);
+}
+
 // Export functions.
 module.exports = {
     retrievePartialArticles,
@@ -157,5 +168,6 @@ module.exports = {
     retrieveArticleById,
     retrieveArticleByContentTitleUserId,
     retrieveImageById,
-    retrieveLikeByArticleIdandUserId
+    retrieveLikeByArticleIdandUserId,
+    deleteImageByArticleId
 };

@@ -2,10 +2,14 @@
     <form action="./submitArticle" method="post" enctype="multipart/form-data">
         <textarea class="title" name="title" required></textarea>
         <textarea class="content" name="content" required></textarea><br>
+        {{#if filenameObj.filename}}
+        <p id="imageDisplay">image: {{filenameObj.filename}}</p>
+        <input id="delBtn" type="button" name="delBtn" value="Delete image"></input>
+        {{/if}}
         <div class="bTn">
             <div id="budong">
-            <span id="success"></span>
-            <div></div>
+                <span id="success"></span>
+                <div></div>
             </div>
             <label for="inpFile" id="mylabel">Upload an image</label>
             <input id="inpFile" type="file" name="imageFile" accept=".png,.jpg,.jpeg,.bmp"><br>

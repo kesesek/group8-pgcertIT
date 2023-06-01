@@ -1516,3 +1516,20 @@ a:-webkit-any-link {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+#delBtn {
+  display: inline-block;
+  border: none;
+  padding: 10px 10px;
+  background-color: rgb(158, 108, 108);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+#delBtn:hover {
+  background-color: #db9292;
+}
