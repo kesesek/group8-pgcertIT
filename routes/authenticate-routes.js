@@ -221,9 +221,12 @@ router.get("/addarticle", showNotifications, async function (req, res) {
     res.locals.title = "Add Articles";
     const article_id = req.query.edit;
     let article;
+    let filenameObj;
     if (article_id !== undefined) {
         article = await userDao.getArticleById(article_id);
         res.locals.article = article;
+        filenameObj = await userDao.retrieveImageFilenameByArticleId(article_id);
+        res.locals.filenameObj = filenameObj;
     }
 
     res.locals.active_AddArticles = true;
@@ -232,6 +235,14 @@ router.get("/addarticle", showNotifications, async function (req, res) {
 
 //in the "addarticle" page, user can write a whole new article and save it to the database, then redirect to the "My Articles" page
 router.post("/submitArticle", showNotifications, upload.single("imageFile"), async function (req, res) {
+    const article_id = req.body.article;
+    res.cookie("articleId", article_id);
+    let oldImageId = null;
+    if(article_id){
+        const article = await userDao.getArticleById(article_id);
+        oldImageId = article.image_id;
+    }
+
     let title = req.body.title;
     if (title == "" || title == "<p>Title here...</p>") {
         title = "[Untitled]";
@@ -243,18 +254,17 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
     const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
     const user_id = user_idObj.id;
     const fileInfo = req.file;
-    let image_id;
+    let image_id = null;
     if (fileInfo != undefined) {
+        res.cookie("newImage", true);
         const oldFileName = fileInfo.path;
         const newFileName = `./public/images/uploadedFiles/${fileInfo.originalname}`;
         fs.renameSync(oldFileName, newFileName);
         image_id = await userDao.saveImageAndGetId(fileInfo.originalname);
-    }
-    if (image_id == undefined) {
-        image_id = null;
-    }
+    }else if(oldImageId){
+        image_id = oldImageId;
+    }  
 
-    const article_id = req.body.article;
     if (article_id !== "") {
         await userDao.updateArticleById(article_id, content, title, image_id);
     } else {
@@ -346,6 +356,15 @@ router.get("/nofollower", showNotifications, async function (req, res) {
 //when go to the other user's profile, the page will display the target user's articles
 router.get("/profile", showNotifications, async function (req, res) {
     res.locals.title = "User profile";
+    if (!req.cookies.newImage) {
+        if(req.cookies.delImage){
+           await articleDao.deleteImageByArticleId(req.cookies.articleId);
+           res.clearCookie("delImage");
+
+        }
+    }else{
+        res.clearCookie("newImage");
+    }
     if (req.cookies.authToken) {
         const user_idObj = await userDao.retrieveUserIdWithAuthToken(req.cookies.authToken);
         let targetId = req.query.otherUserId;

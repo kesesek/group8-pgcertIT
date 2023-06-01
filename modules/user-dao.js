@@ -661,6 +661,20 @@ async function retrieveTargetProfileById(targetId) {
     return targetProfile;
 }
 
+//get the uploaded image filename by article id
+async function retrieveImageFilenameByArticleId(article_id){
+    const db = await dbPromise;
+
+    const filename = await db.get(SQL`
+        SELECT i.filename
+        FROM images i
+        JOIN articles a ON a.image_id = i.id
+        WHERE a.id = ${article_id};
+    `);
+
+    return filename;
+}
+
 
 module.exports = {
     updateUser,
@@ -714,5 +728,6 @@ module.exports = {
     retrieveAllUserProfilesAndArticles,
     delectUserById,
     delectUserAuthToken,
-    retrieveTargetProfileById
+    retrieveTargetProfileById,
+    retrieveImageFilenameByArticleId
 }

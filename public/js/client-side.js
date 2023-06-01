@@ -73,14 +73,14 @@ window.addEventListener("load", async function () {
         // check whether the user can go to their personal profile page(login or not)
         const navIcon = this.document.querySelector(".navIcon");
 
-        navIcon.addEventListener("click", function(){
-            if (!getCookie("authToken")){
+        navIcon.addEventListener("click", function () {
+            if (!getCookie("authToken")) {
                 // alert('Please Log in to go to your personal page!');
             }
         })
         if (document.querySelector(".closeProfileHint")) {
             const closeHint = document.querySelector(".closeProfileHint");
-            closeHint.addEventListener("click", function(){
+            closeHint.addEventListener("click", function () {
                 const hint = document.querySelector("#noAccessProfileHint");
                 hint.style.display = "none";
                 deleteCookie("profileNoAccess");
@@ -161,8 +161,8 @@ window.addEventListener("load", async function () {
         for (let index = 0; index < favoritebuttons.length; index++) {
             const button = favoritebuttons[index];
 
-            button.addEventListener("click", function(){
-                if (!getCookie("authToken")){
+            button.addEventListener("click", function () {
+                if (!getCookie("authToken")) {
                     // alert('Please Log in to add Favorites!');
                 }
             })
@@ -171,7 +171,7 @@ window.addEventListener("load", async function () {
 
     if (document.querySelector(".closeLikeHint")) {
         const closeHint = document.querySelector(".closeLikeHint");
-        closeHint.addEventListener("click", function(){
+        closeHint.addEventListener("click", function () {
             const hint = document.querySelector("#noAccessLikeHint");
             hint.style.display = "none";
             // setCookie("likeNoAccess", false, 1);
@@ -183,15 +183,15 @@ window.addEventListener("load", async function () {
     if (this.document.querySelector(".subscribeStatus")) {
         const subscribebuttons = this.document.querySelector(".subscribeStatus");
 
-        subscribebuttons.addEventListener("click", function(){
-            if (!getCookie("authToken")){
+        subscribebuttons.addEventListener("click", function () {
+            if (!getCookie("authToken")) {
                 // alert('Please Log in to subscribe!');
             }
         })
     };
     if (document.querySelector(".closeSubscribeHint")) {
         const closeHint = document.querySelector(".closeSubscribeHint");
-        closeHint.addEventListener("click", function(){
+        closeHint.addEventListener("click", function () {
             const hint = document.querySelector("#noAccessSubscribeHint");
             hint.style.display = "none";
             // setCookie("subscribeNoAccess", false, 1);
@@ -200,7 +200,7 @@ window.addEventListener("load", async function () {
     }
     if (document.querySelector(".closesubscribeYourselfHint")) {
         const closeHint = document.querySelector(".closesubscribeYourselfHint");
-        closeHint.addEventListener("click", function(){
+        closeHint.addEventListener("click", function () {
             const hint = document.querySelector("#subscribeYourselfHint");
             hint.style.display = "none";
             // setCookie("subscribeNoAccess", false, 1);
@@ -302,7 +302,7 @@ window.addEventListener("load", async function () {
             })
             deleteButton.addEventListener("click", async function () {
 
-                if (!getCookie("authToken")){
+                if (!getCookie("authToken")) {
                     // alert('Please Log in to delete!');
                     // const hint = document.querySelector("#noAccessDeleteHint");
                     // hint.style.display = "block";
@@ -323,7 +323,7 @@ window.addEventListener("load", async function () {
         };
         if (document.querySelector(".closeNoLoginDeleteHint")) {
             const closeHint = document.querySelector(".closeNoLoginDeleteHint");
-            closeHint.addEventListener("click", function(){
+            closeHint.addEventListener("click", function () {
                 const hint = document.querySelector("#noLoginDeleteHint");
                 hint.style.display = "none";
                 // setCookie("deleteNoLogin", false, 1);
@@ -332,7 +332,7 @@ window.addEventListener("load", async function () {
         }
         if (document.querySelector(".closeNoAccessDeleteHint")) {
             const closeHint = document.querySelector(".closeNoAccessDeleteHint");
-            closeHint.addEventListener("click", function(){
+            closeHint.addEventListener("click", function () {
                 const hint = document.querySelector("#noAccessDeleteHint");
                 hint.style.display = "none";
                 // setCookie("deleteNoAccess", false, 1);
@@ -351,7 +351,7 @@ window.addEventListener("load", async function () {
                 const replyText = replyTextArray[index];
                 const replyComment = replyCommentArray[index];
 
-                if (!getCookie("authToken")){
+                if (!getCookie("authToken")) {
                     // alert('Please Log in to reply!');
                     const hint = document.querySelector("#noAccessReplyHint");
                     hint.style.display = "block";
@@ -379,7 +379,7 @@ window.addEventListener("load", async function () {
         // const replyArticleHint = this.document.querySelector(".hint-message");
         commentButton.addEventListener("click", async function () {
 
-            if (!getCookie("authToken")){
+            if (!getCookie("authToken")) {
                 // alert('Please Log in to comment!');
                 // const hint = document.querySelector("#noAccessCommentHint");
                 // hint.style.display = "block";
@@ -389,7 +389,7 @@ window.addEventListener("load", async function () {
         });
         if (document.querySelector(".closeCommentHint")) {
             const closeHint = document.querySelector(".closeCommentHint");
-            closeHint.addEventListener("click", function(){
+            closeHint.addEventListener("click", function () {
                 const hint = document.querySelector("#noAccessCommentHint");
                 hint.style.display = "none";
                 // setCookie("commentNoAccess", false, 1);
@@ -434,12 +434,27 @@ window.addEventListener("load", async function () {
     // edit Account page
     if (document.querySelector(".closeSaveHint")) {
         const closeHint = document.querySelector(".closeSaveHint");
-        closeHint.addEventListener("click", function(){
+        closeHint.addEventListener("click", function () {
             const hint = document.querySelector("#saveSuccess");
             hint.style.display = "none";
             // setCookie("saveSuccess", false, 1);
             deleteCookie("saveSuccess");
         });
+    }
+
+    //delete the image uploaded in the addarticle page
+    if (document.querySelector("#delBtn")) {
+        const delBtn = document.querySelector("#delBtn");
+        const imageDisplay = document.querySelector("#imageDisplay");
+
+        delBtn.addEventListener("click", function () {
+            imageDisplay.innerHTML = "";
+            delBtn.value = "Deleted successfully!";
+            setCookie("delImage", true, 1);
+        });
+        // if (delBtn.value == "Deleted successfully!") {
+        //     setCookie("delImage", true, 1);
+        // }
     }
 });
 
