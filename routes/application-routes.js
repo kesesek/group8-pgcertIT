@@ -95,9 +95,10 @@ router.get("/sortArticles", showNotifications, async function (req, res) {
         userId = user.id;
     }
     const articles = await articleDao.retrieveArticlesByOrder(userId, req.query.sort);
-    articles.forEach(article => {
+    articles.forEach(async article => {
         article.title = removeTags(article.title);
         article.content = removeTags(article.content);
+        article.likes = await userDao.countArticlelike(article.id);
         //     article.content = article.content.substring(0,100) + "...";
     });
     res.locals.article = articles;
