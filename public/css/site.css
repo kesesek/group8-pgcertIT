@@ -1558,3 +1558,8 @@ a:-webkit-any-link {
 #delBtn:hover {
   background-color: #db9292;
 }
+
+.sortHeader{
+  color: rgb(158, 108, 108);
+  margin: 15px 60px;
+}

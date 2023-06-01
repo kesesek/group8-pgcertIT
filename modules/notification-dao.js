@@ -42,7 +42,7 @@ async function retrieveAllNotificationWithauthTokenOrderByTimeAndRead(userAuthTo
         from notifications as n, users as u
         where u.id = n.receiver_id
         and u.authToken = ${userAuthToken}
-        order by n.isRead, n.date_time`);
+        order by n.isRead, n.date_time DESC`);
     
     return allNotifications;
 }

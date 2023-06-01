@@ -10,6 +10,16 @@
     </form>
 </div>
 
+{{#if sortedByTitle}}
+<h2 class="sortHeader">Article lists Sorted by Title</h2>
+{{/if}}
+{{#if sortedByAuthor}}
+<h2 class="sortHeader">Article lists Sorted by Author</h2>
+{{/if}}
+{{#if sortedByDate}}
+<h2 class="sortHeader">Article lists Sorted by Date</h2>
+{{/if}}
+
 <div class="main-container">
     <div class="main-content">
         <div class="grid-articles">

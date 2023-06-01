@@ -80,6 +80,15 @@ router.get("/sortArticles", showNotifications, async function (req, res) {
 
     res.locals.title = "Sorted Articles";
     res.locals.active_AllArticlesPage = true;
+    if (req.query.sort == "title") {
+        res.locals.sortedByTitle = true;
+    }
+    if (req.query.sort == "author") {
+        res.locals.sortedByAuthor = true;
+    }
+    if (req.query.sort == "datestamp") {
+        res.locals.sortedByDate = true;
+    }
     let userId = 0;
     if (req.cookies.authToken) {
         const user = await userDao.retrieveUserWithAuthToken(req.cookies.authToken);
