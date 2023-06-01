@@ -76,9 +76,18 @@ function makeNestedComments(commentArray, nestedCommentArray){
             
         }
 
+        // last version
         if (commentArray.length != 0) {
+            // console.log("nestedCommentArray");
+            // console.log(nestedCommentArray);
             nestedCommentArray.forEach(parent => {
-                return makeNestedComments(commentArray, parent.children);
+                // console.log("commentArray");
+                // console.log(commentArray);
+                // console.log("parent.children");
+                // console.log(parent.children);
+                if (parent.children) {
+                    return makeNestedComments(commentArray, parent.children);
+                }
             });
         }
     };
