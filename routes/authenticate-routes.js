@@ -263,7 +263,7 @@ router.post("/submitArticle", showNotifications, upload.single("imageFile"), asy
         const newFileName = `./public/images/uploadedFiles/${fileInfo.originalname}`;
         fs.renameSync(oldFileName, newFileName);
         const image = await jimp.read(newFileName);
-        image.resize(40, jimp.AUTO);
+        image.resize(100, jimp.AUTO);
         await image.write(`./public/images/thumbnails/${fileInfo.originalname}`);
         image_id = await userDao.saveImageAndGetId(fileInfo.originalname);
     }else if(oldImageId){
@@ -500,7 +500,6 @@ router.get('/analytics', showNotifications, async function (req, res) {
             articleInfo.index = index + 1;
             return articleInfo;
         });
-        console.log(topThree);
         res.locals.topThreeWithIndex = topThree;
     }
 

@@ -881,7 +881,7 @@ a:-webkit-any-link {
 
 .limit_container {
   max-width: 94%;
-  max-height: 20%;
+  max-height: 18%;
   overflow:hidden;
   margin:3%;
   display: flex;

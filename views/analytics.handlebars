@@ -1,8 +1,10 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
 <script type="module">
     import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
-    
+
     async function getCommentsNuminTenDays() {
         let response = await fetch("http://localhost:3000/commentdata");
         let commentData = await response.json();
@@ -15,26 +17,7 @@
     
 
     const container = document.querySelector("#commentcolunm");
-        {{!-- const chart = Plot.plot({
-            marks: [
-            Plot.ruleY([0]),
-            Plot.barY(tenDaysData, {
-                 x: "date",
-                  y:"commentNum", 
-                  fill:"#B9C9E5", 
-                  
-            }),
-            Plot.axisX({anchor: "bottom", label: null,tickRotate: -30})
-            ],
-            width: container.offsetWidth,
-            height: container.offsetHeight,
-            
-            y: {
-                grid:true,
-                label: "The total number of comments",
-                axis: "left"
-            }
-        }); --}}
+        
 
         const chart =  Plot.plot({
             marginBottom: 60,
@@ -45,7 +28,7 @@
             y: {
                 label: "The total number of comments",
                 grid: true,
-                domain:[0,30]
+                min:0
             },
             marks: [
                 Plot.ruleY([0]),
@@ -78,12 +61,15 @@
         width: lineContainer.offsetWidth,
         height: lineContainer.offsetHeight,
         x: {
+            base: 1,
+            ticks: 5,
             label: "Your nth article",
+            tickFormat: d3.format(".0f")
         },
         y: {
             grid:true,
             label: "Popularity",
-            domain:[0,500]
+            min:0
         }
     });
 
@@ -148,7 +134,7 @@
                 <p class="limit_content">{{{this.content}}}</p>
             </div>
             {{#if this.imagePath}}
-            <p><img src="./images/thumbnails/{{this.imagePath}}" width="40%"></p>
+            <p><img src="./images/thumbnails/{{this.imagePath}}" width="100%"></p>
             {{/if}}
             
             <form action="./article" method="get">
