@@ -6,6 +6,8 @@ Your team should update this README to include the information required, as pres
 
 To whom it may consern,
 
+Our group members are: Lanyue Huang, Xue Jiang, Zishuai Liu and Yiliang Sun.
+
 For login, the username are:
 -bandalls(who is the admin)
 -wattlexp
