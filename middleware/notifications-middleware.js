@@ -45,7 +45,7 @@ async function showNotifications(req, res, next) {
                 let articleTitle = null;
                 if (articleId) {
                     const article = await articleDao.retrieveArticleById(articleId);
-                    articleTitle = article.title;
+                    articleTitle = removeTags(article.title);
                 }
     
                 notificationMessages[index] = {
@@ -68,6 +68,10 @@ async function showNotifications(req, res, next) {
     res.locals.notificationMessages = notificationMessages;
 
     next();
+}
+
+function removeTags(str) {
+    return str.replace(/<[^>]*>/g, '');
 }
 
 module.exports = showNotifications;

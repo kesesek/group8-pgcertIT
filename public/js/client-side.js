@@ -16,11 +16,11 @@ window.addEventListener("load", async function () {
         });
 
         function showNotification() {
-            notificationContainer.classList.remove('hide');
+            notificationContainer.classList.remove('noDisplay');
         };
 
         function hideNotification() {
-            notificationContainer.classList.add('hide');
+            notificationContainer.classList.add('noDisplay');
         };
 
         // change notifications status when it is clicked
