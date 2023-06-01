@@ -944,9 +944,11 @@ a:-webkit-any-link {
 .article-content p {
   white-space: pre-wrap;
   word-break: break-all;
+  text-align: left;
 }
 
 .article-content li {
+  text-align: left;
   white-space: pre-wrap;
   word-break: break-all;
 }
