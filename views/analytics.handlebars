@@ -92,8 +92,7 @@
 </script>
 
 
-<div id="analytics_container">
-    <br>
+<div class="main-container">
     <div id="cards" class="parts">
         <div id="followercard" class="analyticscard">
             <div clsaa="leftpart"><img src="./images/subscribe.png"></div>
@@ -123,10 +122,7 @@
             </div>
         </div>
     </div>
-    <br>
-
-
-    
+   
     <div id="charts" class="parts">
         <div id="commentcolunm" class="analyticschart">
             <h4 id="chartTitle">The number of comments received in the past ten days</h4>
@@ -135,7 +131,6 @@
             <h4 id="chartTitle">The variations of popularity for each of your articles</h4>
         </div>
     </div>
-    <br>
 
     <div class="parts" id="showTitle"><h3>Your Top Three Popular Articles</h3></div>
 
@@ -152,9 +147,12 @@
             <div class="limit_container">
                 <p class="limit_content">{{{this.content}}}</p>
             </div>
+            {{#if this.imagePath}}
+            <p><img src="./images/thumbnails/{{this.imagePath}}" width="40%"></p>
+            {{/if}}
             
             <form action="./article" method="get">
-                <button type="submit" class="readMore" name="fullArticle" value="{{this.[7]}}">Full Article</button>
+                <button type="submit" class="readMore" name="fullArticle" value="{{this.id}}">Full Article</button>
             </form>
         </div>
         {{/each}}
