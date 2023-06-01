@@ -377,7 +377,7 @@ a:-webkit-any-link {
 
 .favorite {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 }
 
@@ -1028,6 +1028,10 @@ a:-webkit-any-link {
   transition: transform 0.3s ease-in-out;
 }
 
+.subscribe:hover{
+  transform: scale(1.05);
+}
+
 .fullArticleLike{
   background-color: rgb(158, 108, 108);
 }
@@ -1041,6 +1045,10 @@ a:-webkit-any-link {
   height: 25px;
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
+}
+
+.hideButton:hover, .replyComment:hover, .deleteComment:hover, .commentSubmitButton:hover{
+  transform: scale(1.05);
 }
 
 .hide-or-show a{

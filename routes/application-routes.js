@@ -48,15 +48,18 @@ router.get("/allArticles", showNotifications, async function(req, res) {
         userId = user.id;
     }
     const articleNumbers = await articleDao.retrieveArticleNumbers();
-    const articles = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
-    articles.forEach(article => {
+    let articles = await articleDao.retrievePartialArticles(articleNumbers.count,userId);
+    articles.forEach(async article => {
         // if(article.title.length > 50){
         //     article.title = article.title.substring(0, 50) + "...";
         // }
         // if(article.content.length > 100){
         //     article.content = article.content.substring(0,100) + "...";
         // }
+        article.likes = await userDao.countArticlelike(article.id);
     });
+
+
     res.locals.article = articles;
 
     if (req.cookies.likeNoAccess == "true") {
@@ -170,6 +173,8 @@ router.get("/article", showNotifications, async function(req, res) {
             }
         });
     }
+
+    res.locals.likeCount = await userDao.countArticlelike(req.cookies.articleId);
 
     res.render("fullArticle");
 
