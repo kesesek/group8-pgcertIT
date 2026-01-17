@@ -7,10 +7,10 @@
   },
   "dependencies": {
     "@observablehq/plot": "^0.6.7",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.4",
     "cookie-parser": "^1.4.5",
     "d3": "^7.8.4",
-    "express": "^4.17.1",
+    "express": "^4.22.1",
     "express-handlebars": "^5.3.4",
     "jimp": "^0.16.13",
     "multer": "^1.4.5-lts.1",
